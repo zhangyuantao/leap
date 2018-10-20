@@ -29,7 +29,7 @@ module leap {
 			self.multTxt.text = "x" + GameMgr.getInstance().multiNum;
 			self.hasShowNewRecord = false;
 
-			//self.soundOn = MySoundMgr.getInstance().getBgSoundStorage();			
+			self.soundOn = !utils.Singleton.get(utils.SoundMgr).isMuteSound;
 			self.setSound();
 		}
 
@@ -114,15 +114,10 @@ module leap {
 		}
 
 		private setSound(){
-			let self = this;
-			if(self.soundOn){				
-				//MySoundMgr.getInstance().resumeBgSound(true);
-				//MySoundMgr.getInstance().resumeEffectSound(true);
-			}
-			else{
-				//MySoundMgr.getInstance().pauseBgSound(true);
-				//MySoundMgr.getInstance().pauseEffectSound(true);
-			}			
+			let self = this;			
+			utils.Singleton.get(utils.SoundMgr).setSoundMute(!self.soundOn);
+			utils.Singleton.get(utils.SoundMgr).setBgmMute(!self.soundOn);
+			
 			self.musicBtn.getController("button").setSelectedIndex(self.soundOn ? 0 : 1);
 		}
 
@@ -204,7 +199,7 @@ module leap {
 			// 		egret.Tween.get(self.newRecord).wait(1000).to({alpha: 0}, 1000, egret.Ease.sineInOut);
 			// 	}, self);
 			// 	self.hasShowNewRecord = true;
-			// 	MySoundMgr.getInstance().playSound("resource/game/leap/sound/newHighScore.mpt", 1, false, 1);	
+			// 	utils.Singleton.get(utils.SoundMgr).playSound("newHighScore_mp3");;	
 			// }
 		}
 

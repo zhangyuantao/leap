@@ -8,7 +8,7 @@ module leap {
 
 			player.addEffect(self.key, MagnetEffect);
 
-			//MySoundMgr.getInstance().playSound("resource/game/leap/sound/gravityeffect2.mpt", 1, false, 1);
+			utils.Singleton.get(utils.SoundMgr).playSound("gravityeffect2_mp3");
 		}	
 	}
 }

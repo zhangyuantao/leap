@@ -7,7 +7,7 @@ module leap {
 			super.applyEffect(player);
 			player.addEffect(self.key, PlusEffect);
 			
-			//MySoundMgr.getInstance().playSound("resource/game/leap/sound/Increase_chord_1_edited.mpt", 1, false, 1);
+			utils.Singleton.get(utils.SoundMgr).playSound("Increase_chord_1_edited_mp3");
 		}	
 	}
 }

@@ -16,7 +16,7 @@ module utils {
 		/**
 		 * 获取、创建单例
 		 */
-		public static get<T>(classFactory:T):T{
+		public static get<T>(classFactory:{new ():T}):T{
 			let Class = <any>classFactory;
 			if(!Class.instance){
 				Class.instance = new Class();
@@ -30,7 +30,7 @@ module utils {
 		 * 销毁单例
 		 */
 		public static destroy(classFactory:any){
-			let instance = Singleton.get(classFactory);
+			let instance = Singleton.get(classFactory) as any;
 			if(instance.onDestroy)
 				instance.onDestroy();
 			classFactory.instance = null;

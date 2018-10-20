@@ -7,7 +7,7 @@ module leap {
 			super.applyEffect(player);		
 			player.addEffect(self.key, StarEffect);	
 
-			//MySoundMgr.getInstance().playSound("resource/game/leap/sound/star_sound_final.mpt", 1, false, 1);
+			utils.Singleton.get(utils.SoundMgr).playSound("star_sound_final_mp3");
 		}	
 	}
 }

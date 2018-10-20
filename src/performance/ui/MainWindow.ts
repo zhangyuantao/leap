@@ -20,7 +20,7 @@ module leap {
 			let self = this;
 			self.removeEventListeners();
 			self.destroyGame();		
-			//MySoundMgr.getInstance().disposeSound();
+			utils.Singleton.destroy(utils.SoundMgr);
 			utils.StageUtils.removeEventListener(egret.Event.RESIZE, self.setResolution, self);
 			console.log("game dispose");
 		}
@@ -111,7 +111,7 @@ module leap {
 			let self = this;
 			utils.StageUtils.dispatchEvent("createGame");
 
-			//MySoundMgr.getInstance().playBgSound("resource/game/leap/sound/back_music.mpt", -1);
+			utils.Singleton.get(utils.SoundMgr).playBgm("back_music_mp3");
 
 			// 背景
 			let bg = utils.ObjectPool.getInstance().createObject(Background);

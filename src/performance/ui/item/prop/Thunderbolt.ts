@@ -7,7 +7,7 @@ module leap {
 			super.applyEffect(player);
 			player.addEffect(self.key, ThunderboltEffect);
 
-			//MySoundMgr.getInstance().playSound("resource/game/leap/sound/thunderbolt.mpt", 1, false, 1);
+			utils.Singleton.get(utils.SoundMgr).playSound("thunderbolt_mp3");
 		}	
 	}
 }

@@ -78,7 +78,7 @@ module leap {
 			if(rounds <= 1)
 				return;
 			
-			//MySoundMgr.getInstance().playSound("resource/game/leap/sound/multiplier2.mpt", 1, false, 1);
+			utils.Singleton.get(utils.SoundMgr).playSound("multiplier2_mp3");
 
 			// 爆炸渐变动画
 			egret.Tween.get(self.bg).set({alpha:0})

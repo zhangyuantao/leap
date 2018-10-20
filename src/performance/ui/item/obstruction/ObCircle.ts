@@ -47,8 +47,7 @@ module leap {
 			}
 			else{
 				self.addScore();
-
-				//MySoundMgr.getInstance().playSound("resource/game/leap/sound/black_explosion.mpt", 1, false, 1);
+				utils.Singleton.get(utils.SoundMgr).playSound("black_explosion_mp3");
 			}
 		}
 

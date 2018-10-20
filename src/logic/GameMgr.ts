@@ -72,7 +72,6 @@ module leap {
 			utils.EventDispatcher.getInstance().dispatchEvent("updateScore", self.score);
 
 			// 服务端加分
-			//CMD.instance.gameAddScore([self.multiNum, score]);
 			
 			return addValue;
 		}
@@ -83,7 +82,7 @@ module leap {
 			self.gameOver = true;
 			self.pause(true);
 			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");
-			//CMD.instance.gameOver(new CallBackVo(), self.score);
+			//			gameOver(new CallBackVo(), self.score);
 		}
 
 		// 复活
@@ -94,7 +93,7 @@ module leap {
 			self.pause(false);
 			utils.EventDispatcher.getInstance().once("gameResume", () => {
 				utils.EventDispatcher.getInstance().dispatchEvent("gameResurgence");
-			//	MySoundMgr.getInstance().playBgSound("resource/game/leap/sound/back_music.mpt", -1);
+				utils.Singleton.get(utils.SoundMgr).playSound("back_music_mp3");
 			}, self);			
 		}
 

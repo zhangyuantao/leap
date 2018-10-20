@@ -6,7 +6,7 @@ module leap {
 			let self = this;
 			let cfg = GameCfg.getCfg().Items[self.key];
 			player.jump(cfg.jumpSpeed, cfg.jumpDis);			
-			//MySoundMgr.getInstance().playSound("resource/game/leap/sound/retro_jump_collect_bonus_03.mpt", 1, false, 1);
+			utils.Singleton.get(utils.SoundMgr).playSound("retro_jump_collect_bonus_03_mp3");
 		}	
 	}
 }

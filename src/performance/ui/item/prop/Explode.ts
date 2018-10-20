@@ -17,7 +17,7 @@ module leap {
 				World.instance.addItem(item.displayObject);
 			}
 
-			//MySoundMgr.getInstance().playSound("resource/game/leap/sound/WhooshesImpacts_Impact_64_edited.mpt", 1, false, 1);
+			utils.Singleton.get(utils.SoundMgr).playSound("WhooshesImpacts_Impact_64_edited_mp3");
 		}	
 
 		protected collisionEffect(){

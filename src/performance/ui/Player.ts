@@ -122,10 +122,11 @@ module leap {
 			World.instance.spawnUIAni(DeadAni, self.x, self.y);
 			
 			// 死亡音效
-			// MySoundMgr.getInstance().playSound("resource/game/leap/sound/DM-CGS-10_edited.mpt", 1, false, 1);
-			// setTimeout(function() {
-			// 	MySoundMgr.getInstance().playSound("resource/game/leap/sound/Decrease_swap_1.mpt", 1, false, 0.4);
-			// }, 400);				
+			utils.Singleton.get(utils.SoundMgr).playSound("DM-CGS-10_edited_mp3");
+			let handle = setTimeout(function() {
+				clearTimeout(handle);
+				utils.Singleton.get(utils.SoundMgr).playSound("Decrease_swap_1_mp3");
+			}, 400);				
 		}
 
 		// 复活
@@ -152,7 +153,7 @@ module leap {
 
 			// 复活无敌
 			self.addEffect(ItemDefine.Plus, PlusEffect);
-			//MySoundMgr.getInstance().playSound("resource/game/leap/sound/revive2.mpt", 1, false, 1); // 复活音效		
+			utils.Singleton.get(utils.SoundMgr).playSound("revive2_mp3"); // 复活音效		
 
 			egret.Tween.removeTweens(self.mainUI);
 			egret.Tween.get(self.mainUI).to({alpha:1}, 200);

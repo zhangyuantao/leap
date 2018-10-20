@@ -85,6 +85,7 @@
 		"bin-debug/utils/Function.js",
 		"bin-debug/utils/ObjectPool.js",
 		"bin-debug/utils/Singleton.js",
+		"bin-debug/utils/SoundMgr.js",
 		"bin-debug/utils/StageUtils.js"
 	]
 }
