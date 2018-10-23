@@ -9,7 +9,7 @@ module leap {
 
 		public timer:MyTimer;
 		public gameOver:boolean = false;
-		public oldScoreRecord:number;	// 记录旧的月记录
+		public scoreRecord:number;	// 记录旧的月记录
 		public score:number = 0;		// 得分
 		public multiNum:number = 1; 	// 倍数
 		public level:number = 1;		// 关卡
@@ -28,7 +28,13 @@ module leap {
 		public gameBegin(){
 			let self = this;
 			self.hasResurgenced = false;
-			//self.oldScoreRecord = GameAPI.gameData.singleGameInfo.score || 0; // 记录旧记录
+			let record = egret.localStorage.getItem("scoreRecord");
+			if(record && record != "")
+				self.scoreRecord = parseInt(record);
+			else
+				self.scoreRecord = 0;
+
+			utils.EventDispatcher.getInstance().dispatchEvent("startGame");
 		}
 
 		/**
@@ -70,8 +76,6 @@ module leap {
 			}
 
 			utils.EventDispatcher.getInstance().dispatchEvent("updateScore", self.score);
-
-			// 服务端加分
 			
 			return addValue;
 		}
@@ -81,8 +85,13 @@ module leap {
 			let self = this;
 			self.gameOver = true;
 			self.pause(true);
-			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");
-			//			gameOver(new CallBackVo(), self.score);
+			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");		
+
+			// 存储新纪录
+			if(self.score > self.scoreRecord){				
+				egret.localStorage.setItem("scoreRecord", self.score.toString());
+				self.scoreRecord = self.score;
+			}
 		}
 
 		// 复活

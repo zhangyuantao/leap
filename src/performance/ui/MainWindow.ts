@@ -71,6 +71,7 @@ module leap {
 		 */
         protected onInit(){			
 			console.log("onInit");
+			utils.Singleton.get(utils.SoundMgr).playBgm("back_music_mp3");
 		}	
 
 		// 动态调整窗口分辨率
@@ -109,10 +110,9 @@ module leap {
 		// 创建游戏
 		public createGame(){
 			let self = this;
-			utils.StageUtils.dispatchEvent("createGame");
-
 			utils.Singleton.get(utils.SoundMgr).playBgm("back_music_mp3");
-
+			utils.StageUtils.dispatchEvent("createGame");
+			
 			// 背景
 			let bg = utils.ObjectPool.getInstance().createObject(Background);
 			self.displayListContainer.addChildAt(bg, 0);

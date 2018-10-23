@@ -35,17 +35,20 @@ module utils {
 		/** 背景音乐 */
 		public playBgm(url:string, startTime:number = 0, loops:number = 0, volume:number = 1){
 			let self = this;
-			if(self.isMuteBgm)
+
+			// 正在播放
+			if(self.bgmSoundChannel && self.bgmSoundChannel.position > 0)
 				return;
 
 			if(!self.bgm)
 				self.bgm = RES.getRes(url) as egret.Sound;					
 			
-			if(self.bgmSoundChannel)
-				self.bgmSoundChannel.stop();
-			
 			self.bgmLoops = loops;
-			self.bgmSoundChannel = self.bgm.play(startTime, loops);
+
+			if(self.isMuteBgm)
+				return;
+
+			self.bgmSoundChannel = self.bgm.play(startTime || self.lastBgmPos, loops);
 			self.bgmSoundChannel.volume = volume;
 		}
 
@@ -61,7 +64,7 @@ module utils {
 		// 恢复背景音乐
 		public resumeBgm(){
 			let self = this;
-			if(self.bgm && self.bgmSoundChannel){
+			if(self.bgm){
 				self.bgmSoundChannel = self.bgm.play(self.lastBgmPos, self.bgmLoops);		
 			}
 		}
@@ -138,13 +141,6 @@ module utils {
 				info.channel = info.sound.play(info.lastSoundPos, info.loops);
 			}
 		}
-
-		// private resumeAllSound(){
-		// 	let self = this;
-		// 	for(let url in self.sounds){
-		// 		self.resumeSound(url);
-		// 	}
-		// }
 
 		// 设置全局音效静音
 		public setSoundMute(mute:boolean){

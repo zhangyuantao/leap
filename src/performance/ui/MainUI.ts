@@ -12,7 +12,6 @@ module leap {
 		private newRecord:fairygui.GComponent;
 
 		private soundOn:boolean = true;
-		private soundOffByPause:boolean = false;
 		private hasShowNewRecord:boolean = false;
 		private alertWnd:any;
 
@@ -84,12 +83,6 @@ module leap {
 			let self = this;
 			GameMgr.getInstance().pause(true);
 			self.showPausePanel();
-
-			if(self.soundOn){
-				self.soundOffByPause = true;
-				self.soundOn = false;
-				self.setSound();
-			}
 		}
 
 		private showPausePanel(){
@@ -144,12 +137,6 @@ module leap {
 
 		private onContinueBtn(e){
 			let self = this;
-			if(self.soundOffByPause){
-				self.soundOffByPause = false;
-				self.soundOn = true;
-				self.setSound();
-			}
-
 			GameMgr.getInstance().pause(false);
 			self.closePausePanel();
 		}
@@ -192,15 +179,15 @@ module leap {
 			let self = this;			
 			self.scoreTxt.setScore(score);
 
-			// 破月记录提示
-			// if(!self.hasShowNewRecord && score > GameAPI.gameData.singleGameInfo.score){
-			// 	self.newRecord.alpha = 1;
-			// 	self.newRecord.getTransition("t0").play(() => {
-			// 		egret.Tween.get(self.newRecord).wait(1000).to({alpha: 0}, 1000, egret.Ease.sineInOut);
-			// 	}, self);
-			// 	self.hasShowNewRecord = true;
-			// 	utils.Singleton.get(utils.SoundMgr).playSound("newHighScore_mp3");;	
-			// }
+			// 破记录提示
+			if(!self.hasShowNewRecord && score > GameMgr.getInstance().scoreRecord){
+				self.newRecord.alpha = 1;
+				self.newRecord.getTransition("t0").play(() => {
+					egret.Tween.get(self.newRecord).wait(1000).to({alpha: 0}, 1000, egret.Ease.sineInOut);
+				}, self);
+				self.hasShowNewRecord = true;
+				utils.Singleton.get(utils.SoundMgr).playSound("newHighScore_mp3");;	
+			}
 		}
 
 		public dispose(){

@@ -14,8 +14,7 @@ module leap {
 
 		private onStartBtn(e){
 			let self = this;
-			//CMD.instance.gameBegin();
-			utils.EventDispatcher.getInstance().dispatchEvent("startGame");
+			GameMgr.getInstance().gameBegin();
 			self.hide();
 			utils.StageUtils.addEventListener("leaveGame", self.onLeaveGame, self);
 		}
