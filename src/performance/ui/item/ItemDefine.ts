@@ -9,10 +9,7 @@ module leap {
 		public static Thunderbolt:string = "Thunderbolt";
 		public static Plus:string = "Plus";
 		public static Magnet:string = "Magnet";
-		public static BlackHole:string = "BlackHole";
-		public static ObSquare:string = "ObSquare";		
 		public static ObCircle:string = "ObCircle";	
 		public static ObTriangle:string = "ObTriangle";
-		public static ObTriangleBlack:string = "ObTriangleBlack";
 	}
 }

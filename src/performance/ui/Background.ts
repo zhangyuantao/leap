@@ -14,7 +14,7 @@ module leap{
 
 		public onCreate(){
 			let self = this;			
-			console.log("onCreate:", self.key);
+			//console.log("onCreate:", self.key);
 			Background.instance = self;
 			self.curColor = parseInt(GameCfg.getCfg().BgColors[0]);
 
@@ -24,7 +24,7 @@ module leap{
 
 		public onDestroy(){
 			let self = this;
-			console.log("onDestroy:", self.key);
+			//console.log("onDestroy:", self.key);
 			self.bgs = null;
 			Background.instance = null;
 			utils.EventDispatcher.getInstance().removeEventListener("levelUp", self.onLevelUp, self);

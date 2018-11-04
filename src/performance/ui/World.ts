@@ -24,7 +24,7 @@ module leap{
 		public onCreate(){
 			let self = this;
 			World.instance = self;
-			console.log("onCreate:", self.key);			
+			//console.log("onCreate:", self.key);			
 
 			self.init();
 			self.once(egret.Event.ADDED_TO_STAGE, self.onAddToStage, self);
@@ -34,7 +34,7 @@ module leap{
 
 		public onDestroy(){
 			let self = this;
-			console.log("onDestroy:", self.key);	
+			//console.log("onDestroy:", self.key);	
 
 			self.camera = null;
 			World.instance = null;

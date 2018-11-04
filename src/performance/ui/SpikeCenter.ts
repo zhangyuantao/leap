@@ -8,14 +8,14 @@ module leap {
 
 		public onCreate(){
 			let self = this;
-			console.log("onCreate:", self.key);
-			//utils.EventDispatcher.getInstance().addEventListener("newRound", self.onNewRound, self);
+			//console.log("onCreate:", self.key);
+			utils.EventDispatcher.getInstance().addEventListener("newRound", self.onNewRound, self);
 		}
 
 		public onDestroy(){
 			let self = this;
-			console.log("onDestroy:", self.key);
-			//utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
+			//console.log("onDestroy:", self.key);
+			utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
 		}
 
 		public onEnterFrame(deltaTime:number){
@@ -27,18 +27,18 @@ module leap {
 		//********************* 接口实现结束 ********************//
 
 		private rotate:fairygui.GImage;
-		//private multiNum:fairygui.GTextField;
+		private multiNum:fairygui.GTextField;
 
 		constructFromResource(){
             super.constructFromResource();
             let self = this;         
 			self.rotate = self.getChild("n0").asImage;
-			//self.multiNum = self.getChild("multiNum").asTextField;
+			self.multiNum = self.getChild("multiNum").asTextField;
         }
 
 		private onNewRound(rounds){
 			let self = this;		
-			//self.multiNum.text = "x" + rounds;
+			self.multiNum.text = "x" + rounds;
 		}
 	}
 }

@@ -37,8 +37,10 @@ module utils {
 			let self = this;
 
 			// 正在播放
-			if(self.bgmSoundChannel && self.bgmSoundChannel.position > 0)
-				return;
+			// if(self.bgmSoundChannel && self.bgmSoundChannel.position > 0)
+			// 	return;
+			if(self.bgmSoundChannel)
+			 	self.bgmSoundChannel.stop();
 
 			if(!self.bgm)
 				self.bgm = RES.getRes(url) as egret.Sound;					

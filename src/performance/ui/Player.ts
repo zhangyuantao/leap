@@ -113,7 +113,7 @@ module leap {
 		
 		public dead(){
 			let self = this; 
-			console.log("game over");
+			//console.log("game over");
 
 			GameMgr.getInstance().dead();
 
@@ -191,7 +191,7 @@ module leap {
 				self.mainUI.playFallEff();
 
 			//  小于中心半径
-			if(self.jumpHeight <= 75){
+			if(self.jumpHeight < 90){
 				self.dead();
 				return;
 			}
@@ -217,7 +217,7 @@ module leap {
 			if(self.isNearEnd && playerAngle >= 270){
 				self.isNearEnd = false;
 				self.rotateRounds ++;
-				console.log("New Round");
+				//console.log("New Round");
 				utils.EventDispatcher.getInstance().dispatchEvent("newRound", self.rotateRounds);
 			}
 		}
@@ -238,12 +238,12 @@ module leap {
 
 		public onCreate(){
 			let self = this;
-			console.log("onCreate:", self.key);
+			//console.log("onCreate:", self.key);
 			
 			// 加拖尾组件
 			if(!self.trail){
 				self.trail = new TrailRenderer();
-				self.trail.init(300, 0.2, 0, 10, 35);
+				self.trail.init(200, 0.4, 0, 5, 35);
 				self.displayListContainer.addChild(self.trail);
 			}
 
@@ -273,7 +273,7 @@ module leap {
 
 		public onDestroy(){
 			let self = this;			
-			console.log("onDestroy:", self.key);
+			//console.log("onDestroy:", self.key);
 			self.effects = null;
 			self.colliderDisplay = null;
 			self.trail = null;

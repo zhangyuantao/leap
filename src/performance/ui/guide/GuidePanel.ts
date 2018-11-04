@@ -49,7 +49,7 @@ module leap {
 		public isCompleteGuide(step:number){
 			let key = "leap_guideStep" + step;
 			let guideStep = egret.localStorage.getItem(key);			
-			return guideStep != null;
+			return guideStep != null && guideStep != "";
 		}
 	}
 }

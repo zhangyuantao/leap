@@ -22,7 +22,7 @@ module leap {
 			self.destroyGame();		
 			utils.Singleton.destroy(utils.SoundMgr);
 			utils.StageUtils.removeEventListener(egret.Event.RESIZE, self.setResolution, self);
-			console.log("game dispose");
+			//console.log("game dispose");
 		}
 
 		protected initUI(){
@@ -66,13 +66,13 @@ module leap {
 			fairygui.UIObjectFactory.setPackageItemExtension(url, userClass);
 		}	
 
-		/**
-		 * 初始化完成
-		 */
-        protected onInit(){			
-			console.log("onInit");
-			utils.Singleton.get(utils.SoundMgr).playBgm("back_music_mp3");
-		}	
+		// /**
+		//  * 初始化完成
+		//  */
+        // protected onInit(){			
+		// 	//console.log("onInit");
+		// 	//utils.Singleton.get(utils.SoundMgr).playBgm("back_music_mp3");
+		// }	
 
 		// 动态调整窗口分辨率
 		private setResolution(){

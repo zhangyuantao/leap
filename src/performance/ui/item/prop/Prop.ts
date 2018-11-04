@@ -14,7 +14,7 @@ module leap {
 			super.onAddToStage(e);
 			let self = this;
 			egret.Tween.removeTweens(self.n);
-			egret.Tween.get(self.n, {loop:true}).to({scaleX:1.1, scaleY:0.9}, 300).to({scaleX:0.9, scaleY:1.1}, 300).to({scaleX:1, scaleY:1}, 300);
+			egret.Tween.get(self.n, {loop:true}).to({scaleX:1.1, scaleY:1.1}, 300).to({scaleX:0.9, scaleY:0.9}, 300).to({scaleX:1, scaleY:1}, 300);
 		}
 
 		protected applyEffect(player:Player){
@@ -22,17 +22,6 @@ module leap {
 			let cfg = GameCfg.getCfg().Items[self.key];
 			if(cfg.jumpSpeed && cfg.jumpDis)
 				player.jump(cfg.jumpSpeed, cfg.jumpDis);
-		}
-		
-		public updateTransform(){
-			let self = this;
-			if(!self.collider)
-				return;
-				
-			self.collider.x = self.x;
-			self.collider.y = self.y;
-			self.collider.scaleX = self.scaleX;
-			self.collider.scaleY = self.scaleY;
 		}
 	}
 }

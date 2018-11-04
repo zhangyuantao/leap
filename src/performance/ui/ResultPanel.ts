@@ -29,7 +29,7 @@ module leap {
 		private show(){
 			let self = this;
 			self.txtScore.text = GameMgr.getInstance().score + "";
-			self.txtScoreBest.text = "0123456789"//GameMgr.getInstance().oldScoreRecord + "";
+			self.txtScoreBest.text = GameMgr.getInstance().scoreRecord + "";
 
 			self.visible = true;
 			egret.Tween.get(self).to({alpha:1}, 500, egret.Ease.sineInOut);	

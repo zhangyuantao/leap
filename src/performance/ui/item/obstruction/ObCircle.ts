@@ -8,7 +8,7 @@ module leap {
 			let self = this;
 			self.rotateSpeed = rotateSpeed;
 			self.rotateTime = self.getAngle() / self.rotateSpeed;			
-			self.initCollider(42);
+			self.initCollider(50);
 		}
 
 		protected onMove(deltaTime:number){

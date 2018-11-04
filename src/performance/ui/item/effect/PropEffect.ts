@@ -45,13 +45,13 @@ module leap {
 
 		public onCreate(){
 			let self = this;
-			console.log("onCreate:", self.key);
+			//console.log("onCreate:", self.key);
 
 		}
 
 		public onDestroy(){
 			let self = this;
-			console.log("onDestroy:", self.key);
+			//console.log("onDestroy:", self.key);
 		}
 
 		public onEnterFrame(deltaTime:number){			

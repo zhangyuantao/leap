@@ -3,7 +3,7 @@
   "compilerVersion": "5.2.10",
   "template": {},
   "target": {
-    "current": "web"
+    "current": "wxgame"
   },
   "modules": [
     {
@@ -26,8 +26,8 @@
       "path": "libs/fairygui"
     },
     {
-      "name":"g2",
-      "path":"libs/g2"
+      "name": "g2",
+      "path": "libs/g2"
     }
   ]
 }

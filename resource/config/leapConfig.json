@@ -1,10 +1,10 @@
 {	
-	"Gravity":0.3,
+	"Gravity":1,
 	"WorldRange":3000,
-	"PlayerRotateSpeed":1,
+	"PlayerRotateSpeed":1.5,
 	"BgColors":[
-		"0x480B77",
 		"0x990000",
+		"0x480B77",
 		"0x993300",
 		"0x996600",
 		"0x666600",
@@ -23,30 +23,30 @@
 	"Items":{
 		"WhiteBall":{
 			"score":1,
-			"jumpSpeed":20,
+			"jumpSpeed":30,
 			"jumpDis":300,
-			"spawnInterval":500,
+			"spawnInterval":1000,
 			"spawnRange":[100, 800],
 			"scaleRange":[0.5, 1],
 			"speedRange":[0.2, 4]
 		},
 		"ScoreBall":{
 			"score":5,
-			"jumpSpeed":20,
+			"jumpSpeed":30,
 			"jumpDis":300,
-			"spawnInterval":1000,
+			"spawnInterval":2000,
 			"spawnRange":[200, 800],
 			"scaleRange":[0.5, 1],
 			"speedRange":[0.3, 5]
 		},
 		"Explode":{
-			"jumpSpeed":20,
+			"jumpSpeed":30,
 			"jumpDis":300,
 			"bulletNum":10,
 			"bulletSpeed":6
 		},		
 		"MegaJump":{
-			"jumpSpeed":30,
+			"jumpSpeed":40,
 			"jumpDis":400
 		},		
 		"Star":{
@@ -55,20 +55,20 @@
 			"invincibleTime":800
 		},		
 		"Plus":{
-			"jumpSpeed":20,
+			"jumpSpeed":30,
 			"jumpDis":300,
 			"duration":5000,
 			"invincibleTime":5300	
 		},		
 		"Magnet":{
-			"jumpSpeed":20,
+			"jumpSpeed":30,
 			"jumpDis":300,
 			"duration":5000,
 			"range":250,
 			"attractionRange":[15,30]
 		},
 		"Thunderbolt":{
-			"jumpSpeed":25,
+			"jumpSpeed":30,
 			"jumpDis":350,
 			"duration":5000,
 			"acceleration":2,
@@ -110,31 +110,31 @@
 		"4":{
 			"score":400,
 			"propSpawnMax":2,
-			"propSpawnInterval":[3000, 5000],
+			"propSpawnInterval":[4000, 6000],
 			"propRange":[600, 1000]
 		},
 		"5":{
 			"score":700,
 			"propSpawnMax":2,
-			"propSpawnInterval":[3500, 5000],
+			"propSpawnInterval":[4000, 6000],
 			"propRange":[600, 1200]
 		},
 		"6":{
 			"score":1000,
-			"propSpawnMax":3,
-			"propSpawnInterval":[3500, 5000],
+			"propSpawnMax":2,
+			"propSpawnInterval":[4000, 6000],
 			"propRange":[600, 1200]
 		},
 		"7":{
 			"score":1400,
 			"propSpawnMax":3,
-			"propSpawnInterval":[3500, 5500],
+			"propSpawnInterval":[5000, 7000],
 			"propRange":[600, 1200]
 		},
 		"8":{
 			"score":[1400,50,450],
-			"propSpawnMax":4,
-			"propSpawnInterval":[4000, 6000],
+			"propSpawnMax":3,
+			"propSpawnInterval":[5000, 7000],
 			"propRange":[600, 1200]
 		}
 	}

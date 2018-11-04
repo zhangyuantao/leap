@@ -21,7 +21,7 @@ class Main extends egret.DisplayObjectContainer {
         egret.lifecycle.onPause = () => {
             egret.ticker.pause();
             utils.EventDispatcher.getInstance().dispatchEvent('onAppPause');
-            console.log("pause");
+            //console.log("pause");
         }
 
         egret.lifecycle.onResume = () => {
@@ -29,16 +29,16 @@ class Main extends egret.DisplayObjectContainer {
         }
 
         this.runGame().catch(e => {
-            console.log(e);
+            //console.log(e);
         })
     }
 
     private async runGame() {
-        await this.loadResource()
-        this.createGameScene();            
+        await this.loadResource();            
         await platform.login();
+        this.createGameScene(); 
         const userInfo = await platform.getUserInfo();
-        console.log(userInfo);
+        //console.log(userInfo);
 
     }
 
@@ -59,7 +59,8 @@ class Main extends egret.DisplayObjectContainer {
      * 创建游戏场景
      * Create a game scene
      */
-    private createGameScene() { 
+    private createGameScene() {        
+        //fairygui.UIConfig.defaultFont = "RubikOne";
         fairygui.UIPackage.addPackage("leap");        
         this.stage.addChild(fairygui.GRoot.inst.displayObject);
         this.stage.removeChild(this);

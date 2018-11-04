@@ -5,7 +5,7 @@ module leap {
 
 		public onCreate(){
 			let self = this;
-			console.log("onCreate:", self.key);
+			//console.log("onCreate:", self.key);
 			self.once(egret.Event.ADDED_TO_STAGE, self.onAdded, self);
 			utils.EventDispatcher.getInstance().addEventListener("newRound", self.onNewRound, self);
 			utils.EventDispatcher.getInstance().addEventListener("nearEnd", self.onNearEnd, self);
@@ -13,7 +13,7 @@ module leap {
 
 		public onDestroy(){
 			let self = this;
-			console.log("onDestroy:", self.key);
+			//console.log("onDestroy:", self.key);
 			utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
 			utils.EventDispatcher.getInstance().removeEventListener("nearEnd", self.onNearEnd, self);
 		}

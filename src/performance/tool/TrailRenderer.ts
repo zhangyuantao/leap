@@ -45,8 +45,8 @@ class TrailRenderer extends egret.DisplayObject{
 
 	private onEnterFrame(e){
 		let self = this;
-		if(self.parent)
-			self.drawTrail();
+		//if(self.parent)
+		//	self.drawTrail();
 	}
 
 	/**
@@ -109,9 +109,9 @@ class TrailRenderer extends egret.DisplayObject{
 			let initScale = 1 - frameTime / self.trailLife / density * i;	
 
 			egret.Tween.get(sh).set({scaleX:initScale, scaleY:initScale})
-			.to({alpha:self.alphaTo, scaleX:0, scaleY:0}, self.trailLife, self.trailEase)
+			.to({alpha:self.alphaTo, scaleX:0, scaleY:0}, self.trailLife)
 			.call(() => {
-				self.removeTrailShape(sh);
+				//self.removeTrailShape(sh);
 				self.cacheShape(sh);
 			});
 		}	
@@ -120,7 +120,8 @@ class TrailRenderer extends egret.DisplayObject{
 	// 添加拖尾图片，注意要跟目标平级
 	private addTrailShape(sh:egret.Shape){
 		let self = this;
-		self.target.parent.addChildAt(sh, 0);
+		if(!sh.parent)
+			self.target.parent.addChildAt(sh, 0);
 	}
 
 	private removeTrailShape(sh:egret.Shape){
