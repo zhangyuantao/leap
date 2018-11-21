@@ -3,8 +3,8 @@
  * 实现目标跟随目标移动和“世界”缩放，同时控制目标在活动半径内（以屏幕中心为原点）
  */
 class Camera {
-	private readonly worldRadius:number = 3500; 	// 世界半径
-	private readonly worldMinScale:number = 0.2; 	// 世界最小缩放系数
+	private readonly worldRadius:number = 4000; 	// 世界半径
+	private readonly worldMinScale:number = 0.3; 	// 世界最小缩放系数
 
 	private worldRoot:any;					// 世界节点
 	private stageWidth:number;				// 舞台宽

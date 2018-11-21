@@ -45,6 +45,8 @@ module leap {
 			self.itemClasses[ItemDefine.Plus] = Plus;
 			self.itemClasses[ItemDefine.ObCircle] = ObCircle;
 			self.itemClasses[ItemDefine.ObTriangle] = ObTriangle;
+			self.itemClasses[ItemDefine.ObSquare] = ObSquare;
+			self.itemClasses[ItemDefine.ObTube] = ObTube;
 
 			self.spwaners = [];	
 			self.spwaners.push(new WhiteBallSpawner());
@@ -57,6 +59,8 @@ module leap {
 			self.spwaners.push(new MagnetSpawner());
 			self.spwaners.push(new ObCircleSpawner());
 			self.spwaners.push(new ObTriangleSpawner());
+			self.spwaners.push(new ObSquareSpawner());
+			self.spwaners.push(new ObTubeSpawner());
 		}
 
 		/**

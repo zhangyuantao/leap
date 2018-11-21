@@ -4,9 +4,7 @@ module leap {
 		private multTxt:fairygui.GComponent;
 		private levelTxt:fairygui.GComponent;
 		private pauseBtn:fairygui.GButton;
-		private musicBtn:fairygui.GButton;
-		private guideBtn:fairygui.GButton;
-		private leaveBtn:fairygui.GButton;
+		private musicBtn:fairygui.GButton;	
 		private pausePanel:fairygui.GComponent;
 		private continueBtn:fairygui.GButton;
 		private newRecord:fairygui.GComponent;
@@ -47,11 +45,7 @@ module leap {
 			self.pauseBtn = self.getChild("pauseBtn").asButton;   
 			self.pauseBtn.addClickListener(self.onPauseBtn, self);
 			self.musicBtn = self.getChild("musicBtn").asButton; 
-			self.musicBtn.addClickListener(self.onMusicBtn, self);
-			self.leaveBtn = self.getChild("leaveBtn").asButton;
-			self.leaveBtn.addClickListener(self.onLeaveBtn, self);
-			self.guideBtn = self.getChild("guideBtn").asButton;
-			self.guideBtn.addClickListener(self.onGuideBtn, self);
+			self.musicBtn.addClickListener(self.onMusicBtn, self);		
 			self.pausePanel = self.getChild("pausePanel").asCom;
 			self.pausePanel.visible = false;
 			self.continueBtn = self.pausePanel.getChild("continueBtn").asButton;
@@ -114,27 +108,6 @@ module leap {
 			self.musicBtn.getController("button").setSelectedIndex(self.soundOn ? 0 : 1);
 		}
 
-		private onLeaveBtn(e){
-			let self = this;
-			GameMgr.getInstance().pause(true);	
-			self.soundOn = false;
-			self.setSound();		
-			// self.alertWnd = GameTextTipsMgr.getInstance().createAlter("确定放弃游戏？", TypeDefine.CANCLE_BTN | TypeDefine.SURE_BTN, new CallBackVo((a,b) => {
-			// 	if(b == TypeDefine.SURE_BTN){
-			// 		//CMD.instance.gameOver(new CallBackVo(), GameMgr.getInstance().score);				
-			// 		FWFacade.instance.sendNotification(MainNotes.SINGLE_GAME_LEAVE);
-			// 	}
-			// 	GameMgr.getInstance().pause(false);
-			// 	self.soundOn = true;
-			// 	self.setSound();
-			// }, self), true);		
-		}
-
-		private onGuideBtn(e){
-			let self = this;
-			//FWFacade.instance.sendNotification(MainNotes.LOAD_MODULE,{flag:"GuideModule"});
-		}
-
 		private onContinueBtn(e){
 			let self = this;
 			GameMgr.getInstance().pause(false);
@@ -194,9 +167,7 @@ module leap {
 			super.dispose();
 			let self = this;
 			self.pauseBtn.removeClickListener(self.onPauseBtn, self);
-			self.musicBtn.removeClickListener(self.onMusicBtn, self);
-			self.leaveBtn.removeClickListener(self.onLeaveBtn, self);
-			self.guideBtn.removeClickListener(self.onGuideBtn, self);
+			self.musicBtn.removeClickListener(self.onMusicBtn, self);		
 			self.continueBtn.removeClickListener(self.onContinueBtn, self);
 
 			utils.StageUtils.removeEventListener("createGame", self.onCreateGame, self);

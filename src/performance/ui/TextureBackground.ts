@@ -29,8 +29,8 @@ module leap {
 			if(self.curImg){
 				egret.Tween.removeTweens(self.curImg);
 				self.curImg.visible = false;
-				self.curImg.width = 0;
-				self.curImg.height = 0;
+				// self.curImg.width = 0;
+				// self.curImg.height = 0;
 			}
 
 			// 随机一个纹理
@@ -51,8 +51,8 @@ module leap {
 			egret.Tween.removeTweens(self.curImg);
 			egret.Tween.get(self.curImg).to({alpha:0}, 800, egret.Ease.sineInOut).call(() => {
 				self.curImg.visible = false;
-				self.curImg.width = 0;
-				self.curImg.height = 0;
+				// self.curImg.width = 0;
+				// self.curImg.height = 0;
 				self.visible = false;
 			});			
 		}
@@ -60,8 +60,8 @@ module leap {
 		public change(){
 			let self = this;
 			self.curImg.visible = false;
-			self.curImg.width = 0;
-			self.curImg.height = 0;
+			// self.curImg.width = 0;
+			// self.curImg.height = 0;
 			self.show();
 		}
 

@@ -243,7 +243,7 @@ module leap {
 			// 加拖尾组件
 			if(!self.trail){
 				self.trail = new TrailRenderer();
-				self.trail.init(200, 0.4, 0, 5, 35);
+				self.trail.init(200, 0.4, 0, 10, 38);
 				self.displayListContainer.addChild(self.trail);
 			}
 

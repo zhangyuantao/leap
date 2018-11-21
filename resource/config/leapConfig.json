@@ -27,7 +27,7 @@
 			"jumpDis":300,
 			"spawnInterval":1000,
 			"spawnRange":[100, 800],
-			"scaleRange":[0.5, 1],
+			"scaleRange":[0.65, 1],
 			"speedRange":[0.2, 4]
 		},
 		"ScoreBall":{
@@ -36,7 +36,7 @@
 			"jumpDis":300,
 			"spawnInterval":2000,
 			"spawnRange":[200, 800],
-			"scaleRange":[0.5, 1],
+			"scaleRange":[0.7, 1],
 			"speedRange":[0.3, 5]
 		},
 		"Explode":{
@@ -50,9 +50,9 @@
 			"jumpDis":400
 		},		
 		"Star":{
-			"duration":500,
-			"acceleration":5,
-			"invincibleTime":800
+			"duration":1000,
+			"acceleration":4,
+			"invincibleTime":1300
 		},		
 		"Plus":{
 			"jumpSpeed":30,
@@ -78,7 +78,7 @@
 			"score":1,
 			"speedRange":[0.1, 0.5],
 			"spawnInterval":8000,
-			"spawnRange":[400, 1000],
+			"spawnRange":[400, 1200],
 			"scaleRange":[0.6, 1]
 		},
 		"ObTriangle":{
@@ -86,6 +86,21 @@
 			"speed":3,
 			"activeScore":100,
 			"spawnInterval":20000
+		},
+		"ObSquare":{
+			"score":1,
+			"speedRange":[0.1, 0.5],
+			"spawnInterval":13000,
+			"spawnRange":[600, 1200],
+			"scaleRange":[0.6, 1]
+		},
+		"ObTube":{
+			"score":1,
+			"speedRange":[0.1, 0.5],
+			"spawnInterval":18000,
+			"spawnRange":[800, 1200],
+			"scaleRange":[0.6, 1],
+			"selfRotateSpeedRange":[1, 3]
 		}
 	},
 	"LevelCfg":{
@@ -93,49 +108,49 @@
 			"score":0,
 			"propSpawnMax":1,
 			"propSpawnInterval":[3000, 5000],
-			"propRange":[500, 800]
+			"propRange":[500, 1000]
 		},
 		"2":{
 			"score":100,
 			"propSpawnMax":1,
 			"propSpawnInterval":[3000, 5000],
-			"propRange":[500, 800]
+			"propRange":[500, 1000]
 			},
 		"3":{
 			"score":200,
 			"propSpawnMax":1,
 			"propSpawnInterval":[3000, 5000],
-			"propRange":[600, 1000]
+			"propRange":[600, 1200]
 		},
 		"4":{
 			"score":400,
 			"propSpawnMax":2,
 			"propSpawnInterval":[4000, 6000],
-			"propRange":[600, 1000]
+			"propRange":[600, 1200]
 		},
 		"5":{
 			"score":700,
 			"propSpawnMax":2,
 			"propSpawnInterval":[4000, 6000],
-			"propRange":[600, 1200]
+			"propRange":[700, 1400]
 		},
 		"6":{
 			"score":1000,
 			"propSpawnMax":2,
 			"propSpawnInterval":[4000, 6000],
-			"propRange":[600, 1200]
+			"propRange":[700, 1400]
 		},
 		"7":{
 			"score":1400,
 			"propSpawnMax":3,
 			"propSpawnInterval":[5000, 7000],
-			"propRange":[600, 1200]
+			"propRange":[700, 1400]
 		},
 		"8":{
 			"score":[1400,50,450],
 			"propSpawnMax":3,
 			"propSpawnInterval":[5000, 7000],
-			"propRange":[600, 1200]
+			"propRange":[800, 1400]
 		}
 	}
 }

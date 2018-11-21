@@ -8,9 +8,10 @@ class TrailRenderer extends egret.DisplayObject{
 	/** 配置项 */
 	public trailDensity:number;						// 拖尾密度，每帧直接画拖尾图形的个数，为0或不指定则默认为一个像素间隔画一个拖尾图片，即最密集
 	public trailLife:number;						// 持续时间
-	public trailWidth:number;						// 拖尾宽度，默认等于目标宽度
+	public trailScale:number = 1;					// 缩放系数
+	private trailWidth:number;						// 拖尾宽度，默认等于目标宽度
 	private trailColors:number[];					// 颜色数组，按数组循环使用颜色
-	private trailEase:Function;						// 拖尾缓动
+	//private trailEase:Function;						// 拖尾缓动
 	private alphaFrom:number;						// 起始透明度
 	private alphaTo:number;							// 结束透明度
 
@@ -45,8 +46,8 @@ class TrailRenderer extends egret.DisplayObject{
 
 	private onEnterFrame(e){
 		let self = this;
-		//if(self.parent)
-		//	self.drawTrail();
+		if(self.parent)
+			self.drawTrail();
 	}
 
 	/**
@@ -59,12 +60,13 @@ class TrailRenderer extends egret.DisplayObject{
 	 * @param colors 颜色数组，按数组循环使用颜色
 	 * @param ease 拖尾缓动函数 使用效果不是很明显，默认即可
 	 */
-	public init(life:number = 500, alphaFrom:number = 1, alphaTo:number = 0,  density:number = 0, width:number = 0, colors:number[] = [0xFFFFFF], ease:Function = egret.Ease.sineInOut){
+	public init(life:number = 500, alphaFrom:number = 1, alphaTo:number = 0,  density:number = 0, width:number = 0, colors:number[] = [0xFFFFFF]/*, ease:Function = egret.Ease.sineInOut*/){
 		let self = this;
 		self.trailDensity = density;
 		self.trailLife = life;
 		self.trailColors = colors;
 		self.trailWidth = width;
+		//self.trailEase = ease;
 		self.alphaFrom = alphaFrom;
 		self.alphaTo = alphaTo;		
 		self.curColorIdx = 0;
@@ -85,7 +87,7 @@ class TrailRenderer extends egret.DisplayObject{
 		self.lastTargetPos.x = self.target.x;
 		self.lastTargetPos.y = self.target.y;	
 
-		if(Math.abs(dx) < 1 && Math.abs(dy) < 1) 
+		if(Math.abs(dx) < 2 && Math.abs(dy) < 2) 
 			return;
 
 		let dis = Math.sqrt(dx * dx + dy * dy);
@@ -102,16 +104,15 @@ class TrailRenderer extends egret.DisplayObject{
 			let x = self.target.x - xTemp;
 			let y = self.target.y - yTemp;
 			let sh = self.drawTrailShape(x, y, color);
-			self.addTrailShape(sh);
 
 			// 平滑处理：该帧所有图形做大小渐变
 			let frameTime = 33;	// 一帧33ms，根据帧率调整
 			let initScale = 1 - frameTime / self.trailLife / density * i;	
+			initScale *= self.trailScale;
 
 			egret.Tween.get(sh).set({scaleX:initScale, scaleY:initScale})
-			.to({alpha:self.alphaTo, scaleX:0, scaleY:0}, self.trailLife)
+			.to({alpha:self.alphaTo, scaleX:0, scaleY:0}, self.trailLife/*, self.trailEase*/)
 			.call(() => {
-				//self.removeTrailShape(sh);
 				self.cacheShape(sh);
 			});
 		}	
@@ -124,18 +125,17 @@ class TrailRenderer extends egret.DisplayObject{
 			self.target.parent.addChildAt(sh, 0);
 	}
 
-	private removeTrailShape(sh:egret.Shape){
-		let self = this;
-		self.target.parent.removeChild(sh);
-	}
-
 	// 画拖尾图形
 	private drawTrailShape(x:number, y:number, color:number){
 		let self = this;
-		let sh = self.getCacheShape() || new egret.Shape();
-		sh.graphics.beginFill(color, self.alphaFrom);
-		sh.graphics.drawCircle(0, 0, self.trailWidth * 0.5);
-		sh.graphics.endFill();
+		let sh = self.getCacheShape();
+		if(!sh){
+			sh =  new egret.Shape();
+			sh.graphics.beginFill(color, self.alphaFrom);
+			sh.graphics.drawCircle(0, 0, self.trailWidth * 0.5);
+			sh.graphics.endFill();
+			self.addTrailShape(sh);
+		}
 		sh.x = x;
 		sh.y = y;
 		return sh;
@@ -164,7 +164,6 @@ class TrailRenderer extends egret.DisplayObject{
 		sh.alpha = 1;
 		sh.scaleX = 1;
 		sh.scaleY = 1;
-		sh.graphics.clear();
 		if(self.trailShapeCache)
 			self.trailShapeCache.push(sh);
 	}

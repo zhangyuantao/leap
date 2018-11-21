@@ -18,9 +18,16 @@ module leap {
 
 		protected applyEffect(player:Player, lastCheckPlayerPos:IPoint){
 			let self = this;
-			let lastHeight = Math.sqrt(lastCheckPlayerPos.x * lastCheckPlayerPos.x + lastCheckPlayerPos.y * lastCheckPlayerPos.y);	
-			let playerHeight = player.getHeight();
-			let selfHeight = self.getHeight();
+			let lastHeight = 0;
+			let playerHeight = 0;
+			let selfHeight = 0;
+
+			if(!player.isInvincible){
+				lastHeight = Math.sqrt(lastCheckPlayerPos.x * lastCheckPlayerPos.x + lastCheckPlayerPos.y * lastCheckPlayerPos.y);	
+				playerHeight = player.getHeight();
+				selfHeight = self.getHeight();
+			}
+
 			if(!player.isInvincible && playerHeight > selfHeight && lastHeight > playerHeight){				
 				player.dead();
 			}

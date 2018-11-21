@@ -3,17 +3,16 @@ module leap {
 		public init(effKey:string, p:Player){
 			super.init(effKey, p);
 			let self = this;
-			p.trail.trailDensity = 20;
-
-			self.player.addInvincibleTime(self.cfg.invincibleTime);
+			p.trail.trailScale = 1.2;
+			p.addInvincibleTime(self.cfg.invincibleTime);
 		}
 
 		// 移除特效
 		public onDestroy(){
 			super.onDestroy();
-			let self = this;	
+			let self = this;
 			if(self.player.trail)
-				egret.Tween.get(self.player.trail).to({trailDensity:10}, 300);
+				self.player.trail.trailScale = 1;
 		}
 	}
 }

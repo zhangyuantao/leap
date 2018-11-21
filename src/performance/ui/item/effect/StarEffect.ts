@@ -5,10 +5,9 @@ module leap {
 			let self = this;
 			egret.Tween.removeTweens(self.player);
 			p.rotateTimeAdd = 1;
-			p.trail.trailDensity = 50;
-			egret.Tween.get(p.trail).to({trailWidth:50}, 300);
-
-			self.player.addInvincibleTime(self.cfg.invincibleTime);
+			p.trail.trailScale = 1.5;
+			if(p.jumpSpeed < 0)	p.jumpSpeed = 0;
+			p.addInvincibleTime(self.cfg.invincibleTime);
 		}
 
 		// 移除特效
@@ -21,7 +20,7 @@ module leap {
 			}
 
 			if(self.player.trail)
-				egret.Tween.get(self.player.trail).to({trailDensity:10, trailWidth:35}, 500);
+				self.player.trail.trailScale = 1;
 		}
 	}
 }
