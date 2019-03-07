@@ -17,18 +17,16 @@ module leap {
 
 		public spawn(){
 			let self = this;
+			let lvCfg = GameCfg.getLevelCfg(GameMgr.getInstance().level);
 
 			// 升级后更新生成频率
 			if(self.levelUpFlag){
 				self.levelUpFlag = false;
-				let lvCfg = GameCfg.getLevelCfg(GameMgr.getInstance().level);
 				let spawnInterval = lvCfg.propSpawnInterval[0] + Math.random() * (lvCfg.propSpawnInterval[1] - lvCfg.propSpawnInterval[0]);
 				self.spawnInterval = Math.floor(spawnInterval);
 			}
 
-			let lvCfg = GameCfg.getLevelCfg(GameMgr.getInstance().level);
-			let spawnedNum = ItemMgr.getInstance().getItemSpawnNum(self.key);
-			if(spawnedNum >= lvCfg.propSpawnMax)
+			if(!self.canSpawnProp())
 				return;
 
 			let randomRad = Math.random() * Math.PI * 2;

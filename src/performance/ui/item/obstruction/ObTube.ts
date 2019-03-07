@@ -7,7 +7,7 @@ module leap {
 			let self = this;
 			let cfg = GameCfg.getCfg().Items[self.key];
 			let tmp = cfg.selfRotateSpeedRange[0] + Math.random() * (cfg.selfRotateSpeedRange[1] - cfg.selfRotateSpeedRange[0]);
-			self.selfRotateSpeed = tmp;
+			self.selfRotateSpeed = parseFloat(tmp.toFixed(1));
 		}
 
 		//@override
@@ -29,7 +29,7 @@ module leap {
 			let self = this;
 			if(!self.collider)
 				return;
-				
+
 			self.collider.x = self.x;
 			self.collider.y = self.y;
 			self.collider.scaleX = self.scaleX;
@@ -49,8 +49,8 @@ module leap {
 				let playerGlobal = player.displayObject.parent.localToGlobal(player.x, player.y);
 				let local = self.globalToLocal(playerGlobal.x, playerGlobal.y);
 				let pPlayer = new g2.Vector2(local.x, local.y);
-				let d1 = g2.Vector2.distance(p0, pPlayer);
-				let d2 = g2.Vector2.distance(p3, pPlayer);
+				d1 = g2.Vector2.distance(p0, pPlayer);
+				d2 = g2.Vector2.distance(p3, pPlayer);
 			}
 
 			if(!player.isInvincible && d1 < d2){

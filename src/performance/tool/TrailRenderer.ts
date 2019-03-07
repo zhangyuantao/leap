@@ -8,24 +8,21 @@ class TrailRenderer extends egret.DisplayObject{
 	/** 配置项 */
 	public trailDensity:number;						// 拖尾密度，每帧直接画拖尾图形的个数，为0或不指定则默认为一个像素间隔画一个拖尾图片，即最密集
 	public trailLife:number;						// 持续时间
-	public trailScale:number = 1;					// 缩放系数
-	private trailWidth:number;						// 拖尾宽度，默认等于目标宽度
-	private trailColors:number[];					// 颜色数组，按数组循环使用颜色
-	//private trailEase:Function;						// 拖尾缓动
+	public trailScale:number = 1;					// 拖尾缩放
+	public initTrailScale:number = 1;
 	private alphaFrom:number;						// 起始透明度
 	private alphaTo:number;							// 结束透明度
 
 	/** 运行时变量 */
 	private inited:boolean;							// 是否初始化
 	private target:any;								// 需要拖尾的目标
-	private trailShapeCache:egret.Shape[];			// 拖尾图形缓存
-	private curColorIdx:number = 0;					// 当前拖尾图形颜色索引
+	private trailItemCache:any[];					// 拖尾图形缓存
 	private lastTargetPos:any;						// 上一帧目标位置
 
 	public constructor(){
 		super();
 		let self = this;
-		self.trailShapeCache = [];
+		self.trailItemCache = [];
 		self.once(egret.Event.ADDED_TO_STAGE, self.onAdded, self);
 		self.once(egret.Event.REMOVED_FROM_STAGE, self.onRemoved, self);
 	}
@@ -33,20 +30,19 @@ class TrailRenderer extends egret.DisplayObject{
 	private onAdded(e){
 		let self = this;
 		self.target = self.parent;
-		self.trailWidth = self.trailWidth || self.target.width;
 		self.addEventListener(egret.Event.ENTER_FRAME, self.onEnterFrame, self);
 	}
 
 	private onRemoved(e){
 		let self = this;
 		egret.Tween.removeTweens(self);
-		self.trailShapeCache = null;
+		self.trailItemCache = null;
 		self.removeEventListener(egret.Event.ENTER_FRAME, self.onEnterFrame, self);
 	}
 
 	private onEnterFrame(e){
 		let self = this;
-		if(self.parent)
+		if(self.inited && self.parent)
 			self.drawTrail();
 	}
 
@@ -60,16 +56,14 @@ class TrailRenderer extends egret.DisplayObject{
 	 * @param colors 颜色数组，按数组循环使用颜色
 	 * @param ease 拖尾缓动函数 使用效果不是很明显，默认即可
 	 */
-	public init(life:number = 500, alphaFrom:number = 1, alphaTo:number = 0,  density:number = 0, width:number = 0, colors:number[] = [0xFFFFFF]/*, ease:Function = egret.Ease.sineInOut*/){
+	public init(life:number = 500, alphaFrom:number = 1, alphaTo:number = 0,  density:number = 0, initScale:number = 0){
 		let self = this;
 		self.trailDensity = density;
 		self.trailLife = life;
-		self.trailColors = colors;
-		self.trailWidth = width;
-		//self.trailEase = ease;
+		self.trailScale = initScale;
+		self.initTrailScale = initScale;
 		self.alphaFrom = alphaFrom;
-		self.alphaTo = alphaTo;		
-		self.curColorIdx = 0;
+		self.alphaTo = alphaTo;
 		self.inited = true;
 	}
 
@@ -87,12 +81,11 @@ class TrailRenderer extends egret.DisplayObject{
 		self.lastTargetPos.x = self.target.x;
 		self.lastTargetPos.y = self.target.y;	
 
-		if(Math.abs(dx) < 2 && Math.abs(dy) < 2) 
+		if(Math.abs(dx) < 1 && Math.abs(dy) < 1) 
 			return;
 
 		let dis = Math.sqrt(dx * dx + dy * dy);
 		let angle = Math.acos(dx / dis);
-		let color = self.getCurColor();
 		let density = self.trailDensity || dis;
 
 		// 该帧到上帧的位置平均插入density个拖尾图形
@@ -100,71 +93,70 @@ class TrailRenderer extends egret.DisplayObject{
 			let disTemp = dis / density * i;
 			let xTemp = disTemp * Math.cos(angle);
 			let yTemp = disTemp * Math.sin(angle);
-			yTemp *= dy < 0 ? -1 : 1; 				// 象限问题处理
-			let x = self.target.x - xTemp;
-			let y = self.target.y - yTemp;
-			let sh = self.drawTrailShape(x, y, color);
+			yTemp *= dy < 0 ? -1 : 1; // 象限问题处理
+			let x = parseFloat((self.target.x - xTemp).toFixed(1));
+			let y = parseFloat((self.target.y - yTemp).toFixed(1));
+			let sh = self.drawTrailItem(x, y);
 
 			// 平滑处理：该帧所有图形做大小渐变
 			let frameTime = 33;	// 一帧33ms，根据帧率调整
 			let initScale = 1 - frameTime / self.trailLife / density * i;	
 			initScale *= self.trailScale;
+			initScale = parseFloat(initScale.toFixed(2));
 
 			egret.Tween.get(sh).set({scaleX:initScale, scaleY:initScale})
-			.to({alpha:self.alphaTo, scaleX:0, scaleY:0}, self.trailLife/*, self.trailEase*/)
+			.to({alpha:self.alphaTo, scaleX:0, scaleY:0}, self.trailLife, egret.Ease.sineInOut)
 			.call(() => {
-				self.cacheShape(sh);
+				self.cacheItem(sh);
 			});
 		}	
 	}
 
-	// 添加拖尾图片，注意要跟目标平级
-	private addTrailShape(sh:egret.Shape){
+	// 画拖尾图形
+	private drawTrailItem(x:number, y:number){
 		let self = this;
-		if(!sh.parent)
-			self.target.parent.addChildAt(sh, 0);
+		let item = self.getCacheItem();
+		if(!item){
+			item = self.createTrailItem();
+			item.alpha = self.alphaFrom;
+			self.target.parent.addChildAt(item.displayObject ? item.displayObject : item, 0);
+		}
+		item.x = x;
+		item.y = y;
+		return item;
 	}
 
-	// 画拖尾图形
-	private drawTrailShape(x:number, y:number, color:number){
+	/**
+	 * new一个拖尾图形
+	 */
+	public createTrailItem():any{
 		let self = this;
-		let sh = self.getCacheShape();
-		if(!sh){
-			sh =  new egret.Shape();
-			sh.graphics.beginFill(color, self.alphaFrom);
-			sh.graphics.drawCircle(0, 0, self.trailWidth * 0.5);
-			sh.graphics.endFill();
-			self.addTrailShape(sh);
-		}
-		sh.x = x;
-		sh.y = y;
+
+		// 由外部重写决定创建什么拖尾图形对象
+		// 默认画个圆，该方式一个圆产生一个drawCall，慎重控制拖尾生命和密度		
+		let sh = new egret.Shape();
+		sh.graphics.beginFill(0xffffff);
+		sh.graphics.drawCircle(0, 0, 15);
+		sh.graphics.endFill();
+
 		return sh;
 	}
 
-	// 循环获取颜色
-	private getCurColor(){
+	private getCacheItem(){
 		let self = this;
-		let c = self.trailColors[self.curColorIdx++];
-		if(self.curColorIdx > self.trailColors.length - 1)
-			self.curColorIdx = 0;
-		return c;
-	}
-
-	private getCacheShape(){
-		let self = this;
-		let sh = self.trailShapeCache.pop() || null;
+		let sh = self.trailItemCache.pop() || null;
 		if(sh) sh.visible = true;
 		return sh;
 	}
 
-	// 缓存图形
-	private cacheShape(sh:egret.Shape){
+	// 缓存拖尾对象
+	private cacheItem(item:any){
 		let self = this;
-		sh.visible = false;
-		sh.alpha = 1;
-		sh.scaleX = 1;
-		sh.scaleY = 1;
-		if(self.trailShapeCache)
-			self.trailShapeCache.push(sh);
+		item.visible = false;
+		item.alpha = self.alphaFrom;
+		item.scaleX = self.trailScale;
+		item.scaleY = self.trailScale;
+		if(self.trailItemCache)
+			self.trailItemCache.push(item);
 	}
 }

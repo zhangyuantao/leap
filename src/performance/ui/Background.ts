@@ -92,17 +92,13 @@ module leap{
 			return self.bgs[self.curBgIdx] || null;
 		}
 
-		private onLevelUp(){
+		private onLevelUp(lv:number){
 			let self = this;
 
 			// 升级随机换一种和当前不一样的颜色
-			let color;
 			let colors = GameCfg.getCfg().BgColors;
-			do{
-				let idx = Math.round(Math.random() * (colors.length - 1));
-				color = parseInt(colors[idx]);
-			}while(self.curColor == color);
-
+			let idx = (lv - 1) % colors.length;
+			let color = parseInt(colors[idx]);
 			self.changeColor(color);
 		}
 	}

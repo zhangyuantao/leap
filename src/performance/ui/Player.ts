@@ -89,7 +89,7 @@ module leap {
 		/**
 		 * 跳跃
 		 */
-		public jump(jumpSpeed:number, jumpDis:number){
+		public jump(jumpSpeed:number){
 			let self = this;
 			
 			// 连跳逻辑
@@ -138,7 +138,7 @@ module leap {
 			self.effects = {};			// 清除效果
 			self.jumpContinueCnt = 0;	
 			self.invincibleTime = 0;
-			self.jumpSpeed = 20;		// 复活的时候上升
+			self.jumpSpeed = GameCfg.getCfg().Items[ItemDefine.WhiteBall].jumpSpeed;		// 复活的时候上升
 			self.rotateTimeAdd = 0;
 			self.isPressed = false;
 
@@ -175,7 +175,7 @@ module leap {
 				if(self.y < 0)
 					angle += 180;
 			}
-			return angle;
+			return Math.round(angle);
 		}
 
 		public onMove(){
@@ -238,12 +238,14 @@ module leap {
 
 		public onCreate(){
 			let self = this;
-			//console.log("onCreate:", self.key);
 			
 			// 加拖尾组件
 			if(!self.trail){
 				self.trail = new TrailRenderer();
-				self.trail.init(200, 0.4, 0, 10, 38);
+				self.trail.createTrailItem = () => {
+					return fairygui.UIPackage.createObject('leap', "TrailItem");
+				}
+				self.trail.init(280, 0.5, 0, 1, 0.7);
 				self.displayListContainer.addChild(self.trail);
 			}
 
@@ -311,11 +313,11 @@ module leap {
 			let self = this;
 			if(!self.collider)
 				return;
-				
+
 			self.collider.x = self.x;
 			self.collider.y = self.y;
-			self.collider.scaleX = self.mainUI.face.scaleX;
-			self.collider.scaleY = self.mainUI.face.scaleY;
+			self.collider.scaleX = parseFloat(self.mainUI.face.scaleX.toFixed(2));
+			self.collider.scaleY = self.collider.scaleX;
 			self.rotation = self.getAngle() - 270;
 			self.collider.rotation = self.rotation;
 		}

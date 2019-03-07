@@ -78,10 +78,10 @@ module leap {
 			// 围绕中心点生成	
 			let dx = r * Math.cos(rad);
 			let dy = r * Math.sin(rad);		
-			item.x = dx + World.instance.spike.x;
-			item.y = dy + World.instance.spike.y;
+			item.x = Math.round(dx + World.instance.spike.x);
+			item.y = Math.round(dy + World.instance.spike.y);
 
-			item.scaleX = item.scaleY = scale;
+			item.scaleX = item.scaleY = parseFloat(scale.toFixed(1));
 
 			self.spawnItems.push(item);
 			
@@ -112,7 +112,7 @@ module leap {
 		// 物品定时生成
 		public onUpdate(){
 			let self = this;
-			self.collisionCheck(World.instance.player);			
+			self.collisionCheck(World.instance.player);	
 			self.onSpawnsUpdate();
 		}
 
@@ -122,7 +122,6 @@ module leap {
 		private collisionCheck(player:Player){
 			let self = this;
 			let playerPos = <IPoint>{x:player.x, y:player.y};
-
 			let pCollider = player.collider;
 			for(let i = 0; i < self.spawnItems.length; i++){
 				let item = self.spawnItems[i];
@@ -130,6 +129,13 @@ module leap {
 					continue;
 				
 				if(item instanceof ExplodeSpike)
+					continue;
+
+				// 距离超过多少不检测
+				let dx = player.x - item.x;
+				let dy = player.y - item.y;
+				let d = dx * dx + dy * dy;
+				if(d > 10000)
 					continue;
 
 				let collided = g2.SAT.checkCollision(pCollider, item.collider);
@@ -162,6 +168,13 @@ module leap {
 					continue;
 				
 				if(item.key.indexOf("Ob") == -1)
+					continue;
+
+				// 距离超过多少不检测
+				let dx = bullet.x - item.x;
+				let dy = bullet.y - item.y;
+				let d = dx * dx + dy * dy;
+				if(d > 10000)
 					continue;
 
 				let collided = g2.SAT.checkCollision(bCollider, item.collider);

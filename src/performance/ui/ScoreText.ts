@@ -1,14 +1,12 @@
 module leap {
 	export class ScoreText extends fairygui.GComponent{
-		//private txtScoreOut:fairygui.GTextField;
 		private txtScore:fairygui.GTextField;
 
 		private initY:number;
 
 		constructFromResource(){
             super.constructFromResource();
-            let self = this;
-			//self.txtScoreOut = self.getChild("txtScoreOut").asTextField;   
+            let self = this; 
 			self.txtScore = self.getChild("txtScore").asTextField;         
 			self.initY = self.txtScore.y;
         }
@@ -25,7 +23,6 @@ module leap {
 
 		public setText(text:string){
 			let self = this;
-			//self.txtScore.text = self.txtScoreOut.text = text;
 			self.txtScore.text = text;
 		}
 	}

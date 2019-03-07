@@ -12,6 +12,7 @@ module leap {
 	// 关卡配置
 	export interface ILevelCfg{
 		score:number;
+		obSpawnMax
 		propSpawnMax:number;
 		propSpawnInterval:number[];
 		propRange:number[];

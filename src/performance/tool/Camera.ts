@@ -3,8 +3,8 @@
  * 实现目标跟随目标移动和“世界”缩放，同时控制目标在活动半径内（以屏幕中心为原点）
  */
 class Camera {
-	private readonly worldRadius:number = 4000; 	// 世界半径
-	private readonly worldMinScale:number = 0.3; 	// 世界最小缩放系数
+	private readonly worldRadius:number = 3000; 	// 世界半径
+	private readonly worldMinScale:number = 0.25; 	// 世界最小缩放系数
 
 	private worldRoot:any;					// 世界节点
 	private stageWidth:number;				// 舞台宽
@@ -58,8 +58,8 @@ class Camera {
 		// 根据目标距离圆心的距离来缩放“世界”
 		let toScale = 1 - disToCenter / self.worldRadius;
 		toScale = Math.max(toScale, self.worldMinScale);		
-		self.worldRoot.scaleX = toScale;
-		self.worldRoot.scaleY = toScale;
+		self.worldRoot.scaleX = parseFloat(toScale.toFixed(5));
+		self.worldRoot.scaleY = parseFloat(toScale.toFixed(5));
 
 		// worldOffsetX worldOffsetY 控制目标在一个屏幕半径范围内活动
 		let angle = Math.atan(self.target.y / self.target.x);
@@ -82,7 +82,9 @@ class Camera {
 		worldOffsetY += temp2 * sin;
 
 		// 世界位置==目标相对屏幕中心的坐标取反 + 偏移
-		self.worldRoot.x = (-self.target.x + self.screenCenter.x) + worldOffsetX;
-		self.worldRoot.y = (-self.target.y + self.screenCenter.y) + worldOffsetY;		
+		let x = (-self.target.x + self.screenCenter.x) + worldOffsetX;
+		let y = (-self.target.y + self.screenCenter.y) + worldOffsetY;
+		self.worldRoot.x = Math.round(x);
+		self.worldRoot.y = Math.round(y);
 	}
 }

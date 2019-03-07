@@ -67,4 +67,4 @@ class Main extends egret.DisplayObjectContainer {
     }
 }
 
-let wx = <any>{};
+declare let wx;

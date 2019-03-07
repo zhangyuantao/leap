@@ -28,6 +28,32 @@ module leap {
 			let item = ItemMgr.getInstance().spawnItem(self.key, randomRad, randomRadius, Prop.scaleUnit);		
 			World.instance.addItem(item.displayObject);
 		}
+		
+		protected canSpawnProp(){
+			let self = this;
+			let lv = GameMgr.getInstance().level;
+			let lvCfg = GameCfg.getLevelCfg(lv);
+			let spawnedNum = ItemMgr.getInstance().getItemSpawnNum(self.key);
+			if(spawnedNum >= lvCfg.propSpawnMax)
+				return false;
+
+			return true;
+		}
+
+		protected canSpawnOb(){
+			let self = this;
+			let lv = GameMgr.getInstance().level;			
+			let itemCfg = GameCfg.getCfg().Items[self.key];
+			if(itemCfg.level && itemCfg.level > lv)
+				return false;
+
+			let lvCfg = GameCfg.getLevelCfg(lv);
+			let spawnedNum = ItemMgr.getInstance().getItemSpawnNum(self.key);
+			if(spawnedNum >= lvCfg.obSpawnMax)
+				return false;
+
+			return true;
+		}
 	}
 
 	export interface ISpawner{

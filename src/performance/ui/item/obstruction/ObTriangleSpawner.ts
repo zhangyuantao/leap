@@ -9,6 +9,9 @@ module leap {
 
 		public spawn(){
 			let self = this;
+			if(!self.canSpawnOb())
+				return;	
+				
 			let itemCfg = GameCfg.getCfg().Items[self.key];
 
 			// 达到一定分数才会触发

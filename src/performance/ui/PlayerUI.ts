@@ -39,7 +39,7 @@ module leap {
 			self.isFall = false;
 
 			egret.Tween.removeTweens(self);
-			egret.Tween.get(self).to({scaleX:0.64, scaleY:1.12}, 300, egret.Ease.sineInOut);
+			egret.Tween.get(self).to({scaleX:0.7, scaleY:1.2}, 300, egret.Ease.sineInOut);
 			egret.Tween.removeTweens(self.eyes);
 			egret.Tween.get(self.eyes).to({scaleY:1.4, y:14}, 300, egret.Ease.sineInOut);
 		}
@@ -50,7 +50,7 @@ module leap {
 			self.isFall = true;
 			self.isJump = false;
 			egret.Tween.removeTweens(self);
-			egret.Tween.get(self).to({scaleX:0.8, scaleY:0.8}, 300, egret.Ease.sineInOut);
+			egret.Tween.get(self).to({scaleX:1, scaleY:1}, 300, egret.Ease.sineInOut);
 			egret.Tween.removeTweens(self.eyes);
 			egret.Tween.get(self.eyes).to({scaleX:1, scaleY:1, y:27}, 300, egret.Ease.sineInOut);
 		}

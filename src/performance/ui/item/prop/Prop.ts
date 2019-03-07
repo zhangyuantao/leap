@@ -20,8 +20,8 @@ module leap {
 		protected applyEffect(player:Player){
 			let self = this;
 			let cfg = GameCfg.getCfg().Items[self.key];
-			if(cfg.jumpSpeed && cfg.jumpDis)
-				player.jump(cfg.jumpSpeed, cfg.jumpDis);
+			if(cfg.jumpSpeed)
+				player.jump(cfg.jumpSpeed);
 		}
 	}
 }

@@ -4,6 +4,7 @@
 module leap {
 	export class MainWindow extends fairygui.Window {
 		public static instance:MainWindow;
+		public textureBg:TextureBackground;
 
 		public constructor() {
 			super();		
@@ -116,6 +117,10 @@ module leap {
 			// 背景
 			let bg = utils.ObjectPool.getInstance().createObject(Background);
 			self.displayListContainer.addChildAt(bg, 0);
+			
+			self.textureBg = fairygui.UIPackage.createObject('leap', "TextureBackground") as TextureBackground;
+			self.textureBg.visible = false;
+			self.addChild(self.textureBg);
 
 			// 世界
 			let worldContainer = new egret.DisplayObjectContainer();

@@ -23,8 +23,10 @@ module leap {
 		protected onMove(deltaTime:number){
 			let self = this;
 			super.onMove(deltaTime);
-			self.x += self.speedX;
-			self.y += self.speedY;
+			let newX = Math.round(self.x + self.speedX);
+			let newY = Math.round(self.y + self.speedY);
+			self.x = newX;
+			self.y = newY;
 		}		
 	}
 }

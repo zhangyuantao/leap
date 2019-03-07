@@ -16,21 +16,12 @@ module leap {
 			self.imgs.push(self.getChild("n6").asImage);
         }
 
-		public setWidth(w:number){
-			let self = this;
-			w = Math.max(w, utils.StageUtils.stageHeight * 2);
-			if(self.curImg.width < w)
-				self.curImg.width = self.curImg.height = w;
-		}
-
 		public show(){
 			let self = this;
 			self.visible = true;
 			if(self.curImg){
 				egret.Tween.removeTweens(self.curImg);
 				self.curImg.visible = false;
-				// self.curImg.width = 0;
-				// self.curImg.height = 0;
 			}
 
 			// 随机一个纹理
@@ -41,7 +32,7 @@ module leap {
 			while(self.lastIdx == idx);
 			
 			self.lastIdx = idx;
-			self.curImg = self.imgs[idx];			
+			self.curImg = self.imgs[idx];
 
 			egret.Tween.get(self.curImg).set({visible:true, alpha:0}).to({alpha:0.2}, 500, egret.Ease.sineInOut);
 		}
@@ -51,17 +42,17 @@ module leap {
 			egret.Tween.removeTweens(self.curImg);
 			egret.Tween.get(self.curImg).to({alpha:0}, 800, egret.Ease.sineInOut).call(() => {
 				self.curImg.visible = false;
-				// self.curImg.width = 0;
-				// self.curImg.height = 0;
 				self.visible = false;
 			});			
 		}
 
+		public setRotation(rot:number){
+			let self = this;
+			self.rotation = rot;
+		}
+
 		public change(){
 			let self = this;
-			self.curImg.visible = false;
-			// self.curImg.width = 0;
-			// self.curImg.height = 0;
 			self.show();
 		}
 

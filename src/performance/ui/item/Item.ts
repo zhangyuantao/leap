@@ -91,7 +91,7 @@ module leap {
 				if(self.y < 0 || self.x < 0)
 					angle += 180;
 			}
-			return angle;
+			return Math.round(angle);
 		}
 
 		//********************* 接口实现 ********************//

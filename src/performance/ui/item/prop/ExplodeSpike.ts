@@ -59,7 +59,7 @@ module leap {
 			let self = this;
 			if(!self.collider)
 				return;
-				
+
 			self.collider.x = self.x;
 			self.collider.y = self.y;
 		}

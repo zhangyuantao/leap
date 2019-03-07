@@ -5,7 +5,7 @@ module leap {
 			let self = this;
 			egret.Tween.removeTweens(self.player);
 			p.rotateTimeAdd = 1;
-			p.trail.trailScale = 1.5;
+			p.trail.trailScale = 1;
 			if(p.jumpSpeed < 0)	p.jumpSpeed = 0;
 			p.addInvincibleTime(self.cfg.invincibleTime);
 		}
@@ -20,7 +20,7 @@ module leap {
 			}
 
 			if(self.player.trail)
-				self.player.trail.trailScale = 1;
+				self.player.trail.trailScale = self.player.trail.initTrailScale;
 		}
 	}
 }

@@ -7,7 +7,7 @@ module leap{
 		public spike:SpikeCenter;
 		public linkLine:egret.Sprite;
 		public endLine:EndLine;
-		public textureBg:TextureBackground;
+		// public textureBg:TextureBackground;
 
 		private itemContainer:egret.DisplayObjectContainer;
 
@@ -49,7 +49,7 @@ module leap{
 			
 			self.camera.onUpdate();
 			ItemMgr.getInstance().onUpdate();	
-			self.drawLine();
+			//self.drawLine();
 		}
 		
 		//********************* 接口实现结束 ********************//
@@ -99,7 +99,7 @@ module leap{
 			let global = self.localToGlobal(self.player.x, self.player.y);
 			let local = self.linkLine.globalToLocal(global.x, global.y);
 			self.linkLine.graphics.moveTo(0, 0);
-			self.linkLine.graphics.lineTo(local.x, local.y);
+			self.linkLine.graphics.lineTo(Math.floor(local.x), Math.floor(local.y));
 			self.linkLine.graphics.endFill();
 		}
 
@@ -107,9 +107,9 @@ module leap{
 			let self = this;	
 			
 			// 纹理背景
-			self.textureBg = fairygui.UIPackage.createObject('leap', "TextureBackground") as TextureBackground;
-			self.textureBg.visible = false;
-			self.addChild(self.textureBg.displayObject);
+			//self.textureBg = fairygui.UIPackage.createObject('leap', "TextureBackground") as TextureBackground;
+			//self.textureBg.visible = false;
+			//self.addChild(self.textureBg.displayObject);
 
 			// 物品容器
 			self.itemContainer = new egret.DisplayObjectContainer();
@@ -155,8 +155,8 @@ module leap{
 			let self = this;
 			let ani = utils.ObjectPool.getInstance().createFairyUIObject(classFactory, "leap") as any;
 			self.itemContainer.addChild(ani.displayObject);
-			ani.x = x;
-			ani.y = y;
+			ani.x = Math.round(x);
+			ani.y = Math.round(y);
 			ani.getTransition("t0").play(()=>{
 				utils.ObjectPool.getInstance().destroyObject(ani);
 			}, self);
@@ -170,8 +170,8 @@ module leap{
 			let oldX = self.parent.x;
 			let oldY = self.parent.y;
 			egret.Tween.removeTweens(self.parent);
-			egret.Tween.get(self.parent).to({x:oldX + 5, y:oldY + 5}, 80, egret.Ease.backInOut)
-			.to({x:oldX - 4, y:oldY - 4}, 90, egret.Ease.backInOut)
+			egret.Tween.get(self.parent).to({x:oldX + 7, y:oldY + 7}, 80, egret.Ease.backInOut)
+			.to({x:oldX - 5, y:oldY - 5}, 90, egret.Ease.backInOut)
 			.to({x:oldX + 3, y:oldY + 3}, 100, egret.Ease.backInOut)
 			.to({x:oldX, y:oldY}, 110, egret.Ease.sineInOut);
 		}
