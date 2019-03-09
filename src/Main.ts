@@ -1,7 +1,7 @@
 class Main extends egret.DisplayObjectContainer {
     public constructor() {
         super();
-        if(wx && wx.loadFont)
+        if(platform.isRunWx())
             wx.loadFont("resource/RubikOne-Regular.ttf");
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }

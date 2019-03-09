@@ -163,6 +163,10 @@ var g2;
                     // 3.平移：加上自身坐标偏移				
                     newCoord.x += self.x;
                     newCoord.y += self.y;
+                    
+                    newCoord.x = Math.round(newCoord.x)
+                    newCoord.y = Math.round(newCoord.y);
+
                     result.push(newCoord);
                 }
                 return result;

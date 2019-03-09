@@ -245,7 +245,7 @@ module leap {
 				self.trail.createTrailItem = () => {
 					return fairygui.UIPackage.createObject('leap', "TrailItem");
 				}
-				self.trail.init(280, 0.5, 0, 1, 0.7);
+				self.trail.init(280, 0.3, 0, 5, 0.7);
 				self.displayListContainer.addChild(self.trail);
 			}
 
@@ -299,6 +299,7 @@ module leap {
 			self.updateTransform();			
 			self.drawCollider();
 			self.mainUI.onEnterFrame();
+			self.trail && self.trail.onEnterFrame(deltaTime);
 		}
 
 		public isCollided:boolean;

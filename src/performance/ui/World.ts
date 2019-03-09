@@ -138,7 +138,7 @@ module leap{
 			// 生成一圈球
 			for(let i = 0; i < 16; i++){
 				let rad = i * Math.PI / (16 / 2);
-				let ball = ItemMgr.getInstance().spawnItem(ItemDefine.WhiteBall, rad, 150, 1) as WhiteBall;
+				let ball = ItemMgr.getInstance().spawnItem(ItemDefine.WhiteBall, rad, 150) as WhiteBall;
 				ball.init(0.1 + Math.random() * 0.3);
 				self.addItem(ball.displayObject);
 			}

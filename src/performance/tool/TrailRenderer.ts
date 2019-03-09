@@ -30,17 +30,17 @@ class TrailRenderer extends egret.DisplayObject{
 	private onAdded(e){
 		let self = this;
 		self.target = self.parent;
-		self.addEventListener(egret.Event.ENTER_FRAME, self.onEnterFrame, self);
+		//self.addEventListener(egret.Event.ENTER_FRAME, self.onEnterFrame, self);
 	}
 
 	private onRemoved(e){
 		let self = this;
 		egret.Tween.removeTweens(self);
 		self.trailItemCache = null;
-		self.removeEventListener(egret.Event.ENTER_FRAME, self.onEnterFrame, self);
+		//self.removeEventListener(egret.Event.ENTER_FRAME, self.onEnterFrame, self);
 	}
 
-	private onEnterFrame(e){
+	public onEnterFrame(e){
 		let self = this;
 		if(self.inited && self.parent)
 			self.drawTrail();

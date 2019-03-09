@@ -10,6 +10,7 @@ declare interface Platform {
 
     login(): Promise<any>
 
+    isRunWx():boolean;
 }
 
 class DebugPlatform implements Platform {
@@ -18,6 +19,10 @@ class DebugPlatform implements Platform {
     }
     async login() {
 
+    }
+
+    isRunWx(){
+        return false;
     }
 }
 

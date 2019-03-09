@@ -24,6 +24,7 @@ module leap {
 
 		public onDestroy(){
 			let self = this;
+			self.timers = null;
 			//console.log("onDestroy:", self.key);
 		}
 

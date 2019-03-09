@@ -120,8 +120,10 @@ module leap {
 			self.level = 1;
 			self.score = 0;
 			utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
-			if(self.timer)
+			if(self.timer){
 				utils.ObjectPool.getInstance().destroyObject(self.timer);
+				self.timer = null;
+			}
 			
 			GameMgr.instance = null;		
 		}

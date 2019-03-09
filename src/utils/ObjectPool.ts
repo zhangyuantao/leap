@@ -33,17 +33,16 @@ module utils {
 			let self = this;
 			if(self.pause)
 				return;
-			let now = egret.getTimer();
-			self.lastEnterFrameTime = self.lastEnterFrameTime || now;
-			let deltaTime = now - self.lastEnterFrameTime
-			
+			//let now = egret.getTimer();
+			//self.lastEnterFrameTime = self.lastEnterFrameTime || now;
+			//let deltaTime = now - self.lastEnterFrameTime
 			let list = self.list.concat();
 			for(let i = 0, length = list.length; i < length; i++){
 				let obj:IGameObject = list[i];
-				obj.onEnterFrame(deltaTime);
+				obj.onEnterFrame(16);
 			}
 
-			self.lastEnterFrameTime = egret.getTimer();
+			//self.lastEnterFrameTime = egret.getTimer();
 		}
 
 		/**
