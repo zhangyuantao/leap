@@ -13,8 +13,11 @@ module leap {
 			let angle = Math.atan((self.y - self.rootY) / (self.x - self.rootX));
 			self.speedX = self.speed * Math.cos(angle);
 			self.speedX *= (self.x - self.rootX) < 0 ? -1 : 1;
+			self.speedX = parseFloat(self.speedX.toFixed(1));
+
 			self.speedY = self.speed * Math.sin(angle);
 			self.speedY *= (self.x - self.rootX) < 0 ? -1 : 1;
+			self.speedY = parseFloat(self.speedY.toFixed(1));
 
 			self.rotation = self.getAngle() - 270;
 			self.collider.rotation = self.rotation;

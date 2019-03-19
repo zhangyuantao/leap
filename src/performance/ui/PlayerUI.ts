@@ -2,8 +2,8 @@ module leap {
 	export class PlayerUI extends fairygui.GComponent{
 		public face:fairygui.GComponent;
 		private eyes:fairygui.GComponent;
-		private plusEff:fairygui.GImage;
-		private thunderEff:fairygui.GImage;
+		private plusEff:fairygui.GComponent;
+		private thunderEff:fairygui.GComponent;
 		private magnetEff:fairygui.GComponent;
 		
 		private isJump:boolean;
@@ -14,9 +14,9 @@ module leap {
             let self = this;
 			self.face = self.getChild("face").asCom; 
 			self.eyes = self.face.getChild("eyes").asCom;
-			self.plusEff = self.getChild("plusEff").asImage; 
+			self.plusEff = self.getChild("plusEff").asCom; 
 			self.plusEff.visible = false;  
-			self.thunderEff = self.getChild("thunderEff").asImage;  
+			self.thunderEff = self.getChild("thunderEff").asCom;  
 			self.thunderEff.visible = false;
 			self.magnetEff = self.getChild("magnetEff").asCom; 
 			self.magnetEff.visible = false;
@@ -25,10 +25,10 @@ module leap {
 		public onEnterFrame(){
 			let self = this;
 			if(self.thunderEff.visible){
-				self.thunderEff.rotation += 20;
+				self.thunderEff.rotation += 10;
 			}
 			if(self.plusEff.visible){
-				self.plusEff.rotation += 5;
+				self.plusEff.rotation += 2;
 			}
 		}
 

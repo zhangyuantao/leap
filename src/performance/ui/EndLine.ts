@@ -21,56 +21,35 @@ module leap {
 		public onEnterFrame(deltaTime:number){
 			let self = this;
 			if(self.isNear)
-				self.draw();
+				self.drawLine();
 		}
 		//********************* 接口实现结束 ********************//
-	
-		private readonly lineSpace:number = 25;
-		private readonly lineW:number = 5;
-		private readonly lineH:number = 30;
 
-		private bg:egret.Shape;
-		private dottedLine:egret.Shape;
+		private line:egret.Shape;
 		private lineLen:number = 0;
 		private isNear:boolean;
 
 		private onAdded(e){
 			let self = this;
-			self.bg = new egret.Shape();
-			self.addChild(self.bg);
-			self.dottedLine = new egret.Shape();
-			self.addChild(self.dottedLine);
-			self.dottedLine.graphics.lineStyle(self.lineW, 0xffffff, 0.8);
+			self.line = new egret.Shape();
+			self.addChild(self.line);
 		}
 
-		private draw(){
+		private drawLine(){
 			let self = this;
 			let local = self.globalToLocal(0, 0);
 			let length = Math.abs(local.y);
 			if(length <= self.lineLen)
 				return;
+			self.lineLen = length;
 			
-			// 画虚线
-			let lineNum = Math.ceil((length - self.lineLen) / (self.lineH +  self.lineSpace));
-			let startY = self.lineLen;
-			let graphics = self.dottedLine.graphics;
-			for(let i = 0; i < lineNum; i++){
-				startY += self.lineSpace;
-				graphics.moveTo(0, -startY);
-				startY += self.lineH;
-				graphics.lineTo(0, -startY);
-			}
+			// 画线
+			let graphics = self.line.graphics;			
+			graphics.clear();
+			self.line.graphics.lineStyle(4, 0xffffff, 0.7);
+			graphics.moveTo(0, 0);
+			graphics.lineTo(0, -length);
 			graphics.endFill();
-
-			self.lineLen = startY;
-			
-			// 画背景		
-			self.bg.scaleX = 0;
-			self.bg.alpha = 0;
-			self.bg.graphics.clear();
-			self.bg.graphics.beginFill(0xffffff);
-			self.bg.graphics.drawRect(-5, 0, 10, -self.lineLen);
-			self.bg.graphics.endFill();
 		}
 
 		private onNewRound(rounds){
@@ -78,20 +57,17 @@ module leap {
 			if(rounds <= 1)
 				return;
 			
-			utils.Singleton.get(utils.SoundMgr).playSound("multiplier2_mp3");
+			utils.Singleton.get(utils.SoundMgr).playSound("multiplier2_mp3");			
 
 			// 爆炸渐变动画
-			egret.Tween.get(self.bg).set({alpha:0})
-			.to({alpha:1}, 200, egret.Ease.quadInOut)
-			.to({alpha:0}, 600, egret.Ease.quadInOut)
-			.call(()=>{
+			egret.Tween.removeTweens(self.line);
+			egret.Tween.get(self.line)
+			.to({scaleX:15, alpha:1}, 300, egret.Ease.sineIn)
+			.to({scaleX:30, alpha:0}, 700, egret.Ease.sineOut)
+			.set({visible:false})
+			.call(() => {
 				self.isNear = false;
-			});
-			egret.Tween.get(self.bg).set({scaleX:0}).to({scaleX:10}, 800, egret.Ease.quadInOut);
-
-			// 隐藏虚线
-			egret.Tween.removeTweens(self.dottedLine);
-			egret.Tween.get(self.dottedLine).to({alpha:0}, 200);
+			});		
 		}
 
 		// 接近终点
@@ -102,9 +78,10 @@ module leap {
 			self.isNear = true;
 
 			// 显示虚线
-			egret.Tween.get(self.dottedLine, {loop:true})
-			.to({alpha:1, scaleX:1.3}, 500)
-			.to({alpha:0.3, scaleX:0.7}, 500);
+			egret.Tween.get(self.line, {loop:true})
+			.set({scaleX:1, visible:true})
+			.to({alpha:1}, 600, egret.Ease.sineInOut)
+			.to({alpha:0.1}, 600, egret.Ease.sineInOut);
 		}
 	}
 }

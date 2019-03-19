@@ -11,8 +11,11 @@ module leap {
 			let angle = Math.atan(self.y / self.x);
 			self.speedX = self.speed * Math.cos(angle);
 			self.speedX *= self.x < 0 ? -1 : 1;
+			self.speedX = parseFloat(self.speedX.toFixed(1));
+
 			self.speedY = self.speed * Math.sin(angle);
 			self.speedY *= self.x < 0 ? -1 : 1;
+			self.speedY = parseFloat(self.speedY.toFixed(1));
 		}
 
 		public init(speed:number){
@@ -23,10 +26,10 @@ module leap {
 		protected onMove(deltaTime:number){
 			let self = this;
 			super.onMove(deltaTime);
-			let newX = Math.round(self.x + self.speedX);
-			let newY = Math.round(self.y + self.speedY);
-			self.x = newX;
-			self.y = newY;
+			let newX = self.x + self.speedX;
+			let newY = self.y + self.speedY;
+			self.x = parseFloat(newX.toFixed(1));
+			self.y = parseFloat(newY.toFixed(1));
 		}		
 	}
 }

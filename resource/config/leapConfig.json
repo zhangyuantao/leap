@@ -41,26 +41,26 @@
 			"jumpSpeed":18
 		},		
 		"Star":{
-			"duration":2000,
+			"duration":3000,
 			"acceleration":4,
-			"invincibleTime":2300
+			"invincibleTime":3300
 		},		
 		"Plus":{
 			"jumpSpeed":15,
-			"duration":5000,
-			"invincibleTime":5300	
+			"duration":6000,
+			"invincibleTime":6300	
 		},		
 		"Magnet":{
 			"jumpSpeed":12,
-			"duration":5000,
+			"duration":6000,
 			"range":250,
 			"attractionRange":[15,30]
 		},
 		"Thunderbolt":{
 			"jumpSpeed":12,
-			"duration":5000,
+			"duration":6000,
 			"acceleration":1,
-			"invincibleTime":5300
+			"invincibleTime":6300
 		},		
 		"ObCircle":{
 			"score":1,
@@ -82,7 +82,6 @@
 			"score":1,
 			"level":5,
 			"speed":1.5,
-			"activeScore":100,
 			"spawnInterval":15000
 		},
 		"ObTube":{

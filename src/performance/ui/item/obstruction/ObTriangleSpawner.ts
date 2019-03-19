@@ -13,10 +13,6 @@ module leap {
 				return;	
 				
 			let itemCfg = GameCfg.getCfg().Items[self.key];
-
-			// 达到一定分数才会触发
-			if(GameMgr.getInstance().score < itemCfg.activeScore)
-				return;
 				
 			// 生成一圈
 			for(let i = 0; i < 10; i++){

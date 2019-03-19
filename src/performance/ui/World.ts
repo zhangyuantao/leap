@@ -49,7 +49,7 @@ module leap{
 			
 			self.camera.onUpdate();
 			ItemMgr.getInstance().onUpdate();	
-			//self.drawLine();
+			self.drawPlayerLine();
 		}
 		
 		//********************* 接口实现结束 ********************//
@@ -73,7 +73,7 @@ module leap{
 			self.y = self.stage.stageHeight / 2;
 		}	
 
-		private drawLine(){
+		private drawPlayerLine(){
 			let self = this;
 			if(self.isGameOver)
 				return;
@@ -95,11 +95,9 @@ module leap{
 				return;
 			
 			self.linkLine.graphics.clear();
-			self.linkLine.graphics.lineStyle(3, 0xFFFFFF, 0.5);
-			let global = self.localToGlobal(self.player.x, self.player.y);
-			let local = self.linkLine.globalToLocal(global.x, global.y);
+			self.linkLine.graphics.lineStyle(3, 0xFFFFFF, 0.5);		
 			self.linkLine.graphics.moveTo(0, 0);
-			self.linkLine.graphics.lineTo(Math.floor(local.x), Math.floor(local.y));
+			self.linkLine.graphics.lineTo(Math.floor(self.player.x), Math.floor(self.player.y));
 			self.linkLine.graphics.endFill();
 		}
 
