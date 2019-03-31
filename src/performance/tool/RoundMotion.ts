@@ -18,7 +18,11 @@ module leap {
 			// 已知圆心坐标center，半径r，角度rad，求坐标x,y
 			let x = center.x + Math.cos(rad) * r;
 			let y = clockwise ? center.y + Math.sin(rad) * r : center.y - Math.sin(rad) * r;
-			return {x:Math.round(x), y:Math.round(y)};
+			x = Math.round(x);
+			y = Math.round(y);
+			if(x == -0) x = 0;
+			if(y == -0) y = 0;
+			return {x:x, y:y};
 		}
 	}	
 }

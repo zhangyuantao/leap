@@ -9,7 +9,7 @@ module leap {
 
 		public timer:MyTimer;
 		public gameOver:boolean = false;
-		public scoreRecord:number;	// 记录旧的月记录
+		public scoreRecord:number;	// 记录旧的周记录
 		public score:number = 0;		// 得分
 		public multiNum:number = 1; 	// 倍数
 		public level:number = 1;		// 关卡
@@ -85,13 +85,14 @@ module leap {
 			let self = this;
 			self.gameOver = true;
 			self.pause(true);
-			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");		
 
 			// 存储新纪录
 			if(self.score > self.scoreRecord){				
 				egret.localStorage.setItem("scoreRecord", self.score.toString());
 				self.scoreRecord = self.score;
 			}
+			
+			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");		
 		}
 
 		// 复活

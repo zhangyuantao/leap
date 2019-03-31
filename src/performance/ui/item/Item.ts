@@ -81,17 +81,23 @@ module leap {
 
 		// 获取物品的角度（以世界中心为圆心的半径）
 		public getAngle(){
+			// let self = this;
+			// let rad = Math.atan(self.y / self.x);
+			// let angle = rad / Math.PI  * 180;
+			// if(angle < 0) {
+			// 	angle += self.y > 0 ? 180 : 360;				
+			// }
+			// else{
+			// 	if(self.y < 0 || self.x < 0)
+			// 		angle += 180;
+			// }
+			// return Math.floor(angle);
 			let self = this;
-			let rad = Math.atan(self.y / self.x);
+			let l = Math.sqrt(self.x * self.x + self.y * self.y);
+			let rad = Math.acos(self.x / l);
 			let angle = rad / Math.PI  * 180;
-			if(angle < 0) {
-				angle += self.y > 0 ? 180 : 360;				
-			}
-			else{
-				if(self.y < 0 || self.x < 0)
-					angle += 180;
-			}
-			return Math.round(angle);
+			if(self.y < 0) angle = 360 - angle
+			return Math.floor(angle);
 		}
 
 		//********************* 接口实现 ********************//

@@ -22,16 +22,16 @@ module leap {
 
 		public init(speed:number){
 			let self = this;
-			self.speed = speed;
+			self.speed = parseFloat(speed.toFixed(2));
 		}
 
 		protected onMove(deltaTime:number){
 			let self = this;
 			super.onMove(deltaTime);
-			let newX = Math.round(self.x + self.speedX);
-			let newY = Math.round(self.y + self.speedY);
-			self.x = newX;
-			self.y = newY;
+			let newX = self.x + self.speedX;
+			let newY = self.y + self.speedY;
+			self.x = parseFloat(newX.toFixed(1));
+			self.y = parseFloat(newY.toFixed(1));
 		}		
 	}
 }

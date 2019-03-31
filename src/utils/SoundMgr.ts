@@ -32,25 +32,31 @@ module utils {
 			self.disposeAllSound();
 		}
 
+		/**
+		 * 预加载背景音乐，文件比较大的时候播放会卡顿
+		 */
+		public preloadBgm(url:string){
+			let self = this;
+			if(!self.bgm)
+				self.bgm = RES.getRes(url) as egret.Sound;		
+		}
+
 		/** 背景音乐 */
-		public playBgm(url:string, startTime:number = 0, loops:number = 0, volume:number = 1){
+		public playBgm(url:string, isReset:boolean = false, startTime:number = 0, loops:number = 0, volume:number = 1){
 			let self = this;
 
-			// 正在播放
-			// if(self.bgmSoundChannel && self.bgmSoundChannel.position > 0)
-			// 	return;
 			if(self.bgmSoundChannel)
 			 	self.bgmSoundChannel.stop();
 
-			if(!self.bgm)
-				self.bgm = RES.getRes(url) as egret.Sound;					
+			self.preloadBgm(url);					
 			
 			self.bgmLoops = loops;
 
 			if(self.isMuteBgm)
 				return;
-
-			self.bgmSoundChannel = self.bgm.play(startTime || self.lastBgmPos, loops);
+			
+			startTime = isReset ? 0 : (startTime || self.lastBgmPos);
+			self.bgmSoundChannel = self.bgm.play(startTime, loops);
 			self.bgmSoundChannel.volume = volume;
 		}
 

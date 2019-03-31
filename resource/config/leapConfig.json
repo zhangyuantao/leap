@@ -1,7 +1,7 @@
 {	
 	"Gravity":0.2,
 	"WorldRange":3000,
-	"PlayerRotateSpeed":1,
+	"PlayerRotateSpeed":1.2,
 	"BgColors":[
 		"0x990000",
 		"0xE2602D",
@@ -21,7 +21,7 @@
 			"jumpSpeed":12,
 			"spawnInterval":2000,
 			"spawnRange":[100, 800],
-			"scaleRange":[0.65, 1],
+			"scaleRange":[0.7, 1],
 			"speedRange":[0.2, 2]
 		},
 		"ScoreBall":{
@@ -29,13 +29,13 @@
 			"jumpSpeed":12,
 			"spawnInterval":5000,
 			"spawnRange":[200, 800],
-			"scaleRange":[0.7, 1],
+			"scaleRange":[0.8, 1],
 			"speedRange":[0.2, 3]
 		},
 		"Explode":{
 			"jumpSpeed":12,
 			"bulletNum":10,
-			"bulletSpeed":3
+			"bulletSpeed":4
 		},		
 		"MegaJump":{
 			"jumpSpeed":18
@@ -81,7 +81,7 @@
 		"ObTriangle":{
 			"score":1,
 			"level":5,
-			"speed":1.5,
+			"speed":3,
 			"spawnInterval":15000
 		},
 		"ObTube":{

@@ -22,6 +22,7 @@ class TrailRenderer extends egret.DisplayObject{
 	public constructor(){
 		super();
 		let self = this;
+		self.touchEnabled = false;		
 		self.trailItemCache = [];
 		self.once(egret.Event.ADDED_TO_STAGE, self.onAdded, self);
 		self.once(egret.Event.REMOVED_FROM_STAGE, self.onRemoved, self);

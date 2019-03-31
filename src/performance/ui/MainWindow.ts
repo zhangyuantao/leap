@@ -34,13 +34,13 @@ module leap {
 		protected addEventListeners(){
 			let self = this;
 			utils.StageUtils.addEventListener(egret.Event.RESIZE, self.setResolution, self); // 监听屏幕大小改变
-			utils.EventDispatcher.getInstance().addEventListener("startGame", self.createGame, self);
+			//utils.EventDispatcher.getInstance().addEventListener("startGame", self.createGame, self);
 		}
 
 		protected removeEventListeners(){
 			let self = this;
 			utils.StageUtils.removeEventListener(egret.Event.RESIZE, self.setResolution, self);
-			utils.EventDispatcher.getInstance().removeEventListener("startGame", self.createGame, self);
+			//utils.EventDispatcher.getInstance().removeEventListener("startGame", self.createGame, self);
 		}
 
 		/**
@@ -67,13 +67,12 @@ module leap {
 			fairygui.UIObjectFactory.setPackageItemExtension(url, userClass);
 		}	
 
-		// /**
-		//  * 初始化完成
-		//  */
-        // protected onInit(){			
-		// 	//console.log("onInit");
-		// 	//utils.Singleton.get(utils.SoundMgr).playBgm("back_music_mp3");
-		// }	
+		/**
+		 * 初始化完成
+		 */
+        protected onInit(){
+			utils.Singleton.get(utils.SoundMgr).preloadBgm("back_music_mp3");
+		}	
 
 		// 动态调整窗口分辨率
 		private setResolution(){
@@ -111,7 +110,10 @@ module leap {
 		// 创建游戏
 		public createGame(){
 			let self = this;
-			utils.Singleton.get(utils.SoundMgr).playBgm("back_music_mp3");
+			self.destroyGame();
+			GameMgr.getInstance().gameBegin();
+			
+			utils.Singleton.get(utils.SoundMgr).playBgm("back_music_mp3", true);
 			utils.StageUtils.dispatchEvent("createGame");
 			
 			// 背景
@@ -135,7 +137,6 @@ module leap {
 		// 重开游戏
 		public restartGame(){
 			let self = this;
-			self.destroyGame();
 			self.createGame();
 		}
 

@@ -1,7 +1,7 @@
 class Main extends egret.DisplayObjectContainer {
     public constructor() {
         super();
-        if(platform.isRunWx())
+        if(platform.isRunInWX())
             wx.loadFont("resource/RubikOne-Regular.ttf");
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
@@ -58,12 +58,26 @@ class Main extends egret.DisplayObjectContainer {
      * Create a game scene
      */
     private createGameScene() {        
-        //fairygui.UIConfig.defaultFont = "RubikOne";
         fairygui.UIPackage.addPackage("leap");        
         this.stage.addChild(fairygui.GRoot.inst.displayObject);
         this.stage.removeChild(this);
         let wnd = new leap.MainWindow();
         wnd.show();
+
+        if(platform.isRunInWX()){
+            // 启用显示转发分享菜单
+            wx.showShareMenu({withShareTicket:true});
+
+            // 用户点击了“转发”按钮
+            wx.onShareAppMessage(() => {
+                return {
+                    title:"LeapOn微信小游戏版终于出了！",
+					imageUrl:"resource/assets/share1.png",
+					imageUrlId:"",
+					query:"",		
+                }
+            });
+        }
     }
 }
 

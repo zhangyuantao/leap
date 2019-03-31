@@ -27,7 +27,7 @@ module leap {
 			// 随机一个纹理
 			let idx = 0;
 			do{
-				idx = Math.round(Math.random() * (self.imgs.length - 1));
+				idx = Math.floor(Math.random() * (self.imgs.length - 1));
 			}
 			while(self.lastIdx == idx);
 			

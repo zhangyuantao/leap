@@ -74,12 +74,13 @@ module leap {
 				return;
 			
 			let item = utils.ObjectPool.getInstance().createFairyUIObject(classFactory, "leap") as Item;
+			item.touchable = false;
 
 			// 围绕中心点生成	
 			let dx = r * Math.cos(rad);
 			let dy = r * Math.sin(rad);		
-			item.x = Math.round(dx + World.instance.spike.x);
-			item.y = Math.round(dy + World.instance.spike.y);
+			item.x = Math.floor(dx + World.instance.spike.x);
+			item.y = Math.floor(dy + World.instance.spike.y);
 
 			item.scaleX = item.scaleY = parseFloat(scale.toFixed(1));
 

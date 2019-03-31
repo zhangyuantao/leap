@@ -14,7 +14,7 @@ module leap {
 
 		private onStartBtn(e){
 			let self = this;
-			GameMgr.getInstance().gameBegin();
+			MainWindow.instance.createGame();
 			self.hide();
 			utils.StageUtils.addEventListener("leaveGame", self.onLeaveGame, self);
 		}

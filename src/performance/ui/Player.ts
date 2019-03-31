@@ -121,6 +121,8 @@ module leap {
 			egret.Tween.get(self.mainUI).to({alpha:0}, 200);		
 			World.instance.spawnUIAni(DeadAni, self.x, self.y);
 			
+			utils.Singleton.get(utils.SoundMgr).pauseBgm();
+
 			// 死亡音效
 			utils.Singleton.get(utils.SoundMgr).playSound("DM-CGS-10_edited_mp3");
 			let handle = setTimeout(function() {
@@ -161,21 +163,26 @@ module leap {
 
 		public getHeight(){
 			let self = this;
-			return Math.sqrt(self.x * self.x + self.y * self.y);
+			return Math.floor(Math.sqrt(self.x * self.x + self.y * self.y));
 		}
 
+		// 获取角度，水平x>0 y == 0 开始的顺时针0-360
 		public getAngle(){
 			let self = this;
+			// let l = Math.sqrt(self.x * self.x + self.y * self.y);
+			// let rad = Math.acos(self.x / l);
+			// let angle = rad / Math.PI  * 180;
+			// if(self.y < 0) angle = 360 - angle
+			// return parseFloat(angle.toFixed(2));
+			// tan免开根，提高性能
 			let rad = Math.atan(self.y / self.x);
 			let angle = rad / Math.PI  * 180;
-			if(angle < 0) {
-				angle += self.y > 0 ? 180 : 360;				
-			}
-			else{
-				if(self.y < 0)
-					angle += 180;
-			}
-			return Math.round(angle);
+			if(self.x < 0) 
+				angle = 180 + angle;			
+			else if(self.y < 0)
+				angle = 360 + angle;
+			
+			return parseFloat(angle.toFixed(2));
 		}
 
 		public onMove(){
@@ -243,7 +250,9 @@ module leap {
 			if(!self.trail){
 				self.trail = new TrailRenderer();
 				self.trail.createTrailItem = () => {
-					return fairygui.UIPackage.createObject('leap', "TrailItem");
+					let ob = fairygui.UIPackage.createObject('leap', "TrailItem");
+					ob.touchable = false;
+					return ob;
 				}
 				self.trail.init(280, 0.3, 0, 5, 0.7);
 				self.displayListContainer.addChild(self.trail);

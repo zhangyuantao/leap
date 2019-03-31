@@ -21,35 +21,34 @@ module leap {
 		public onEnterFrame(deltaTime:number){
 			let self = this;
 			if(self.isNear)
-				self.drawLine();
+				self.updateLine();
 		}
 		//********************* 接口实现结束 ********************//
 
-		private line:egret.Shape;
+		private line:fairygui.GObject;
 		private lineLen:number = 0;
 		private isNear:boolean;
 
 		private onAdded(e){
 			let self = this;
-			self.line = new egret.Shape();
-			self.addChild(self.line);
+			self.touchEnabled = false;
+			self.touchChildren = false;
+			self.line = fairygui.UIPackage.createObject("leap", "BaseImgWhite");
+			self.line.touchable = false;
+			self.line.width = 6;
+			self.line.pivotX = 0.5;
+			self.line.rotation = 180;
+			self.addChild(self.line.displayObject);
 		}
 
-		private drawLine(){
+		private updateLine(){
 			let self = this;
 			let local = self.globalToLocal(0, 0);
 			let length = Math.abs(local.y);
 			if(length <= self.lineLen)
 				return;
 			self.lineLen = length;
-			
-			// 画线
-			let graphics = self.line.graphics;			
-			graphics.clear();
-			self.line.graphics.lineStyle(4, 0xffffff, 0.7);
-			graphics.moveTo(0, 0);
-			graphics.lineTo(0, -length);
-			graphics.endFill();
+			self.line.height = length;
 		}
 
 		private onNewRound(rounds){
@@ -62,8 +61,8 @@ module leap {
 			// 爆炸渐变动画
 			egret.Tween.removeTweens(self.line);
 			egret.Tween.get(self.line)
-			.to({scaleX:15, alpha:1}, 300, egret.Ease.sineIn)
-			.to({scaleX:30, alpha:0}, 700, egret.Ease.sineOut)
+			.to({scaleX:12, alpha:1}, 300, egret.Ease.sineIn)
+			.to({scaleX:24, alpha:0}, 700, egret.Ease.sineOut)
 			.set({visible:false})
 			.call(() => {
 				self.isNear = false;
@@ -77,11 +76,11 @@ module leap {
 				return;
 			self.isNear = true;
 
-			// 显示虚线
+			// 显示线
 			egret.Tween.get(self.line, {loop:true})
 			.set({scaleX:1, visible:true})
-			.to({alpha:1}, 600, egret.Ease.sineInOut)
-			.to({alpha:0.1}, 600, egret.Ease.sineInOut);
+			.to({alpha:1}, 800, egret.Ease.sineInOut)
+			.to({alpha:0.1}, 800, egret.Ease.sineInOut);
 		}
 	}
 }

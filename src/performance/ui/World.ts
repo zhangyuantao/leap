@@ -5,9 +5,8 @@ module leap{
 		// 显示对象
 		public player:Player;
 		public spike:SpikeCenter;
-		public linkLine:egret.Sprite;
+		public linkLine:fairygui.GObject;
 		public endLine:EndLine;
-		// public textureBg:TextureBackground;
 
 		private itemContainer:egret.DisplayObjectContainer;
 
@@ -49,14 +48,14 @@ module leap{
 			
 			self.camera.onUpdate();
 			ItemMgr.getInstance().onUpdate();	
-			self.drawPlayerLine();
+			self.updatePlayerLine();
 		}
 		
 		//********************* 接口实现结束 ********************//
 
 		private onGameOver(){
 			let self = this;
-			self.linkLine.graphics.clear();
+			self.linkLine.alpha = 0;
 		}
 
 		private get isGameOver():boolean{
@@ -73,44 +72,36 @@ module leap{
 			self.y = self.stage.stageHeight / 2;
 		}	
 
-		private drawPlayerLine(){
+		private updatePlayerLine(){
 			let self = this;
 			if(self.isGameOver)
 				return;
-
-			if(self.player.getHeight() > GameCfg.getCfg().WorldRange * 0.5){
+			
+			let playHeight = self.player.getHeight();
+			if(playHeight > GameCfg.getCfg().WorldRange * 0.5){
 				if(self.linkLine.alpha == 1){
 					egret.Tween.removeTweens(self.linkLine);
-					egret.Tween.get(self.linkLine).to({alpha:0}, 1000, egret.Ease.sineInOut);
+					egret.Tween.get(self.linkLine).to({alpha:0}, 500, egret.Ease.sineInOut);
 				}
 			}
 			else{
 				if(self.linkLine.alpha == 0){
 					egret.Tween.removeTweens(self.linkLine);
-					egret.Tween.get(self.linkLine).to({alpha:1}, 1000, egret.Ease.sineInOut);
+					egret.Tween.get(self.linkLine).to({alpha:1}, 500, egret.Ease.sineInOut);
 				}
 			}
 
-			if(self.linkLine.alpha == 0)
-				return;
-			
-			self.linkLine.graphics.clear();
-			self.linkLine.graphics.lineStyle(3, 0xFFFFFF, 0.5);		
-			self.linkLine.graphics.moveTo(0, 0);
-			self.linkLine.graphics.lineTo(Math.floor(self.player.x), Math.floor(self.player.y));
-			self.linkLine.graphics.endFill();
+			self.linkLine.height = playHeight;
+			self.linkLine.rotation = self.player.getAngle() - 90;
 		}
 
 		private init(){
-			let self = this;	
-			
-			// 纹理背景
-			//self.textureBg = fairygui.UIPackage.createObject('leap', "TextureBackground") as TextureBackground;
-			//self.textureBg.visible = false;
-			//self.addChild(self.textureBg.displayObject);
+			let self = this;
 
 			// 物品容器
 			self.itemContainer = new egret.DisplayObjectContainer();
+			self.itemContainer.touchEnabled = false;
+			self.itemContainer.touchChildren = false;
 			self.addChild(self.itemContainer);
 
 			// 终点线
@@ -118,15 +109,20 @@ module leap{
 			self.addChild(self.endLine);
 
 			// 玩家连线
-			self.linkLine = new egret.Sprite();	
-			self.addChild(self.linkLine);
+			self.linkLine = fairygui.UIPackage.createObject("leap", "BaseImgWhite");
+			self.linkLine.touchable = false;
+			self.linkLine.width = 3;
+			self.linkLine.pivotX = 0.5;
+			self.addChild(self.linkLine.displayObject);
 
 			// 玩家显示对象
 			self.player = utils.ObjectPool.getInstance().createFairyUIObject(Player, "leap");
+			self.player.touchable = false;
 			self.addChild(self.player.displayObject);
 
 			// 中心锯齿陷阱
-			self.spike = utils.ObjectPool.getInstance().createFairyUIObject(SpikeCenter, "leap");		
+			self.spike = utils.ObjectPool.getInstance().createFairyUIObject(SpikeCenter, "leap");	
+			self.spike.touchable = false;	
 			self.addChild(self.spike.displayObject);
 
 			// 摄像机
@@ -137,7 +133,7 @@ module leap{
 			for(let i = 0; i < 16; i++){
 				let rad = i * Math.PI / (16 / 2);
 				let ball = ItemMgr.getInstance().spawnItem(ItemDefine.WhiteBall, rad, 150) as WhiteBall;
-				ball.init(0.1 + Math.random() * 0.3);
+				ball.init(0.05 + Math.random() * 0.05);
 				self.addItem(ball.displayObject);
 			}
 		}
@@ -152,9 +148,10 @@ module leap{
 		public spawnUIAni(classFactory:any, x:number, y:number){
 			let self = this;
 			let ani = utils.ObjectPool.getInstance().createFairyUIObject(classFactory, "leap") as any;
+			ani.touchable = false;	
 			self.itemContainer.addChild(ani.displayObject);
-			ani.x = Math.round(x);
-			ani.y = Math.round(y);
+			ani.x = Math.floor(x);
+			ani.y = Math.floor(y);
 			ani.getTransition("t0").play(()=>{
 				utils.ObjectPool.getInstance().destroyObject(ani);
 			}, self);
@@ -168,9 +165,9 @@ module leap{
 			let oldX = self.parent.x;
 			let oldY = self.parent.y;
 			egret.Tween.removeTweens(self.parent);
-			egret.Tween.get(self.parent).to({x:oldX + 7, y:oldY + 7}, 80, egret.Ease.backInOut)
-			.to({x:oldX - 5, y:oldY - 5}, 90, egret.Ease.backInOut)
-			.to({x:oldX + 3, y:oldY + 3}, 100, egret.Ease.backInOut)
+			egret.Tween.get(self.parent).to({x:oldX + 10, y:oldY + 10}, 80, egret.Ease.backInOut)
+			.to({x:oldX - 7, y:oldY - 7}, 90, egret.Ease.backInOut)
+			.to({x:oldX + 4, y:oldY + 4}, 100, egret.Ease.backInOut)
 			.to({x:oldX, y:oldY}, 110, egret.Ease.sineInOut);
 		}
 	}

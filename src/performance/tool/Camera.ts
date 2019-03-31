@@ -68,8 +68,8 @@ class Camera {
 		cos *= self.target.x < 0 ? -1 : 1; 	// 象限问题处理		 	
 		sin *= self.target.x < 0 ? -1 : 1;
 		
-		let worldOffsetX = self.targetMoveRadius * cos;
-		let worldOffsetY = self.targetMoveRadius * sin;
+		let worldOffsetX = Math.floor(self.targetMoveRadius * cos);
+		let worldOffsetY = Math.floor(self.targetMoveRadius * sin);
 
 		// 根据距离圆心距离控制活动半径（该段代码作用：当目标越靠近世界中心时世界中心越接近屏幕中央）
 		let temp = Math.min(disToCenter / self.targetMoveRadius, 1);
@@ -84,7 +84,7 @@ class Camera {
 		// 世界位置==目标相对屏幕中心的坐标取反 + 偏移
 		let x = (-self.target.x + self.screenCenter.x) + worldOffsetX;
 		let y = (-self.target.y + self.screenCenter.y) + worldOffsetY;
-		self.worldRoot.x = Math.round(x);
-		self.worldRoot.y = Math.round(y);
+		self.worldRoot.x = parseFloat(x.toFixed(1));
+		self.worldRoot.y = parseFloat(y.toFixed(1));
 	}
 }
