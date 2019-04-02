@@ -9,7 +9,35 @@ module leap {
 			self.startBtn = self.getChild("startBtn").asButton;
 			self.startBtn.addClickListener(self.onStartBtn, self);
 			self.rankBtn = self.getChild("rankBtn").asButton;
-			self.rankBtn.addClickListener(self.onRankBtn, self);		
+			self.rankBtn.addClickListener(self.onRankBtn, self);
+			let isRunWeb = (platform instanceof DebugPlatform) ? true : false;
+
+			if(!Main.isScopeUserInfo && platform.isRunInWX()){
+				self.startBtn.visible = false;
+				self.rankBtn.visible = false;
+
+				let btnWidth = Main.systemInfo.windowWidth / utils.StageUtils.stageWidth * 160;
+				let btnHeight = Main.systemInfo.windowHeight / utils.StageUtils.stageHeight * 160;
+				Main.userInfoBtn = wx.createUserInfoButton({
+						type: 'image',
+						image: 'resource/assets/startBtn.png',
+						style: {
+							left: Main.systemInfo.windowWidth * 0.5 - btnWidth * 0.5,
+							top:  Main.systemInfo.windowHeight * 0.55,
+							width: btnWidth,
+							height: btnHeight,
+						}
+					});
+
+				Main.userInfoBtn.onTap((res) => {
+					if(res.errMsg == "getUserInfo:ok"){           
+						Main.myAvatarUrl = res.userInfo.avatarUrl;
+						Main.isScopeUserInfo = true;
+						Main.userInfoBtn.hide();   
+						self.onStartBtn(null);
+					}
+				});      
+			}  	
 		}
 
 		private onStartBtn(e){
@@ -35,8 +63,8 @@ module leap {
 
 		private onRankBtn(e){
 			let self = this;
-			//let arg = {flag: MainNotes.NOR_RANK_MODULE,dataArg:{weekRankName:"leapWeekRank",monthRankName:"leapMonthRank"}};
-			//FWFacade.instance.sendNotification(MainNotes.LOAD_MODULE, arg);
+			//self.rankBtn.visible = false;
+			MainWindow.instance.showRankWnd();
 		}
 
 		public dispose(){

@@ -90,6 +90,10 @@ module leap {
 			if(self.score > self.scoreRecord){				
 				egret.localStorage.setItem("scoreRecord", self.score.toString());
 				self.scoreRecord = self.score;
+
+				wx.setUserCloudStorage({KVDataList:[{key:'score', value:`${self.score}`}], success:function(res){ 
+					console.log("分数设置成功:", res);
+				},"fail":null, "complete":null});
 			}
 			
 			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");		

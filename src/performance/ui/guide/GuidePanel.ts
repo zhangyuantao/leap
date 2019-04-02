@@ -4,6 +4,8 @@ module leap {
 		
 		public onCreate(){
 			let self = this;
+			self.touchable = false;
+			
 			utils.EventDispatcher.getInstance().once("guideCompleted", () => {
 				utils.ObjectPool.getInstance().destroyObject(self);
 			}, self);

@@ -2,17 +2,24 @@
  * 主游戏入口
  */
 module leap {
-	export class MainWindow extends fairygui.Window {
+	export class MainWindow extends BaseWindow {
 		public static instance:MainWindow;
 		public textureBg:TextureBackground;
 
-		public constructor() {
-			super();		
+		private btnCloseRank:fairygui.GButton;
+
+		private isShowRank:boolean = false;
+		private rankingListMask:egret.Shape;
+		private rankBitmap:egret.Bitmap;
+
+    	private myAvatarUrl:string = "";
+		private curRankType:string;
+		private lastRankType:string;
+
+		public constructor(pkgName:string = "leap", windowName?:string, playPopSound?:boolean) {
+			super(pkgName, windowName, playPopSound);		
 			let self = this;		
 			MainWindow.instance = self;
-			self.registerComponents();  // 要在窗体创建(initUI)之前
-			self.initUI();				// UI初始化
-			self.addEventListeners();	// 事件监听
 		}	
 
 		// 释放
@@ -22,7 +29,7 @@ module leap {
 			self.removeEventListeners();
 			self.destroyGame();		
 			utils.Singleton.destroy(utils.SoundMgr);
-			utils.StageUtils.removeEventListener(egret.Event.RESIZE, self.setResolution, self);
+			self.btnCloseRank.removeClickListener(self.onCloseRank, self);	
 			//console.log("game dispose");
 		}
 
@@ -33,13 +40,11 @@ module leap {
 
 		protected addEventListeners(){
 			let self = this;
-			utils.StageUtils.addEventListener(egret.Event.RESIZE, self.setResolution, self); // 监听屏幕大小改变
 			//utils.EventDispatcher.getInstance().addEventListener("startGame", self.createGame, self);
 		}
 
 		protected removeEventListeners(){
 			let self = this;
-			utils.StageUtils.removeEventListener(egret.Event.RESIZE, self.setResolution, self);
 			//utils.EventDispatcher.getInstance().removeEventListener("startGame", self.createGame, self);
 		}
 
@@ -71,16 +76,14 @@ module leap {
 		 * 初始化完成
 		 */
         protected onInit(){
+			super.onInit();
+			let self = this;
+			self.btnCloseRank = self.contentPane.getChild("btnCloseRank").asButton;
+			self.btnCloseRank.addClickListener(self.onCloseRank, self);
+			self.btnCloseRank.visible = false;			
+
 			utils.Singleton.get(utils.SoundMgr).preloadBgm("back_music_mp3");
 		}	
-
-		// 动态调整窗口分辨率
-		private setResolution(){
-			let self = this;
-			self.height = utils.StageUtils.stageHeight;
-			self.width = utils.StageUtils.stageWidth;
-		}
-
 
 		// 引导初始化
 		private initGuide(){
@@ -147,6 +150,89 @@ module leap {
 			GameMgr.getInstance().dispose();
 			utils.EventDispatcher.getInstance().dispose();
 			egret.Tween.removeAllTweens();
+		}
+
+		/**
+		 * 显示排行榜
+		 * type： list horizontal vertical
+		 */
+		public showRankWnd(type:string = "list", maskAlpha:number = 0.8, maskTouchEnabled:boolean = true, showCloseRankBnt:boolean = true){
+			let self = this;
+			if(!platform.isRunInWX())
+				return;
+			if(!self.isShowRank) {
+				self.lastRankType = self.curRankType;
+				self.curRankType = type;
+				//Main.userInfoBtn && Main.userInfoBtn.hide();
+				
+				//处理遮罩,避免开放域数据影响主域
+				self.rankingListMask = new egret.Shape();
+				self.rankingListMask.graphics.beginFill(0x000000);
+				self.rankingListMask.graphics.drawRect(0, 0, utils.StageUtils.stageWidth, utils.StageUtils.stageHeight);
+				self.rankingListMask.graphics.endFill();
+				self.rankingListMask.alpha = maskAlpha;
+
+				//设置为true,以免触摸到下面的按钮
+				self.rankingListMask.touchEnabled = maskTouchEnabled;
+				self.parent.displayListContainer.addChildAt(self.rankingListMask, 999);
+				
+				//显示开放域数据
+				self.rankBitmap = platform.openDataContext.createDisplayObject(null, utils.StageUtils.stageWidth, utils.StageUtils.stageHeight);				
+				self.parent.displayListContainer.addChild(self.rankBitmap);
+				egret.Tween.get(self.rankBitmap).set({alpha:0}).to({alpha:1}, 500, egret.Ease.sineInOut);
+
+				//让关闭排行榜按钮显示在容器内
+				if(showCloseRankBnt){
+					self.btnCloseRank.visible = true;
+					self.parent.displayListContainer.addChild(self.btnCloseRank.displayObject);
+				}
+
+				//主域向子域发送数据
+				self.isShowRank = true;
+				platform.openDataContext.postMessage({
+					isRanking: self.isShowRank,
+					text: "egret",
+					year: (new Date()).getFullYear(),
+					command: "open",
+					myAvatarUrl:Main.myAvatarUrl,
+					rankType:type
+				});	
+			}
+
+			if(type == "list")
+				utils.Singleton.get(AdMgr).hideBanner();
+		}	
+
+		private onCloseRank(e){
+			let self = this;			
+			self.hideRankWnd();
+			//if(self.lastRankType == "vertical" && self.testWnd.isShowing)
+			//	self.showRankWnd("vertical", 0, false, false);
+			
+			//utils.Singleton.get(AdMgr).showBannerAd("Banner排行榜");
+		}
+
+		/**
+		 * 隐藏排行榜
+		 */
+		public hideRankWnd(){
+			let self = this;
+			if(!platform.isRunInWX())
+				return;
+			if(self.isShowRank) {
+				if(self.rankBitmap)
+					egret.Tween.removeTweens(self.rankBitmap)
+				self.rankBitmap.parent && self.rankBitmap.parent.removeChild(self.rankBitmap);
+				self.rankingListMask.parent && self.rankingListMask.parent.removeChild(self.rankingListMask);
+				self.isShowRank = false;
+				self.btnCloseRank.visible = false;
+				platform.openDataContext.postMessage({
+					isRanking: self.isShowRank,
+					text: "egret",
+					year: (new Date()).getFullYear(),
+					command: "close"
+				});
+			}
 		}
 	}
 }

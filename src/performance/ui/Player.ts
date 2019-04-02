@@ -166,23 +166,10 @@ module leap {
 			return Math.floor(Math.sqrt(self.x * self.x + self.y * self.y));
 		}
 
-		// 获取角度，水平x>0 y == 0 开始的顺时针0-360
+		// 获取旋转角度
 		public getAngle(){
-			let self = this;
-			// let l = Math.sqrt(self.x * self.x + self.y * self.y);
-			// let rad = Math.acos(self.x / l);
-			// let angle = rad / Math.PI  * 180;
-			// if(self.y < 0) angle = 360 - angle
-			// return parseFloat(angle.toFixed(2));
-			// tan免开根，提高性能
-			let rad = Math.atan(self.y / self.x);
-			let angle = rad / Math.PI  * 180;
-			if(self.x < 0) 
-				angle = 180 + angle;			
-			else if(self.y < 0)
-				angle = 360 + angle;
-			
-			return parseFloat(angle.toFixed(2));
+			let self = this;		
+			return utils.getAngle(self.x, self.y);
 		}
 
 		public onMove(){

@@ -28,17 +28,7 @@ module leap {
 			let self = this;
 			let dx = self.x - self.rootX;
 			let dy = self.y - self.rootY;
-			let rad = Math.atan(dy / dx);
-			let angle = rad / Math.PI  * 180;
-			if(angle < 0) {
-				angle += dy > 0 ? 180 : 360;				
-			}
-			else{
-				if(dy < 0 || dx < 0)
-					angle += 180;
-			}
-			
-			return angle;
+			return utils.getAngle(dx, dy);
 		}
 
 		//@override
