@@ -85,8 +85,10 @@ module leap {
 		public watchVideoAd(adName:string, watchOk:Function, watchFail:Function){
 			let self = this;	
 			let adId = self.adCfg[adName]	
-			if(!adId)	
+			if(!adId){
+				watchFail();
 				return;
+			}
 			self.videoAdComp = platform.createVideoAd(adId);	
 			self.videoAdComp.load()
 			.then(() => self.videoAdComp.show())

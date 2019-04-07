@@ -5,7 +5,7 @@ module leap {
 	export class BaseWindow extends fairygui.Window {
 		protected playPopSound:boolean = false;
 
-		public constructor(pkgName:string = "guess", windowName?:string, playPopSound?:boolean) {
+		public constructor(pkgName:string = "leap", windowName?:string, playPopSound?:boolean) {
 			super();		
 			let self = this;		
 			self.playPopSound = playPopSound;

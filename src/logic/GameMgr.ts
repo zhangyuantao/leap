@@ -14,7 +14,7 @@ module leap {
 		public multiNum:number = 1; 	// 倍数
 		public level:number = 1;		// 关卡
 		public guideCompleted:boolean;
-		public hasResurgenced:boolean;	// 标记该局是否分享过
+		public hasRevived:boolean;	// 标记该局是否分享过
 
 		private constructor(){
 			let self = this;
@@ -27,7 +27,7 @@ module leap {
 
 		public gameBegin(){
 			let self = this;
-			self.hasResurgenced = false;
+			self.hasRevived = false;
 			let record = egret.localStorage.getItem("scoreRecord");
 			if(record && record != "")
 				self.scoreRecord = parseInt(record);
@@ -90,35 +90,90 @@ module leap {
 			if(self.score > self.scoreRecord){				
 				egret.localStorage.setItem("scoreRecord", self.score.toString());
 				self.scoreRecord = self.score;
-
-				wx.setUserCloudStorage({KVDataList:[{key:'score', value:`${self.score}`}], success:function(res){ 
+				platform.setUserCloudStorage([{key:'score', value:`${self.score}`}], res => { 
 					console.log("分数设置成功:", res);
-				},"fail":null, "complete":null});
+				});
 			}
 			
 			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");		
 		}
 
 		// 复活
-		public resurgence(){
+		public revive(){
 			let self = this;
-			self.hasResurgenced = true;
+			if(self.hasRevived)
+				return;			
+			self.hasRevived = true;
+
 			self.gameOver = false;
-			self.pause(false);
+			
+			utils.EventDispatcher.getInstance().dispatchEvent("gameRevive");
+
 			utils.EventDispatcher.getInstance().once("gameResume", () => {
-				utils.EventDispatcher.getInstance().dispatchEvent("gameResurgence");
-				utils.Singleton.get(utils.SoundMgr).playSound("back_music_mp3");
-			}, self);			
+				utils.EventDispatcher.getInstance().dispatchEvent("gameReviveOk");
+			}, self);
 		}
 
 		public pause(paused:boolean){
 			let self = this;
 			if(self.isPaused == paused)
 				return;
-			utils.ObjectPool.getInstance().pause = paused;
+			utils.ObjectPool.getInstance().pause = paused;			
 			
+			if(!paused)
+				utils.Singleton.get(utils.SoundMgr).resumeBgm();
+				
 			utils.EventDispatcher.getInstance().dispatchEvent(paused ? "gamePause": "gameResume");
 		}
+
+		/**
+		 * 分享
+		 */
+		public share(title:string, shareImgId:number){
+			let self = this;
+			if(!platform.isRunInWX())
+				return;
+			
+			let urlId = self.getShareImgUrlId(shareImgId);;
+
+			// 分享
+			wx.shareAppMessage({
+				"title":title,
+				"imageUrl":`resource/assets/share${shareImgId}.png`,
+				"imageUrlId":urlId,
+				"query":"",					
+			});
+		}
+
+		/**
+		 * 获取分享图编号
+		 */
+		public getShareImgUrlId(shareImgId:number){
+			let urlId = shareImgId == 1 ? "k972XN06TNGPgKaQaMw4WQ" : "sLuHd8JpTQCDOtEHCBUpog";
+			return urlId;
+		}
+
+		/**
+		 * 看广告，失败转分享
+		 */
+		public watchVideoAd(adKey:string, cb:Function){
+			let self = this;
+			if(!platform.isRunInWX()){
+				return cb();
+			}
+
+			// 获取双倍奖励
+			utils.Singleton.get(AdMgr).watchVideoAd(adKey, (isEnded) => {
+				if(isEnded){ // 观看广告完成
+					cb();
+				}
+			}, () => {
+				// 广告拉取失败改成分享
+				self.share("你的好友请你帮他复活上分！拜托！", 1);
+				cb();
+			});				
+		}
+
 
 		public dispose(){
 			let self = this;

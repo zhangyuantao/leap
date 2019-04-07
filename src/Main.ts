@@ -5,9 +5,7 @@ class Main extends egret.DisplayObjectContainer {
     public static myAvatarUrl:string = "";
 
     public constructor() {
-        super();
-        if(platform.isRunInWX())
-            wx.loadFont("resource/RubikOne-Regular.ttf");
+        super();    
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
 
@@ -66,7 +64,9 @@ class Main extends egret.DisplayObjectContainer {
             //加载排行榜资源
             platform.openDataContext && platform.openDataContext.postMessage({
                 command: "loadRes"
-            });
+            });   
+
+            platform.loadFont("resource/RubikOne-Regular.ttf");             
         }
         catch (e) {
             console.error(e);
@@ -81,7 +81,7 @@ class Main extends egret.DisplayObjectContainer {
         fairygui.UIPackage.addPackage("leap");        
         this.stage.addChild(fairygui.GRoot.inst.displayObject);
         this.stage.removeChild(this);
-        let wnd = new leap.MainWindow("guess", "MainWindow", false);
+        let wnd = new leap.MainWindow();
         wnd.show();
 
 

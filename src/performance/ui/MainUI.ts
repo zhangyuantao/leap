@@ -33,7 +33,8 @@ module leap {
 		private registerListener(){
 			let self = this;
 			utils.EventDispatcher.getInstance().addEventListener("updateScore", self.updateScore, self);
-			utils.EventDispatcher.getInstance().addEventListener("onAppPause", self.onAppPause, self);
+			utils.EventDispatcher.getInstance().addEventListener("onAppPause", self.onPause, self);
+			utils.EventDispatcher.getInstance().addEventListener("gameRevive", self.pause, self);
 			utils.EventDispatcher.getInstance().addEventListener("newRound", self.onNewRound, self);
 			utils.EventDispatcher.getInstance().addEventListener("levelUp", self.onLevelUp, self);
 			utils.EventDispatcher.getInstance().addEventListener("settlement", self.onSettlement, self);
@@ -65,7 +66,7 @@ module leap {
 			self.pause();
 		}
 
-		private onAppPause(){
+		private onPause(){
 			let self = this;
 			if(GameMgr.getInstance().isPaused || GameMgr.getInstance().gameOver)
 				return;
@@ -172,7 +173,8 @@ module leap {
 
 			utils.StageUtils.removeEventListener("createGame", self.onCreateGame, self);
 			utils.EventDispatcher.getInstance().removeEventListener("updateScore", self.updateScore, self);
-			utils.EventDispatcher.getInstance().removeEventListener("onPause", self.onAppPause, self);
+			utils.EventDispatcher.getInstance().removeEventListener("onAppPause", self.onPause, self);
+			utils.EventDispatcher.getInstance().removeEventListener("gameRevive", self.pause, self);
 			utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
 			utils.EventDispatcher.getInstance().removeEventListener("levelUp", self.onLevelUp, self);
 			utils.EventDispatcher.getInstance().removeEventListener("settlement", self.onSettlement, self);

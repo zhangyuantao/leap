@@ -65,6 +65,8 @@ module leap {
 			// 点击菜单
 			if(e.target.parent && e.target.parent instanceof MainUI)
 				return;
+			if(e.target.parent.parent && e.target.parent.parent instanceof MainUI)
+				return;
 
 			self.isPressed = true;
 			egret.Tween.removeTweens(self);
@@ -132,7 +134,7 @@ module leap {
 		}
 
 		// 复活
-		private onResurgence(){
+		private onRevive(){
 			let self = this;
 
 			// 属性重置
@@ -255,7 +257,7 @@ module leap {
 
 			self.initCollider(21);
 			
-			utils.EventDispatcher.getInstance().addEventListener("gameResurgence", self.onResurgence, self);
+			utils.EventDispatcher.getInstance().addEventListener("gameReviveOk", self.onRevive, self);
 
 			utils.StageUtils.addEventListener(egret.TouchEvent.TOUCH_BEGIN, self.onTouchBegin, self);
 			utils.StageUtils.addEventListener(egret.TouchEvent.TOUCH_END, self.onTouchEnd, self);
@@ -275,7 +277,7 @@ module leap {
 			self.effects = null;
 			self.colliderDisplay = null;
 			self.trail = null;
-			utils.EventDispatcher.getInstance().removeEventListener("gameResurgence", self.onResurgence, self);
+			utils.EventDispatcher.getInstance().removeEventListener("gameReviveOk", self.onRevive, self);
 			utils.StageUtils.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, self.onTouchBegin, self);
 			utils.StageUtils.removeEventListener(egret.TouchEvent.TOUCH_END, self.onTouchEnd, self);
 			utils.StageUtils.removeEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE, self.onTouchEnd, self);

@@ -72,6 +72,8 @@ module utils {
 		// 恢复背景音乐
 		public resumeBgm(){
 			let self = this;
+			if(self.isMuteBgm)
+				return;
 			if(self.bgm){
 				self.bgmSoundChannel = self.bgm.play(self.lastBgmPos, self.bgmLoops);		
 			}

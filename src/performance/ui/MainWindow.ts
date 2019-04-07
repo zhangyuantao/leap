@@ -5,7 +5,8 @@ module leap {
 	export class MainWindow extends BaseWindow {
 		public static instance:MainWindow;
 		public textureBg:TextureBackground;
-
+		
+		private readyPanel:ReadyPanel;
 		private btnCloseRank:fairygui.GButton;
 
 		private isShowRank:boolean = false;
@@ -25,17 +26,13 @@ module leap {
 		// 释放
 		public dispose(): void {		
 			super.dispose();			
-			let self = this;
+			let self = this;			
 			self.removeEventListeners();
+			egret.Tween.removeAllTweens();
 			self.destroyGame();		
 			utils.Singleton.destroy(utils.SoundMgr);
 			self.btnCloseRank.removeClickListener(self.onCloseRank, self);	
 			//console.log("game dispose");
-		}
-
-		protected initUI(){
-			let self = this;
-			self.contentPane = fairygui.UIPackage.createObject("leap", "MainWindow").asCom;
 		}
 
 		protected addEventListeners(){
@@ -78,6 +75,7 @@ module leap {
         protected onInit(){
 			super.onInit();
 			let self = this;
+			self.readyPanel = self.contentPane.getChild("readyPanel") as ReadyPanel;
 			self.btnCloseRank = self.contentPane.getChild("btnCloseRank").asButton;
 			self.btnCloseRank.addClickListener(self.onCloseRank, self);
 			self.btnCloseRank.visible = false;			
@@ -149,7 +147,6 @@ module leap {
 			utils.ObjectPool.getInstance().dispose();
 			GameMgr.getInstance().dispose();
 			utils.EventDispatcher.getInstance().dispose();
-			egret.Tween.removeAllTweens();
 		}
 
 		/**
@@ -233,6 +230,13 @@ module leap {
 					command: "close"
 				});
 			}
+		}
+		
+		// 返回准备界面
+		public backToReadyWindow(){
+			let self = this;
+			self.destroyGame();
+			self.readyPanel.show();
 		}
 	}
 }

@@ -10,8 +10,21 @@ module leap {
 			self.startBtn.addClickListener(self.onStartBtn, self);
 			self.rankBtn = self.getChild("rankBtn").asButton;
 			self.rankBtn.addClickListener(self.onRankBtn, self);
-			let isRunWeb = (platform instanceof DebugPlatform) ? true : false;
+			
+			self.initState();
+		}
 
+		private onStartBtn(e){
+			let self = this;
+			MainWindow.instance.createGame();
+			self.hide();
+			utils.StageUtils.addEventListener("leaveGame", self.onLeaveGame, self);
+		}
+
+		private initState(){
+			let self = this;
+			self.startBtn.visible = true;
+			self.rankBtn.visible = true;
 			if(!Main.isScopeUserInfo && platform.isRunInWX()){
 				self.startBtn.visible = false;
 				self.rankBtn.visible = false;
@@ -40,11 +53,11 @@ module leap {
 			}  	
 		}
 
-		private onStartBtn(e){
+		public show(){
 			let self = this;
-			MainWindow.instance.createGame();
-			self.hide();
-			utils.StageUtils.addEventListener("leaveGame", self.onLeaveGame, self);
+			self.initState();
+			self.visible = true;
+			egret.Tween.get(self).to({alpha:1}, 300, egret.Ease.sineInOut);			
 		}
 
 		private hide(){

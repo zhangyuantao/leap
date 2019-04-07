@@ -18,6 +18,8 @@ declare interface Platform {
     layaAdChange(cb:Function);
     layaAdToMiniProgram();
     isRuniOS():boolean;
+    setUserCloudStorage(kvDataList:any[], success?:Function, fail?:Function, complete?:Function);
+    loadFont(url:string);
 }
 
 class DebugPlatform implements Platform {
@@ -94,6 +96,14 @@ class DebugPlatform implements Platform {
     
     isRuniOS(){
         return true;
+    }
+
+    setUserCloudStorage(kvDataList:any[], success?:Function, fail?:Function, complete?:Function){
+       
+    }
+
+    loadFont(url:string){
+        
     }
 }
 
