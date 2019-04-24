@@ -1,8 +1,9 @@
 module leap {
 	export class ResultPanel extends fairygui.GComponent{
 		private restartBtn:fairygui.GButton;
-		private quiteBtn:fairygui.GButton;
+		private homeBtn:fairygui.GButton;
 		private reviveBtn:fairygui.GButton;
+		private shareBtn:fairygui.GButton;
 		private txtScore:fairygui.GTextField;
 		private txtScoreBest:fairygui.GTextField;
 
@@ -11,10 +12,12 @@ module leap {
 			let self = this;
 			self.restartBtn = self.getChild("restartBtn").asButton;
 			self.restartBtn.addClickListener(self.onReStartBtn, self);
-			self.quiteBtn = self.getChild("quiteBtn").asButton;
-			self.quiteBtn.addClickListener(self.onQuiteBtn, self);
+			self.homeBtn = self.getChild("homeBtn").asButton;
+			self.homeBtn.addClickListener(self.onHomeBtn, self);
 			self.reviveBtn = self.getChild("reviveBtn").asButton;
 			self.reviveBtn.addClickListener(self.onReviveBtn, self);
+			self.shareBtn = self.getChild("shareBtn").asButton;
+			self.shareBtn.addClickListener(self.onShareBtn, self);
 			self.txtScore = self.getChild("txtScore").asTextField;
 			self.txtScoreBest = self.getChild("txtScoreBest").asTextField;
 			self.alpha = 0;	
@@ -38,7 +41,10 @@ module leap {
 			self.txtScoreBest.text = GameMgr.getInstance().scoreRecord + "";
 			self.reviveBtn.visible = !GameMgr.getInstance().hasRevived;
 			self.visible = true;
-			egret.Tween.get(self).to({alpha:1}, 500, egret.Ease.sineInOut);	
+			egret.Tween.get(self).to({alpha:1}, 500, egret.Ease.sineInOut);
+			
+			// 显示横板排行榜
+			MainWindow.instance.showRankWnd("horizontal", 0, false, false);
 		}
 
 		private onReStartBtn(e){
@@ -47,7 +53,7 @@ module leap {
 			self.hide();
 		}
 
-		private onQuiteBtn(e){
+		private onHomeBtn(e){
 			let self = this;		
 			self.hide();
 			MainWindow.instance.backToReadyWindow();
@@ -60,11 +66,17 @@ module leap {
 			GameMgr.getInstance().watchVideoAd("复活Vedio", () => {
 				GameMgr.getInstance().revive();
 				self.hide();
-			})	
+			});
+		}
+
+		private onShareBtn(e){
+			let self = this;
+			GameMgr.getInstance().shareFromCanvas();
 		}
 
 		private hide(){
 			let self = this;
+			MainWindow.instance.hideRankWnd();
 			egret.Tween.get(self).to({alpha:0}, 500, egret.Ease.sineInOut).call(() => {			
 				self.visible = false;
 			});			
@@ -74,8 +86,9 @@ module leap {
 			super.dispose();
 			let self = this;
 			self.restartBtn.removeClickListener(self.onReStartBtn, self);
-			self.quiteBtn.removeClickListener(self.onQuiteBtn, self);
+			self.homeBtn.removeClickListener(self.onHomeBtn, self);
 			self.reviveBtn.removeClickListener(self.onReviveBtn, self);
+			self.shareBtn.removeClickListener(self.onShareBtn, self);
 			utils.StageUtils.removeEventListener("createGame", self.onCreateGame, self);
 			utils.EventDispatcher.getInstance().removeEventListener("gameOver", self.onGameOver, self)	
 		}

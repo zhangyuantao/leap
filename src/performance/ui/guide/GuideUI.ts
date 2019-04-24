@@ -10,9 +10,10 @@ module leap {
 			let self = this;
 			let key = "leap_guideStep" + self.step;
 			egret.localStorage.setItem(key, "1");
-			GameMgr.getInstance().pause(false);
+			GameMgr.getInstance().setPause(false, false);
 
 			self.parent.visible = false;
+			self.parent.touchable = false;	
 			self.removeFromParent();	
 
 			// 标记引导完成

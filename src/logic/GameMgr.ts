@@ -84,7 +84,7 @@ module leap {
 		public dead(){
 			let self = this;
 			self.gameOver = true;
-			self.pause(true);
+			self.setPause(true);
 
 			// 存储新纪录
 			if(self.score > self.scoreRecord){				
@@ -114,43 +114,96 @@ module leap {
 			}, self);
 		}
 
-		public pause(paused:boolean){
+		public setPause(paused:boolean, pauseBgm:boolean = true){
 			let self = this;
 			if(self.isPaused == paused)
 				return;
 			utils.ObjectPool.getInstance().pause = paused;			
 			
-			if(!paused)
+			if(paused && pauseBgm)
+				utils.Singleton.get(utils.SoundMgr).pauseBgm();
+			else if(!paused && pauseBgm)
 				utils.Singleton.get(utils.SoundMgr).resumeBgm();
 				
 			utils.EventDispatcher.getInstance().dispatchEvent(paused ? "gamePause": "gameResume");
 		}
 
 		/**
-		 * 分享
+		 * 使用指定图片分享
 		 */
-		public share(title:string, shareImgId:number){
+		public share(title?:string, shareImgId:number = -1){
 			let self = this;
 			if(!platform.isRunInWX())
 				return;
 			
-			let urlId = self.getShareImgUrlId(shareImgId);;
+			if(!title) title = self.getShareTittle();
+			let info = self.getShareImgUrlId(shareImgId);
 
 			// 分享
 			wx.shareAppMessage({
-				"title":title,
-				"imageUrl":`resource/assets/share${shareImgId}.png`,
-				"imageUrlId":urlId,
-				"query":"",					
+				title:title,
+				imageUrlId:info[0],
+				imageUrl:info[1],
+				query:"",					
 			});
 		}
 
+		// 使用 Canvas 内容作为转发图片（5:4比例）
+		public shareFromCanvas(title?:string, x:number = 0, y:number = 200, width:number = 720, height:number = 576, destWidth:number = 425, destHeight:number = 340){
+			let self = this;
+			if(!platform.isRunInWX())
+				return;
+				
+			if(!title) title = self.getShareTittle();
+			let tmpFilePath = canvas.toTempFilePathSync({
+				x:x,
+				y:y,
+				width: width,
+				height: height,
+				destWidth: destWidth,
+				destHeight: destHeight
+			});
+			
+			wx.shareAppMessage({
+				title:title,
+				imageUrl:tmpFilePath,
+				imageUrlId:"",
+				query:"",			
+			});
+		}
+		
 		/**
-		 * 获取分享图编号
+		 * 获取审核过的分享图信息
 		 */
-		public getShareImgUrlId(shareImgId:number){
-			let urlId = shareImgId == 1 ? "k972XN06TNGPgKaQaMw4WQ" : "sLuHd8JpTQCDOtEHCBUpog";
-			return urlId;
+		public getShareImgUrlId(shareImgId:number = -1):string[]{
+			let arr = [
+				["", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBlMianh5iaqObI06H2J2vLgu5nFsXIfWeEibTsAP9v1DNHsOJAtibgdJhJ/0"],
+				["Z48e_OwCRmGCxZzvY33xyw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzC89r1OCNkLxlEykiaKyFTZyVqXAJQluLcuiaBamruqr8hucMtnUAA9sA/0"],
+				["SslXVQ9WS9ySqCX_EmjGww", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBasfSDwqemHMDJvZ8OyJYYvyS0h9Pcrmp7tQDKYfocQaoia2YpzJVul/0"],
+				["jxKor47oSTqhSz8dTWZ2EQ", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzAyNhicibcGVy9nbgibIRH6IialUVz6YEvr57oJFXMEUwZnib5sC5JRjPOoM/0"],
+			];
+
+			if(shareImgId == -1){
+				let idx = Math.round(1 + Math.random() * (arr.length - 2));
+				return arr[idx];
+			}
+			else
+				return arr[shareImgId];
+		}
+
+		/**
+		 * 获取分享标题
+		 */
+		public getShareTittle(){
+			let arr = [
+				"你知道LeapOn吗？终于在微信上可以玩了！",
+				"只有iPhone6以上才能玩(开发者说优化尽力了)",
+				"听说有点难？这分数不服来战！",
+				"太好玩了！好友请你帮他复活接着玩！",
+				"这音乐节奏根本停不下来啊！"
+			];
+			let idx = Math.round(Math.random() * (arr.length - 1));
+			return arr[idx];
 		}
 
 		/**
@@ -169,7 +222,8 @@ module leap {
 				}
 			}, () => {
 				// 广告拉取失败改成分享
-				self.share("你的好友请你帮他复活上分！拜托！", 1);
+				//self.share("嘿，看见你了！", 1);
+				//self.shareFromCanvas(null, 0, 185)
 				cb();
 			});				
 		}

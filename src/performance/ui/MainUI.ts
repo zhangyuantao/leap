@@ -8,10 +8,10 @@ module leap {
 		private pausePanel:fairygui.GComponent;
 		private continueBtn:fairygui.GButton;
 		private newRecord:fairygui.GComponent;
+		private gameOverCtrl:fairygui.Controller;
 
 		private soundOn:boolean = true;
 		private hasShowNewRecord:boolean = false;
-		private alertWnd:any;
 
 		public constructor(){
 			super();
@@ -22,6 +22,7 @@ module leap {
 		private onCreateGame(){
 			let self = this;
 			self.registerListener();
+			self.gameOverCtrl.setSelectedIndex(0);
 			self.scoreTxt.setText("");
 			self.multTxt.text = "x" + GameMgr.getInstance().multiNum;
 			self.hasShowNewRecord = false;
@@ -37,7 +38,8 @@ module leap {
 			utils.EventDispatcher.getInstance().addEventListener("gameRevive", self.pause, self);
 			utils.EventDispatcher.getInstance().addEventListener("newRound", self.onNewRound, self);
 			utils.EventDispatcher.getInstance().addEventListener("levelUp", self.onLevelUp, self);
-			utils.EventDispatcher.getInstance().addEventListener("settlement", self.onSettlement, self);
+			utils.EventDispatcher.getInstance().addEventListener("gameOver", self.onGameOver, self);
+			utils.EventDispatcher.getInstance().addEventListener("gameReviveOk", self.onGameReviveOk, self);
 		}
 
 		public constructFromResource(){
@@ -51,7 +53,7 @@ module leap {
 			self.pausePanel.visible = false;
 			self.continueBtn = self.pausePanel.getChild("continueBtn").asButton;
 			self.continueBtn.addClickListener(self.onContinueBtn, self);
-
+			self.gameOverCtrl = self.getController("gameOverCtrl");
 			self.scoreTxt = self.getChild("scoreTxt") as ScoreText;
 			self.multTxt = self.getChild("multTxt").asCom;
 			self.multTxt.alpha = 0;
@@ -76,7 +78,7 @@ module leap {
 
 		private pause(){
 			let self = this;
-			GameMgr.getInstance().pause(true);
+			GameMgr.getInstance().setPause(true);
 			self.showPausePanel();
 		}
 
@@ -111,7 +113,7 @@ module leap {
 
 		private onContinueBtn(e){
 			let self = this;
-			GameMgr.getInstance().pause(false);
+			GameMgr.getInstance().setPause(false);
 			self.closePausePanel();
 		}
 
@@ -140,17 +142,9 @@ module leap {
 			self.levelTxt.getChild("txt").asTextField.text = "STAGE " + lv;
 			egret.Tween.get(self.levelTxt).set({alpha:0}).to({alpha:1, scaleX:1.5, scaleY:1.5}, 500, egret.Ease.sineInOut).wait(500).to({alpha:0, scaleX:1, scaleY:1}, 500, egret.Ease.sineInOut);
 		}
-
-		private onSettlement(){
-			let self = this;
-			if(self.alertWnd){
-				egret.Tween.removeTweens(self.alertWnd);
-				self.alertWnd.dispose();
-			}
-		}
-
+		
 		private updateScore(score:number){
-			let self = this;			
+			let self = this;
 			self.scoreTxt.setScore(score);
 
 			// 破记录提示
@@ -162,6 +156,16 @@ module leap {
 				self.hasShowNewRecord = true;
 				utils.Singleton.get(utils.SoundMgr).playSound("newHighScore_mp3");;	
 			}
+		}
+
+		private onGameOver(){
+			let self = this;
+			self.gameOverCtrl.setSelectedIndex(1);
+		}
+		
+		private onGameReviveOk(){
+			let self = this;
+			self.gameOverCtrl.setSelectedIndex(0);
 		}
 
 		public dispose(){
@@ -177,7 +181,8 @@ module leap {
 			utils.EventDispatcher.getInstance().removeEventListener("gameRevive", self.pause, self);
 			utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
 			utils.EventDispatcher.getInstance().removeEventListener("levelUp", self.onLevelUp, self);
-			utils.EventDispatcher.getInstance().removeEventListener("settlement", self.onSettlement, self);
+			utils.EventDispatcher.getInstance().removeEventListener("gameOver", self.onGameOver, self);
+			utils.EventDispatcher.getInstance().removeEventListener("gameReviveOk", self.onGameReviveOk, self);
 		}
 	}
 }

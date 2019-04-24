@@ -83,21 +83,5 @@ class Main extends egret.DisplayObjectContainer {
         this.stage.removeChild(this);
         let wnd = new leap.MainWindow();
         wnd.show();
-
-
-        if(platform.isRunInWX()){
-            // 启用显示转发分享菜单
-            wx.showShareMenu({withShareTicket:true});
-
-            // 用户点击了“转发”按钮
-            wx.onShareAppMessage(() => {
-                return {
-                    title:"LeapOn飞跃吧体验",
-					imageUrl:"resource/assets/share1.png",
-					imageUrlId:"k972XN06TNGPgKaQaMw4WQ",
-					query:"",		
-                }
-            });
-        }        
     }
 }

@@ -14,7 +14,7 @@ module leap {
 		public setScore(score:number){
 			let self = this;	
 			egret.Tween.removeTweens(self.txtScore);		
-			egret.Tween.get(self.txtScore).to({y:self.initY - 30}, 200, egret.Ease.sineOut).call(()=>{
+			egret.Tween.get(self.txtScore).to({y:self.initY - 30}, 150, egret.Ease.sineOut).call(()=>{
 				let text = score > 0 ? "" + score : "";
 				self.setText(text);
 			})

@@ -93,13 +93,14 @@ module utils {
 			let self = this;
 			if(self.isMuteBgm == mute)
 				return;
+
+			self.isMuteBgm = mute;
 			
 			if(mute)
 				self.pauseBgm();			
 			else
 				self.resumeBgm();
-
-			self.isMuteBgm = mute;
+				
 			egret.localStorage.setItem("isMuteBgm", mute ? "1" : "0");
 		}
 

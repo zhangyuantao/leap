@@ -120,7 +120,7 @@ module leap {
 			GameMgr.getInstance().dead();
 
 			// 死亡特效
-			egret.Tween.get(self.mainUI).to({alpha:0}, 200);		
+			egret.Tween.get(self.mainUI).to({alpha:0}, 300);		
 			World.instance.spawnUIAni(DeadAni, self.x, self.y);
 			
 			utils.Singleton.get(utils.SoundMgr).pauseBgm();
@@ -159,8 +159,7 @@ module leap {
 			self.addEffect(ItemDefine.Plus, PlusEffect);
 			utils.Singleton.get(utils.SoundMgr).playSound("revive2_mp3"); // 复活音效		
 
-			egret.Tween.removeTweens(self.mainUI);
-			egret.Tween.get(self.mainUI).to({alpha:1}, 200);
+			if(!self.mainUI.alpha) self.mainUI.alpha = 1;
 		}
 
 		public getHeight(){

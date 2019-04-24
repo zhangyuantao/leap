@@ -14,6 +14,8 @@ module leap {
 			self.imgs.push(self.getChild("n4").asImage);
 			self.imgs.push(self.getChild("n5").asImage);
 			self.imgs.push(self.getChild("n6").asImage);
+			self.imgs.push(self.getChild("n7").asImage);
+			self.imgs.push(self.getChild("n8").asImage);
         }
 
 		public show(){
@@ -27,7 +29,7 @@ module leap {
 			// 随机一个纹理
 			let idx = 0;
 			do{
-				idx = Math.floor(Math.random() * (self.imgs.length - 1));
+				idx = Math.round(Math.random() * (self.imgs.length - 1));
 			}
 			while(self.lastIdx == idx);
 			

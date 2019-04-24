@@ -2,6 +2,7 @@ module leap {
 	export class ReadyPanel extends fairygui.GComponent{
 		private startBtn:fairygui.GButton;
 		private rankBtn:fairygui.GButton;
+		private shareBtn:fairygui.GButton;
 
 		public constructFromResource(){
             super.constructFromResource();
@@ -10,6 +11,8 @@ module leap {
 			self.startBtn.addClickListener(self.onStartBtn, self);
 			self.rankBtn = self.getChild("rankBtn").asButton;
 			self.rankBtn.addClickListener(self.onRankBtn, self);
+			self.shareBtn = self.getChild("shareBtn").asButton;
+			self.shareBtn.addClickListener(self.onShareBtn, self);
 			
 			self.initState();
 		}
@@ -76,15 +79,20 @@ module leap {
 
 		private onRankBtn(e){
 			let self = this;
-			//self.rankBtn.visible = false;
 			MainWindow.instance.showRankWnd();
 		}
 
+		private onShareBtn(e){
+			let self = this;
+			GameMgr.getInstance().share();
+		}
+		
 		public dispose(){
 			super.dispose();
 			let self = this;
 			self.startBtn.removeClickListener(self.onStartBtn, self);			
 			self.rankBtn.removeClickListener(self.onRankBtn, self);
+			self.shareBtn.removeClickListener(self.onShareBtn, self);
 			utils.StageUtils.removeEventListener("leaveGame", self.onLeaveGame, self);
 		}
 	}

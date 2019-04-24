@@ -55,6 +55,7 @@ module leap{
 
 		private onGameOver(){
 			let self = this;
+			egret.Tween.removeTweens(self.linkLine);
 			self.linkLine.alpha = 0;
 		}
 
@@ -78,19 +79,20 @@ module leap{
 				return;
 			
 			let playHeight = self.player.getHeight();
-			if(playHeight > GameCfg.getCfg().WorldRange * 0.5){
-				if(self.linkLine.alpha == 1){
-					egret.Tween.removeTweens(self.linkLine);
-					egret.Tween.get(self.linkLine).to({alpha:0}, 500, egret.Ease.sineInOut);
-				}
-			}
-			else{
-				if(self.linkLine.alpha == 0){
-					egret.Tween.removeTweens(self.linkLine);
-					egret.Tween.get(self.linkLine).to({alpha:1}, 500, egret.Ease.sineInOut);
-				}
-			}
+			// if(playHeight > GameCfg.getCfg().WorldRange * 0.5){
+			// 	if(self.linkLine.alpha == 1){
+			// 		egret.Tween.removeTweens(self.linkLine);
+			// 		egret.Tween.get(self.linkLine).to({alpha:0}, 500, egret.Ease.sineInOut);
+			// 	}
+			// }
+			// else{
+			// 	if(self.linkLine.alpha == 0){
+			// 		egret.Tween.removeTweens(self.linkLine);
+			// 		egret.Tween.get(self.linkLine).to({alpha:1}, 500, egret.Ease.sineInOut);
+			// 	}
+			// }
 
+			if(!self.linkLine.alpha) self.linkLine.alpha = 1;
 			self.linkLine.height = playHeight;
 			self.linkLine.rotation = self.player.getAngle() - 90;
 		}

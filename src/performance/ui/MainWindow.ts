@@ -17,10 +17,28 @@ module leap {
 		private curRankType:string;
 		private lastRankType:string;
 
+		private worldContainer:egret.DisplayObjectContainer;
+
 		public constructor(pkgName:string = "leap", windowName?:string, playPopSound?:boolean) {
 			super(pkgName, windowName, playPopSound);		
 			let self = this;		
 			MainWindow.instance = self;
+
+			if(platform.isRunInWX()){
+				// 启用显示转发分享菜单
+				wx.showShareMenu({withShareTicket:true});
+
+				// 用户点击了“转发”按钮
+				wx.onShareAppMessage(() => {
+					let info = GameMgr.getInstance().getShareImgUrlId(0);
+					return {
+						title:"黑洞，人类首次看见它！",
+						imageUrlId:info[0],
+						imageUrl:info[1],
+						query:"",		
+					}
+				});
+			}        
 		}	
 
 		// 释放
@@ -86,7 +104,7 @@ module leap {
 		// 引导初始化
 		private initGuide(){
 			let self = this;
-			if(self.isCompleteGuide(3)){
+			if(self.isFinishGuide()){
 				GameMgr.getInstance().guideCompleted = true;				
 			}
 			else{
@@ -100,6 +118,12 @@ module leap {
 				let panel =	utils.ObjectPool.getInstance().createFairyUIObject(GuidePanel, "leap");					
 				self.displayListContainer.addChild(panel.displayObject);
 			}
+		}
+
+		// 引导是否完成
+		public isFinishGuide(){
+			let doGuideCount = parseInt(egret.localStorage.getItem("doGuideCount") || "0");
+			return doGuideCount >= 3; // 做完整的三次引导
 		}
 
 		public isCompleteGuide(step:number){
@@ -126,10 +150,13 @@ module leap {
 			self.addChild(self.textureBg);
 
 			// 世界
-			let worldContainer = new egret.DisplayObjectContainer();
-			self.displayListContainer.addChildAt(worldContainer, 1);
+			if(self.worldContainer)
+				self.worldContainer.removeChildren();
+			else
+				self.worldContainer = new egret.DisplayObjectContainer();
+			self.displayListContainer.addChildAt(self.worldContainer, 1);
 			let world = utils.ObjectPool.getInstance().createObject(World);
-			worldContainer.addChild(world);
+			self.worldContainer.addChild(world);
 
 			// 引导初始化
 			self.initGuide();

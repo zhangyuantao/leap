@@ -15,8 +15,8 @@ module leap {
 			let self = this;
 			let center = World.instance.spike;
 			let pos = World.instance.localToGlobal(center.x, center.y);
-			self.x = pos.x + 60;
-			self.y = pos.y - 60;
+			self.x = pos.x + 80;
+			self.y = pos.y;
 			self.getTransition("t0").play(() => {
 				utils.StageUtils.addEventListener(egret.TouchEvent.TOUCH_BEGIN, self.onStageTouch, self);
 			}, self);
