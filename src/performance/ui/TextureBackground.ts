@@ -6,16 +6,19 @@ module leap {
 		
 		constructFromResource(){
             super.constructFromResource();
-            let self = this;         
+            let self = this;   
+			let w = utils.StageUtils.stageWidth;
+			let h = utils.StageUtils.stageHeight;
+			self.x = w / 2;
+			self.y = h / 2;      
 			self.imgs = [];
-			self.imgs.push(self.getChild("n1").asImage);
-			self.imgs.push(self.getChild("n2").asImage);
-			self.imgs.push(self.getChild("n3").asImage);
-			self.imgs.push(self.getChild("n4").asImage);
-			self.imgs.push(self.getChild("n5").asImage);
-			self.imgs.push(self.getChild("n6").asImage);
-			self.imgs.push(self.getChild("n7").asImage);
-			self.imgs.push(self.getChild("n8").asImage);
+			let size = Math.ceil(Math.sqrt(w * w + h * h));
+			for(let i = 1; i <= 8; i++){
+				let img = self.getChild("n" + i).asImage;
+				img.width = img.height = size;
+				img.setPivot(0.5, 0.5, true);
+				self.imgs.push(img);
+			}
         }
 
 		public show(){

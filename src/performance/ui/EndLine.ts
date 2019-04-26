@@ -35,7 +35,7 @@ module leap {
 			self.touchChildren = false;
 			self.line = fairygui.UIPackage.createObject("leap", "BaseImgWhite");
 			self.line.touchable = false;
-			self.line.width = 6;
+			self.line.width = 8;
 			self.line.pivotX = 0.5;
 			self.line.rotation = 180;
 			self.addChild(self.line.displayObject);

@@ -21,8 +21,8 @@ module leap {
 			World.instance.addItem(item.displayObject);
 
 			let pos = item.displayObject.parent.localToGlobal(item.x, item.y);
-			self.x = pos.x;
-			self.y = pos.y;
+			self.x = pos.x + 20;
+			self.y = pos.y - 20;
 			
 			self.getTransition("t0").play(() => {
 				utils.StageUtils.addEventListener(egret.TouchEvent.TOUCH_BEGIN, self.onStageTouch, self);

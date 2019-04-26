@@ -113,7 +113,7 @@ module leap{
 			// 玩家连线
 			self.linkLine = fairygui.UIPackage.createObject("leap", "BaseImgWhite");
 			self.linkLine.touchable = false;
-			self.linkLine.width = 3;
+			self.linkLine.width = 4;
 			self.linkLine.pivotX = 0.5;
 			self.addChild(self.linkLine.displayObject);
 
