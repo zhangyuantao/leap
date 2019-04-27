@@ -10,7 +10,7 @@ module leap {
 
 			let self = this;
 			self.x = utils.StageUtils.stageWidth * 0.5;
-			self.y = 980;
+			self.y = utils.StageUtils.stageHeight * 0.65;
 
 			// 监听舞台点击
 			utils.StageUtils.addEventListener(egret.TouchEvent.TOUCH_BEGIN, self.onTouchBegin, self);

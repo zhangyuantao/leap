@@ -10,7 +10,7 @@ module leap {
 		private btnCloseRank:fairygui.GButton;
 
 		private isShowRank:boolean = false;
-		private rankingListMask:egret.Shape;
+		private rankingListMask:fairygui.GObject;
 		private rankBitmap:egret.Bitmap;
 
     	private myAvatarUrl:string = "";
@@ -180,7 +180,7 @@ module leap {
 		 * 显示排行榜
 		 * type： list horizontal vertical
 		 */
-		public showRankWnd(type:string = "list", maskAlpha:number = 0.8, maskTouchEnabled:boolean = true, showCloseRankBnt:boolean = true){
+		public showRankWnd(type:string = "list", maskAlpha:number = 1, maskTouchEnabled:boolean = true, showCloseRankBnt:boolean = true){
 			let self = this;
 			if(!platform.isRunInWX())
 				return;
@@ -190,20 +190,25 @@ module leap {
 				//Main.userInfoBtn && Main.userInfoBtn.hide();
 				
 				//处理遮罩,避免开放域数据影响主域
-				self.rankingListMask = new egret.Shape();
-				self.rankingListMask.graphics.beginFill(0x000000);
-				self.rankingListMask.graphics.drawRect(0, 0, utils.StageUtils.stageWidth, utils.StageUtils.stageHeight);
-				self.rankingListMask.graphics.endFill();
-				self.rankingListMask.alpha = maskAlpha;
+				if(!self.rankingListMask){
+					self.rankingListMask = fairygui.UIPackage.createObject("leap", "RankBack");
+					self.rankingListMask.width = utils.StageUtils.stageWidth;
+					self.rankingListMask.height = utils.StageUtils.stageHeight;
+					self.parent.addChild(self.rankingListMask);
+				}
 
-				//设置为true,以免触摸到下面的按钮
-				self.rankingListMask.touchEnabled = maskTouchEnabled;
-				self.parent.displayListContainer.addChildAt(self.rankingListMask, 999);
+				self.rankingListMask.visible = true;
+				self.rankingListMask.alpha = maskAlpha;
+				self.rankingListMask.touchable = maskTouchEnabled;
 				
 				//显示开放域数据
 				self.rankBitmap = platform.openDataContext.createDisplayObject(null, utils.StageUtils.stageWidth, utils.StageUtils.stageHeight);				
 				self.parent.displayListContainer.addChild(self.rankBitmap);
 				egret.Tween.get(self.rankBitmap).set({alpha:0}).to({alpha:1}, 500, egret.Ease.sineInOut);
+
+				self.rankBitmap.anchorOffsetX = 0.5;
+				self.rankBitmap.anchorOffsetY = 0.5;
+				self.rankBitmap.skewY = -4;
 
 				//让关闭排行榜按钮显示在容器内
 				if(showCloseRankBnt){
@@ -247,7 +252,7 @@ module leap {
 				if(self.rankBitmap)
 					egret.Tween.removeTweens(self.rankBitmap)
 				self.rankBitmap.parent && self.rankBitmap.parent.removeChild(self.rankBitmap);
-				self.rankingListMask.parent && self.rankingListMask.parent.removeChild(self.rankingListMask);
+				self.rankingListMask.visible = false;
 				self.isShowRank = false;
 				self.btnCloseRank.visible = false;
 				platform.openDataContext.postMessage({
