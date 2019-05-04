@@ -123,7 +123,7 @@ module leap {
 		// 引导是否完成
 		public isFinishGuide(){
 			let doGuideCount = parseInt(egret.localStorage.getItem("doGuideCount") || "0");
-			return doGuideCount >= 3; // 做完整的三次引导
+			return doGuideCount >= 2; // 做完整的2次引导
 		}
 
 		public isCompleteGuide(step:number){
@@ -154,6 +154,8 @@ module leap {
 				self.worldContainer.removeChildren();
 			else
 				self.worldContainer = new egret.DisplayObjectContainer();
+			self.worldContainer.x = 0;
+			self.worldContainer.y = 0;
 			self.displayListContainer.addChildAt(self.worldContainer, 1);
 			let world = utils.ObjectPool.getInstance().createObject(World);
 			self.worldContainer.addChild(world);
@@ -208,7 +210,7 @@ module leap {
 
 				self.rankBitmap.anchorOffsetX = 0.5;
 				self.rankBitmap.anchorOffsetY = 0.5;
-				self.rankBitmap.skewY = -4;
+				self.rankBitmap.skewY = type == "list" ? -4 : type == "horizontal" ? 4 : 0;
 
 				//让关闭排行榜按钮显示在容器内
 				if(showCloseRankBnt){
