@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	/**
 	 * 引导“道具”
 	 */

@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ObTubeSpawner extends ItemSpawner{
 		public constructor(){
 			super(ItemDefine.ObTube);

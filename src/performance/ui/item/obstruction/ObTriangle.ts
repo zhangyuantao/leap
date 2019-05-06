@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ObTriangle extends LinearMotionPolygon{
 		//@override
 		protected initVertices(){
@@ -22,13 +22,13 @@ module leap {
 			let playerHeight = 0;
 			let selfHeight = 0;
 
-			if(!player.isInvincible){
-				lastHeight = Math.sqrt(lastCheckPlayerPos.x * lastCheckPlayerPos.x + lastCheckPlayerPos.y * lastCheckPlayerPos.y);	
-				playerHeight = player.getHeight();
-				selfHeight = self.getHeight();
-			}
+			// if(!player.isInvincible){
+			// 	lastHeight = Math.sqrt(lastCheckPlayerPos.x * lastCheckPlayerPos.x + lastCheckPlayerPos.y * lastCheckPlayerPos.y);	
+			// 	playerHeight = player.getHeight();
+			// 	selfHeight = self.getHeight();
+			// }
 
-			if(!player.isInvincible && playerHeight > selfHeight && lastHeight > playerHeight){				
+			if(!player.isInvincible/* && playerHeight > selfHeight && lastHeight > playerHeight*/){				
 				player.dead();
 			}
 			else{

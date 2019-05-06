@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class Explode extends Prop{
 
 		// 执行效果

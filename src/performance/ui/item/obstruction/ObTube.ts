@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ObTube extends CircleMotionSquare{		
 		private selfRotateSpeed:number; // 自转速度
 

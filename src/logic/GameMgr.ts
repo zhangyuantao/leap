@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class GameMgr {		
 		private static instance:GameMgr;
 		public static getInstance() {

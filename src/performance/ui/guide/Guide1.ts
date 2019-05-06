@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	/**
 	 * 引导“不要落入中心”
 	 */

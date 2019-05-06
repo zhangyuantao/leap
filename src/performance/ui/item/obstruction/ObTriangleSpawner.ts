@@ -1,5 +1,6 @@
-module leap {
+module planetJump {
 	export class ObTriangleSpawner extends ItemSpawner{
+
 		public constructor(){
 			super(ItemDefine.ObTriangle);
 			let self = this;
@@ -10,10 +11,12 @@ module leap {
 		public spawn(){
 			let self = this;
 			if(!self.canSpawnOb())
-				return;	
-				
+				return;					
+
+			utils.EventDispatcher.getInstance().dispatchEvent("spawnSpike");
+			
 			let itemCfg = GameCfg.getCfg().Items[self.key];
-				
+
 			// 生成一圈
 			for(let i = 0; i < 10; i++){
 				let rad = i * Math.PI / (10 / 2);

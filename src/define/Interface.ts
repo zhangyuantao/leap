@@ -1,4 +1,4 @@
-module leap {	
+module planetJump {	
 	// 游戏配置结构	 
 	export interface IGameCfg{
 		WorldRange:number;	// 世界半径

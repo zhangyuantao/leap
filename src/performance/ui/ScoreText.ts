@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ScoreText extends fairygui.GComponent{
 		private txtScore:fairygui.GTextField;
 

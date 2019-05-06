@@ -81,7 +81,7 @@ class Main extends egret.DisplayObjectContainer {
         fairygui.UIPackage.addPackage("leap");        
         this.stage.addChild(fairygui.GRoot.inst.displayObject);
         this.stage.removeChild(this);
-        let wnd = new leap.MainWindow();
+        let wnd = new planetJump.MainWindow();
         wnd.show();
     }
 }

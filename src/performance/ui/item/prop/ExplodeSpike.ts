@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ExplodeSpike extends LinearMotionPolygon{
 		public rootX:number;
 		public rootY:number;

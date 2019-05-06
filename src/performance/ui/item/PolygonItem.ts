@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	/**
 	 * 多边形物品
 	 */

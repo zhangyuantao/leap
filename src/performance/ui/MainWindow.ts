@@ -1,7 +1,7 @@
 /**
  * 主游戏入口
  */
-module leap {
+module planetJump {
 	export class MainWindow extends BaseWindow {
 		public static instance:MainWindow;
 		public textureBg:TextureBackground;
@@ -80,6 +80,7 @@ module leap {
 			self.registerComponent("Guide2", Guide2);
 			self.registerComponent("Guide3", Guide3);
 			self.registerComponent("ResultPanel", ResultPanel);
+			self.registerComponent("recommendBtn", RecommandBtn);
 	
 		}
 		protected registerComponent(compName:string, userClass:any, pkgName:string = "leap"){
@@ -144,10 +145,11 @@ module leap {
 			// 背景
 			let bg = utils.ObjectPool.getInstance().createObject(Background);
 			self.displayListContainer.addChildAt(bg, 0);
-			
+
+			// 纹理背景
 			self.textureBg = fairygui.UIPackage.createObject('leap', "TextureBackground") as TextureBackground;
 			self.textureBg.visible = false;
-			self.addChild(self.textureBg);
+			self.displayListContainer.addChildAt(self.textureBg.displayObject, 1);		
 
 			// 世界
 			if(self.worldContainer)
@@ -156,7 +158,7 @@ module leap {
 				self.worldContainer = new egret.DisplayObjectContainer();
 			self.worldContainer.x = 0;
 			self.worldContainer.y = 0;
-			self.displayListContainer.addChildAt(self.worldContainer, 1);
+			self.displayListContainer.addChildAt(self.worldContainer, 2);
 			let world = utils.ObjectPool.getInstance().createObject(World);
 			self.worldContainer.addChild(world);
 

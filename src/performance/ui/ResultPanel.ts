@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ResultPanel extends fairygui.GComponent{
 		private restartBtn:fairygui.GButton;
 		private homeBtn:fairygui.GButton;

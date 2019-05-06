@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class AddScoreAni extends fairygui.GComponent implements utils.IGameObject{
 		private txt:fairygui.GTextField;
 

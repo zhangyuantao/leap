@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	/**
 	 * 世界中心齿轮状物体
 	 */
@@ -10,12 +10,14 @@ module leap {
 			let self = this;
 			//console.log("onCreate:", self.key);
 			utils.EventDispatcher.getInstance().addEventListener("newRound", self.onNewRound, self);
+			utils.EventDispatcher.getInstance().addEventListener("spawnSpike", self.onSpawnSpike, self);
 		}
 
 		public onDestroy(){
 			let self = this;
 			//console.log("onDestroy:", self.key);
 			utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
+			utils.EventDispatcher.getInstance().removeEventListener("spawnSpike", self.onSpawnSpike, self);
 		}
 
 		public onEnterFrame(deltaTime:number){
@@ -26,19 +28,26 @@ module leap {
 		}
 		//********************* 接口实现结束 ********************//
 
-		private rotate:fairygui.GImage;
+		private rotate:fairygui.GObject;
 		private multiNum:fairygui.GTextField;
+		private t0:fairygui.Transition;
 
 		constructFromResource(){
             super.constructFromResource();
             let self = this;         
-			self.rotate = self.getChild("n0").asImage;
+			self.rotate = self.getChild("n0");
 			self.multiNum = self.getChild("multiNum").asTextField;
+			self.t0 = self.getTransition("t0");
         }
 
 		private onNewRound(rounds){
 			let self = this;		
 			self.multiNum.text = "x" + rounds;
+		}
+
+		public onSpawnSpike(){
+			let self = this;
+			self.t0.play(null, self, null, 3);
 		}
 	}
 }

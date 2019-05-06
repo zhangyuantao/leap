@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class PlayerUI extends fairygui.GComponent{
 		public face:fairygui.GComponent;
 		private eyes:fairygui.GComponent;

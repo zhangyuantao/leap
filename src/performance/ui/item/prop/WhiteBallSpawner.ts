@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class WhiteBallSpawner extends ItemSpawner{
 		public spawnInterval:number = 1000;
 		public constructor(){

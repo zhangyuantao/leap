@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class LinearMotionPolygon extends PolygonItem{
 		protected speed:number = 0;
 		protected speedX:number = 0;

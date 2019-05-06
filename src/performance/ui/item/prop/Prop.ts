@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class Prop extends CircleItem{
 		public static readonly scaleUnit:number = 1; // 统一功能道具缩放
 

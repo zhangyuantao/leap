@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class GuidePanel extends fairygui.GComponent implements utils.IGameObject{
 		public key:string;
 		

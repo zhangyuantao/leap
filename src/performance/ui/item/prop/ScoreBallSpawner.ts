@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ScoreBallSpawner extends ItemSpawner{
 		public spawnInterval:number = 1500;
 		
@@ -15,7 +15,7 @@ module leap {
 			let randomRad = Math.random() * Math.PI * 2;
 			let randomRadius = Math.floor(itemCfg.spawnRange[0] + Math.random() * (itemCfg.spawnRange[1] - itemCfg.spawnRange[0]));
 			let randomScale = itemCfg.scaleRange[0] + Math.random() * (itemCfg.scaleRange[1] - itemCfg.scaleRange[0]);
-			let item = ItemMgr.getInstance().spawnItem(self.key, randomRad, randomRadius, randomScale) as WhiteBall;
+			let item = ItemMgr.getInstance().spawnItem(self.key, randomRad, randomRadius, randomScale) as ScoreBall_new;
 			let speed = itemCfg.speedRange[0] + Math.random() * (itemCfg.speedRange[1] - itemCfg.speedRange[0]);		
 			speed *= Math.random() < 0.5 ? -1 : 1;
 			item.init(speed);

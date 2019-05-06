@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	/**
 	 * 物品基类
 	 */

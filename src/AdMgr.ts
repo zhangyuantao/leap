@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class AdMgr implements utils.ISingleton{
 		private adCfg = {
 			"Banner首页":'adunit-254c6894d7445ced',

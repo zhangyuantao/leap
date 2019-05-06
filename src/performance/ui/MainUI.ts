@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class MainUI extends fairygui.GComponent{
 		private scoreTxt:ScoreText;
 		private multTxt:fairygui.GComponent;
@@ -139,7 +139,7 @@ module leap {
 
 		private onLevelUp(lv:number){
 			let self = this;
-			self.levelTxt.getChild("txt").asTextField.text = "STAGE " + lv;
+			self.levelTxt.getChild("txt").asTextField.text = "LEVEL " + lv;
 			egret.Tween.get(self.levelTxt).set({alpha:0}).to({alpha:1, scaleX:1.5, scaleY:1.5}, 500, egret.Ease.sineInOut).wait(500).to({alpha:0, scaleX:1, scaleY:1}, 500, egret.Ease.sineInOut);
 		}
 		
