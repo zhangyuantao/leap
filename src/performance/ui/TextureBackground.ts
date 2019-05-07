@@ -39,7 +39,7 @@ module planetJump {
 			self.lastIdx = idx;
 			self.curImg = self.imgs[idx];
 
-			egret.Tween.get(self.curImg).set({visible:true, alpha:0}).to({alpha:0.2}, 500, egret.Ease.sineInOut);
+			egret.Tween.get(self.curImg).set({visible:true, alpha:0}).to({alpha:0.1}, 500, egret.Ease.sineInOut);
 		}
 
 		public hide(){

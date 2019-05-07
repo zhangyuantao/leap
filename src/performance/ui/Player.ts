@@ -242,7 +242,7 @@ module planetJump {
 					ob.touchable = false;
 					return ob;
 				}
-				self.trail.init(280, 0.3, 0, 5, 0.7);
+				self.trail.init(280, 0.2, 0, 5, 0.7);
 				self.displayListContainer.addChild(self.trail);
 			}
 

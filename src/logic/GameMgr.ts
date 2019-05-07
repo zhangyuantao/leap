@@ -178,13 +178,13 @@ module planetJump {
 		public getShareImgUrlId(shareImgId:number = -1):string[]{
 			let arr = [
 				["", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBlMianh5iaqObI06H2J2vLgu5nFsXIfWeEibTsAP9v1DNHsOJAtibgdJhJ/0"],
-				["Z48e_OwCRmGCxZzvY33xyw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzC89r1OCNkLxlEykiaKyFTZyVqXAJQluLcuiaBamruqr8hucMtnUAA9sA/0"],
-				["SslXVQ9WS9ySqCX_EmjGww", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBasfSDwqemHMDJvZ8OyJYYvyS0h9Pcrmp7tQDKYfocQaoia2YpzJVul/0"],
-				["jxKor47oSTqhSz8dTWZ2EQ", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzAyNhicibcGVy9nbgibIRH6IialUVz6YEvr57oJFXMEUwZnib5sC5JRjPOoM/0"],
+				["B0f2KLIOQfi_AIv7qep5kQ", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzCfosWJQPhZJwpaV6EzUibWVmkoEwsRskMWYls7GFDDjq0J4zEiagCgvd/0"],
+				["qcglU7v4TAuf0eRYI46h8A", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzB7jkV42B09xuer2NToEGcwDiblmJr8vzYic8yTpwl2aD7Jc9t6qI0usk/0"],
+				["8Cqy0zJZSTmH5ARvaopFAw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBLVSYJqmibcgibsgMzxNfiaY0If5kEBu1KpP0sic4MQPdBApGSTSxX0czt/0"],
 			];
 
 			if(shareImgId == -1){
-				let idx = Math.round(1 + Math.random() * (arr.length - 2));
+				let idx = Math.floor(1 + Math.random() * (arr.length - 1));
 				return arr[idx];
 			}
 			else

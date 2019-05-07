@@ -99,6 +99,9 @@ module planetJump{
 
 		private init(){
 			let self = this;
+			// 全局光
+			let worldLight = fairygui.UIPackage.createObject('leap', "WoldLight");
+			self.addChild(worldLight.displayObject);
 
 			// 物品容器
 			self.itemContainer = new egret.DisplayObjectContainer();
@@ -115,6 +118,7 @@ module planetJump{
 			self.linkLine.touchable = false;
 			self.linkLine.width = 4;
 			self.linkLine.pivotX = 0.5;
+			self.linkLine.alpha = 0.6;
 			self.addChild(self.linkLine.displayObject);
 
 			// 玩家显示对象

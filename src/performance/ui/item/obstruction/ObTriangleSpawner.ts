@@ -13,7 +13,7 @@ module planetJump {
 			if(!self.canSpawnOb())
 				return;					
 
-			utils.EventDispatcher.getInstance().dispatchEvent("spawnSpike");
+			//utils.EventDispatcher.getInstance().dispatchEvent("spawnSpike");
 			
 			let itemCfg = GameCfg.getCfg().Items[self.key];
 
