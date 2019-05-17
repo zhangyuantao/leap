@@ -4,7 +4,15 @@ module planetJump {
 	 */
 	export class Item extends fairygui.GComponent implements utils.IGameObject, g2.SAT.ICollider{
 		public colliderEnabled:boolean = false;	// 是否能启用碰撞器
-		protected colliderDisplay:egret.Shape;	
+		protected colliderDisplay:egret.Shape;
+
+		public img:fairygui.GImage;
+
+		public constructFromResource(){
+			super.constructFromResource();
+			let self = this;
+			self.img = self.getChild("img").asImage;
+		}
 
 		protected get colliderGraphics():egret.Graphics{
 			let self = this;

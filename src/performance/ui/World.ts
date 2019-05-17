@@ -5,7 +5,7 @@ module planetJump{
 		// 显示对象
 		public player:Player;
 		public spike:SpikeCenter;
-		public linkLine:fairygui.GObject;
+		public linkLine:LinkLine;
 		public endLine:EndLine;
 
 		private itemContainer:egret.DisplayObjectContainer;
@@ -92,7 +92,7 @@ module planetJump{
 			// 	}
 			// }
 
-			if(!self.linkLine.alpha) self.linkLine.alpha = 1;
+			if(!self.linkLine.alpha) self.linkLine.alpha = 0.6;
 			self.linkLine.height = playHeight;
 			self.linkLine.rotation = self.player.getAngle() - 90;
 		}
@@ -114,7 +114,7 @@ module planetJump{
 			self.addChild(self.endLine);
 
 			// 玩家连线
-			self.linkLine = fairygui.UIPackage.createObject("leap", "BaseImgWhite");
+			self.linkLine = fairygui.UIPackage.createObject("leap", "LinkLine") as LinkLine;
 			self.linkLine.touchable = false;
 			self.linkLine.width = 4;
 			self.linkLine.pivotX = 0.5;

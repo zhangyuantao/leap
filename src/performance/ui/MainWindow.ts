@@ -81,6 +81,7 @@ module planetJump {
 			self.registerComponent("Guide3", Guide3);
 			self.registerComponent("ResultPanel", ResultPanel);
 			self.registerComponent("recommendBtn", RecommandBtn);
+			self.registerComponent("LinkLine", LinkLine);
 	
 		}
 		protected registerComponent(compName:string, userClass:any, pkgName:string = "leap"){

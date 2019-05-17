@@ -43,6 +43,7 @@ module planetJump {
 			self.itemClasses[ItemDefine.Thunderbolt] = Thunderbolt;
 			self.itemClasses[ItemDefine.Magnet] = Magnet;
 			self.itemClasses[ItemDefine.Plus] = Plus;
+			self.itemClasses[ItemDefine.Cut] = Cut;
 			self.itemClasses[ItemDefine.ObCircle] = ObCircle;
 			self.itemClasses[ItemDefine.ObTriangle] = ObTriangle;
 			self.itemClasses[ItemDefine.ObSquare] = ObSquare_new;
@@ -57,6 +58,7 @@ module planetJump {
 			self.spwaners.push(new ThunderboltSpawner());
 			self.spwaners.push(new PlusSpawner());
 			self.spwaners.push(new MagnetSpawner());
+			self.spwaners.push(new CutSpawner());
 			self.spwaners.push(new ObCircleSpawner());
 			self.spwaners.push(new ObTriangleSpawner());
 			self.spwaners.push(new ObSquareSpawner());
@@ -214,6 +216,20 @@ module planetJump {
 					 continue;
 				let sub = g2.Vector2.substract(playerPos, item.position);
 				if(sub.length <= range && findKeys.indexOf(item.key) != -1)
+					result.push(item);				
+			}
+			return result;
+		}
+
+		// 找到指定物体
+		public findItemsByKey(...findKeys:string[]){
+			let self = this;
+			let result:Item[] = [];
+			for(let i = 0, len = self.spawnItems.length; i < len; i++){
+				let item = self.spawnItems[i];
+				if(!item.colliderEnabled)
+					 continue;
+				if(findKeys.indexOf(item.key) != -1)
 					result.push(item);				
 			}
 			return result;

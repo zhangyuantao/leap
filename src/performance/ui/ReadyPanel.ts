@@ -4,6 +4,8 @@ module planetJump {
 		private rankBtn:fairygui.GButton;
 		private shareBtn:fairygui.GButton;
 
+		private gameClubBtn:any;
+
 		public constructFromResource(){
             super.constructFromResource();
 			let self = this;
@@ -54,17 +56,38 @@ module planetJump {
 					}
 				});      
 			}  	
+
+			// 游戏圈按钮
+			if(platform.isRunInWX()){
+				if(!self.gameClubBtn){
+					let size = Main.systemInfo.windowWidth / utils.StageUtils.stageWidth * 96;
+					let left = Main.systemInfo.windowWidth / utils.StageUtils.stageWidth * 74;
+					let top = Main.systemInfo.windowWidth / utils.StageUtils.stageWidth * (utils.StageUtils.stageHeight - 129);
+					self.gameClubBtn = wx.createGameClubButton({
+						icon: 'white',
+						style: {
+							left: left,
+							top: top,
+							width: size,
+							height: size
+						}
+					});
+				}	
+				else
+					self.gameClubBtn.show();	
+			}	
 		}
 
 		public show(){
 			let self = this;
 			self.initState();
 			self.visible = true;
-			egret.Tween.get(self).to({alpha:1}, 300, egret.Ease.sineInOut);			
+			egret.Tween.get(self).to({alpha:1}, 300, egret.Ease.sineInOut);
 		}
 
 		private hide(){
 			let self = this;
+			self.gameClubBtn && self.gameClubBtn.hide();
 			egret.Tween.get(self).to({alpha:0}, 300, egret.Ease.sineInOut).call(() => {			
 				self.visible = false;
 			});			
@@ -90,6 +113,7 @@ module planetJump {
 		public dispose(){
 			super.dispose();
 			let self = this;
+			self.gameClubBtn && self.gameClubBtn.destroy();
 			self.startBtn.removeClickListener(self.onStartBtn, self);			
 			self.rankBtn.removeClickListener(self.onRankBtn, self);
 			self.shareBtn.removeClickListener(self.onShareBtn, self);

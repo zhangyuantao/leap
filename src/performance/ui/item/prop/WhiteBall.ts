@@ -11,7 +11,7 @@ module planetJump {
 		public onCreate(){
 			super.onCreate();
 			let self = this;
-			self.key = ItemDefine.ScoreBall;
+			self.key = ItemDefine.WhiteBall;
 
 			let idx = Math.floor(self.c1.pageCount * Math.random());
 			self.c1.setSelectedIndex(idx);

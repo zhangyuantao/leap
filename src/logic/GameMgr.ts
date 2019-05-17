@@ -90,7 +90,7 @@ module planetJump {
 			if(self.score > self.scoreRecord){				
 				egret.localStorage.setItem("scoreRecord", self.score.toString());
 				self.scoreRecord = self.score;
-				platform.setUserCloudStorage([{key:'score', value:`${self.score}`}], res => { 
+				platform.setUserCloudStorage([{key:'score', value:`${self.score}`}, {key:'date', value:new Date().toDateString()}], res => { 
 					console.log("分数设置成功:", res);
 				});
 			}
@@ -196,11 +196,14 @@ module planetJump {
 		 */
 		public getShareTittle(){
 			let arr = [
-				"你知道LeapOn吗？终于在微信上可以玩了！",
-				"只有iPhone6以上才能玩(开发者说优化尽力了)",
+				"这游戏火了就你不知道？好友圈都在玩！",
+				"这游戏要是能上3000分就证明你有点东西~",
+				"你永远不知道下一个背景是什么颜色。",
+				"你知道PlanetJump吗？终于在微信上可以玩了！",				
 				"听说有点难？这分数不服来战！",
-				"太好玩了！好友请你帮他复活接着玩！",
-				"这音乐节奏根本停不下来啊！"
+				"太好玩了！破纪录就靠你了，快来帮我复活。",
+				"这音乐节奏根本停不下来啊！",
+				"旋转，跳跃，但是我不能闭着眼！因为..."
 			];
 			let idx = Math.round(Math.random() * (arr.length - 1));
 			return arr[idx];

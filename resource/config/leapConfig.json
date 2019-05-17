@@ -63,12 +63,17 @@
 			"duration":6000,
 			"acceleration":1,
 			"invincibleTime":6300
+		},	
+		"Cut":{
+			"jumpSpeed":12,
+			"duration":10000,
+			"invincibleTime":10000
 		},		
 		"ObCircle":{
 			"score":1,
 			"level":1,
 			"speedRange":[0.1, 0.3],
-			"spawnInterval":10000,
+			"spawnInterval":5000,
 			"spawnRange":[400, 1200],
 			"scaleRange":[0.6, 1]
 		},
@@ -76,7 +81,7 @@
 			"score":1,
 			"level":3,
 			"speedRange":[0.1, 0.3],
-			"spawnInterval":20000,
+			"spawnInterval":10000,
 			"spawnRange":[600, 1200],
 			"scaleRange":[0.6, 1]
 		},
