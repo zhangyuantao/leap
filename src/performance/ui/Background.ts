@@ -111,7 +111,7 @@ module planetJump{
 			//let idx = (lv - 1) % colors.length;
 			//let color = parseInt(colors[idx]);
 
-			let c = self.getRandomColor16ByHSV([0, 360], [0, 90], [0, 50]);
+			let c = self.getRandomColor16ByHSV([0, 360], [0, 85], [0, 45]);
 			self.changeColor(c);
 		}
 

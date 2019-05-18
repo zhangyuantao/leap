@@ -29,14 +29,54 @@ module planetJump {
 			let self = this;
 			self.hasRevived = false;
 			let record = egret.localStorage.getItem("scoreRecord");
-			if(record && record != "")
-				self.scoreRecord = parseInt(record);
+			if(record && record != ""){
+				// 周一重重
+				let recordTime = parseInt(egret.localStorage.getItem("recordTime"));
+				if(!self.isSameWeek(recordTime)){
+					self.scoreRecord = 0;
+					egret.localStorage.setItem("scoreRecord", "0");
+				}
+				else
+					self.scoreRecord = parseInt(record);
+			}
 			else
 				self.scoreRecord = 0;
 
 			utils.EventDispatcher.getInstance().dispatchEvent("startGame");
 		}
 
+		private isSameWeek(oldTime) {
+			oldTime = parseInt(oldTime);
+			let newTime = new Date().getTime();
+			let oneDayTime = 60 * 60 * 24 * 1000;
+			// console.log("now:" + newTime + " old:" + oldTime + " off:" + (newTime - oldTime) + " one:" + (oneDayTime * 7))
+			let oldDate = new Date(oldTime);
+			let newDate = new Date(newTime);
+
+			let oldDay = oldDate.getDay();
+			let newDay = newDate.getDay();
+			if (newDay == 0) {
+				newDay = 7;
+			}
+			if (oldDay == 0) {
+				oldDay = 7;
+			}
+			let isSame = false;
+
+			if (oldDay < newDay) {
+				if ((newTime - oldTime) < oneDayTime * 7) {  // 时间相差小于7
+					isSame = true;
+				}
+			}
+			else if (oldDay == newDay) {
+				if ((newTime - oldTime) < oneDayTime) {
+					isSame = true;
+				}
+			}
+			return isSame;
+		}
+		
+		
 		/**
 		 * 开始一个计时器
 		 */
@@ -87,10 +127,12 @@ module planetJump {
 			self.setPause(true);
 
 			// 存储新纪录
-			if(self.score > self.scoreRecord){				
+			if(self.score > self.scoreRecord){
+				let now = Date.now().toString();
 				egret.localStorage.setItem("scoreRecord", self.score.toString());
+				egret.localStorage.setItem("recordTime", now);
 				self.scoreRecord = self.score;
-				platform.setUserCloudStorage([{key:'score', value:`${self.score}`}, {key:'date', value:new Date().toDateString()}], res => { 
+				platform.setUserCloudStorage([{key:'score', value:`${self.score}`}, {key:'recordTime', value:now}], res => { 
 					console.log("分数设置成功:", res);
 				});
 			}
@@ -199,7 +241,7 @@ module planetJump {
 				"这游戏火了就你不知道？好友圈都在玩！",
 				"这游戏要是能上3000分就证明你有点东西~",
 				"你永远不知道下一个背景是什么颜色。",
-				"你知道PlanetJump吗？终于在微信上可以玩了！",				
+				"首次发现黑洞，地球命运掌握在你的手里！",
 				"听说有点难？这分数不服来战！",
 				"太好玩了！破纪录就靠你了，快来帮我复活。",
 				"这音乐节奏根本停不下来啊！",

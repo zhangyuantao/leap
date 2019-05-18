@@ -10,7 +10,7 @@ module planetJump {
 
 			p.addInvincibleTime(self.cfg.invincibleTime);
 
-			World.instance.linkLine.setColor(0xFF00FF);
+			World.instance.linkLine.setColor();
 		}
 
 		// 移除特效
@@ -19,7 +19,7 @@ module planetJump {
 			let self = this;
 
 			// 玩家连线恢复样式
-			World.instance && World.instance.linkLine.setColor(0xFFFFFF);
+			World.instance && World.instance.linkLine.resetColor();
 		}
 
 		protected onUpdate(){
