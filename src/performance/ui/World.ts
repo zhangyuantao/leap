@@ -138,7 +138,7 @@ module planetJump{
 			// 生成一圈球
 			for(let i = 0; i < 16; i++){
 				let rad = i * Math.PI / (16 / 2);
-				let ball = ItemMgr.getInstance().spawnItem(ItemDefine.WhiteBall, rad, 150, 0.9) as WhiteBall;
+				let ball = ItemMgr.getInstance().spawnItem(ItemDefine.WhiteBall, rad, 150, 0.8) as WhiteBall;
 				ball.init(0.05 + Math.random() * 0.05);
 				self.addItem(ball.displayObject);
 			}

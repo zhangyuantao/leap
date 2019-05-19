@@ -1,6 +1,7 @@
 class Main extends egret.DisplayObjectContainer {
     public static systemInfo:any;
     public static userInfoBtn:UserInfoButton;
+	public static gameClubBtn:any;
     public static isScopeUserInfo:boolean;
     public static myAvatarUrl:string = "";
 

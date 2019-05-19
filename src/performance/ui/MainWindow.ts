@@ -26,7 +26,7 @@ module planetJump {
 
 			if(platform.isRunInWX()){
 				// 启用显示转发分享菜单
-				wx.showShareMenu({withShareTicket:true});
+				wx.showShareMenu({});
 
 				// 用户点击了“转发”按钮
 				wx.onShareAppMessage(() => {
@@ -49,8 +49,9 @@ module planetJump {
 			egret.Tween.removeAllTweens();
 			self.destroyGame();		
 			utils.Singleton.destroy(utils.SoundMgr);
-			self.btnCloseRank.removeClickListener(self.onCloseRank, self);	
-			//console.log("game dispose");
+			self.btnCloseRank.removeClickListener(self.onCloseRank, self);
+			Main.gameClubBtn && Main.gameClubBtn.destroy();
+			Main.userInfoBtn && Main.userInfoBtn.destroy();
 		}
 
 		protected addEventListeners(){
@@ -192,7 +193,9 @@ module planetJump {
 			if(!self.isShowRank) {
 				self.lastRankType = self.curRankType;
 				self.curRankType = type;
-				//Main.userInfoBtn && Main.userInfoBtn.hide();
+				
+				if(type == "list")
+					Main.gameClubBtn && Main.gameClubBtn.hide();
 				
 				//处理遮罩,避免开放域数据影响主域
 				if(!self.rankingListMask){
@@ -254,6 +257,9 @@ module planetJump {
 			if(!platform.isRunInWX())
 				return;
 			if(self.isShowRank) {
+				if(self.curRankType == "list") 
+					Main.gameClubBtn && Main.gameClubBtn.show();
+
 				if(self.rankBitmap)
 					egret.Tween.removeTweens(self.rankBitmap)
 				self.rankBitmap.parent && self.rankBitmap.parent.removeChild(self.rankBitmap);
