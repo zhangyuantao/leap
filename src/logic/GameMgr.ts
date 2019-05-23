@@ -220,7 +220,7 @@ module planetJump {
 		public getShareImgUrlId(shareImgId:number = -1):string[]{
 			let arr = [
 				["", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBlMianh5iaqObI06H2J2vLgu5nFsXIfWeEibTsAP9v1DNHsOJAtibgdJhJ/0"],
-				["B0f2KLIOQfi_AIv7qep5kQ", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzCfosWJQPhZJwpaV6EzUibWVmkoEwsRskMWYls7GFDDjq0J4zEiagCgvd/0"],
+				["pzjL958QSs6QFcTPR9Clbw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzD8oOSqF7KA725Y8AUeQr2ZNFk05oB1SsZmMfr96X6fNBIOwZtc4udia/0"],
 				["qcglU7v4TAuf0eRYI46h8A", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzB7jkV42B09xuer2NToEGcwDiblmJr8vzYic8yTpwl2aD7Jc9t6qI0usk/0"],
 				["8Cqy0zJZSTmH5ARvaopFAw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBLVSYJqmibcgibsgMzxNfiaY0If5kEBu1KpP0sic4MQPdBApGSTSxX0czt/0"],
 			];
@@ -257,19 +257,16 @@ module planetJump {
 		public watchVideoAd(adKey:string, cb:Function){
 			let self = this;
 			if(!platform.isRunInWX()){
-				return cb();
+				return cb(true);
 			}
 
 			// 获取双倍奖励
 			utils.Singleton.get(AdMgr).watchVideoAd(adKey, (isEnded) => {
-				if(isEnded){ // 观看广告完成
-					cb();
-				}
+				cb(isEnded);
 			}, () => {
 				// 广告拉取失败改成分享
-				//self.share("嘿，看见你了！", 1);
-				//self.shareFromCanvas(null, 0, 185)
-				cb();
+				self.shareFromCanvas(null, 0, 185)
+				cb(true);
 			});				
 		}
 

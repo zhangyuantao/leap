@@ -87,6 +87,9 @@ module planetJump {
 			self.pausePanel.visible = true;
 			egret.Tween.removeTweens(self.pausePanel);
 			egret.Tween.get(self.pausePanel).to({alpha:1}, 300, egret.Ease.sineInOut);
+			
+			// 广告
+			utils.Singleton.get(AdMgr).showBannerAd("暂停界面banner");
 		}
 
 		private closePausePanel(){
@@ -95,6 +98,7 @@ module planetJump {
 			egret.Tween.get(self.pausePanel).to({alpha:0}, 300, egret.Ease.sineInOut).call(() => {
 				self.pausePanel.visible = false;
 			});
+			utils.Singleton.get(AdMgr).hideBanner();
 		}
 
 		private onMusicBtn(e){		

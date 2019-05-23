@@ -45,6 +45,8 @@ module planetJump {
 			
 			// 显示横板排行榜
 			MainWindow.instance.showRankWnd("horizontal", 0, false, false);
+
+			utils.Singleton.get(AdMgr).showBannerAd("结算界面banner");	
 		}
 
 		private onReStartBtn(e){
@@ -63,9 +65,14 @@ module planetJump {
 			let self = this;
 			if(GameMgr.getInstance().hasRevived)
 				return;
-			GameMgr.getInstance().watchVideoAd("复活Vedio", () => {
-				GameMgr.getInstance().revive();
-				self.hide();
+			
+			self.touchable = false;
+			GameMgr.getInstance().watchVideoAd("复活广告", (success:boolean) => {
+				self.touchable = true;
+				if(success){
+					GameMgr.getInstance().revive();
+					self.hide();
+				}
 			});
 		}
 
@@ -76,10 +83,13 @@ module planetJump {
 
 		private hide(){
 			let self = this;
+			self.touchable = false;
 			MainWindow.instance.hideRankWnd();
 			egret.Tween.get(self).to({alpha:0}, 500, egret.Ease.sineInOut).call(() => {			
 				self.visible = false;
-			});			
+				self.touchable = true;
+			});	
+			utils.Singleton.get(AdMgr).hideBanner();	
 		}
 
 		public dispose(){
