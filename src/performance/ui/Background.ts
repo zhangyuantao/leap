@@ -5,7 +5,7 @@ module planetJump{
 			return Background.instance || new Background();
 		}
 
-		public curColor:number = 0x001D42;
+		public curColor:number = 0x001733;
 		private bgs:egret.Sprite[] = [];
 		private curBgIdx:number = 0;	
 
@@ -111,7 +111,7 @@ module planetJump{
 			//let idx = (lv - 1) % colors.length;
 			//let color = parseInt(colors[idx]);
 
-			let c = self.getRandomColor16ByHSV([0, 360], [0, 85], [0, 45]);
+			let c = self.getRandomColor16ByHSV([0, 360], [46, 90], [0, 45]);
 			self.changeColor(c);
 		}
 
@@ -123,6 +123,7 @@ module planetJump{
 			let self = this;
 			let h = hRange[0] + Math.random() * hRange[1];
 			let s = sRange[0] + Math.random() * sRange[1];
+			if(s < 50) s = 0;
 			let l = lRange[0] + Math.random() * lRange[1];
 			let rgb = self.hsl2rgb(h, s, l);
 			let hex = "0x";

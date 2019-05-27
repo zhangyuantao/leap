@@ -16,27 +16,6 @@ module planetJump {
 			self.vertices.push(new g2.Vector2(p4.x, p4.y));
 		}
 
-		protected applyEffect(player:Player, lastCheckPlayerPos:IPoint){
-			let self = this;
-			let lastHeight = 0;
-			let playerHeight = 0;
-			let selfHeight = 0;
-
-			// if(!player.isInvincible){
-			// 	lastHeight = Math.sqrt(lastCheckPlayerPos.x * lastCheckPlayerPos.x + lastCheckPlayerPos.y * lastCheckPlayerPos.y);	
-			// 	playerHeight = player.getHeight();
-			// 	selfHeight = self.getHeight();
-			// }
-
-			if(!player.isInvincible/* && playerHeight > selfHeight && lastHeight > playerHeight*/){				
-				player.dead();
-			}
-			else{
-				self.addScore();				
-				utils.Singleton.get(utils.SoundMgr).playSound("black_explosion_mp3");
-			}
-		}
-
 		protected collisionEffect(){
 			let self = this;
 			World.instance.spawnUIAni(CollisionBlackAni, self.x, self.y);

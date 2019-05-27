@@ -3,7 +3,7 @@
 	"WorldRange":3000,
 	"PlayerRotateSpeed":1.2,
 	"BgColors":[
-		"0x001D42",
+		"0x001C3D",
 		"0xffffff",
 		"0x333333",	
 		"0x000000",
@@ -82,7 +82,7 @@
 			"level":3,
 			"speedRange":[0.1, 0.3],
 			"spawnInterval":10000,
-			"spawnRange":[600, 1200],
+			"spawnRange":[800, 1800],
 			"scaleRange":[0.6, 1]
 		},
 		"ObTriangle":{
@@ -92,12 +92,12 @@
 			"spawnInterval":15000
 		},
 		"ObTube":{
-			"score":1,
+			"score":5,
 			"level":7,
 			"speedRange":[0.1, 0.3],
-			"spawnInterval":25000,
-			"spawnRange":[800, 1200],
-			"scaleRange":[0.6, 1],
+			"spawnInterval":20000,
+			"spawnRange":[1000, 1600],
+			"scaleRange":[1, 1.5],
 			"selfRotateSpeedRange":[0.3, 1]
 		}
 	},

@@ -47,7 +47,7 @@ module planetJump {
 			self.itemClasses[ItemDefine.ObCircle] = ObCircle;
 			self.itemClasses[ItemDefine.ObTriangle] = ObTriangle;
 			self.itemClasses[ItemDefine.ObSquare] = ObSquare_new;
-			//self.itemClasses[ItemDefine.ObTube] = ObTube;
+			self.itemClasses[ItemDefine.ObTube] = ObTube;
 
 			self.spwaners = [];	
 			self.spwaners.push(new WhiteBallSpawner());
@@ -62,7 +62,7 @@ module planetJump {
 			self.spwaners.push(new ObCircleSpawner());
 			self.spwaners.push(new ObTriangleSpawner());
 			self.spwaners.push(new ObSquareSpawner());
-			//self.spwaners.push(new ObTubeSpawner());
+			self.spwaners.push(new ObTubeSpawner());
 		}
 
 		/**
@@ -187,7 +187,6 @@ module planetJump {
 					item.onCollisionEnter(bullet);
 					self.destroyItem(item);
 					self.destroyItem(bullet);
-					//i--;	
 					break; // 只能触碰一个物体		
 				}		
 			}

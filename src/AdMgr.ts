@@ -3,6 +3,7 @@ module planetJump {
 		private adCfg = {
 			"结算界面banner":'adunit-af30ea26be5ee8f3',
 			"暂停界面banner":'adunit-4e928e7d53b5e701',
+			"帮助界面banner":'adunit-71d035b44b8adf6b',
 			"复活广告":'adunit-054e13726a11ffa3'
 		};
 

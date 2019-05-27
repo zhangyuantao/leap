@@ -1,6 +1,15 @@
 module planetJump {
 	export class ObTube extends CircleMotionSquare{		
 		private selfRotateSpeed:number; // 自转速度
+		private c1:fairygui.Controller;
+
+		public constructFromResource(){
+			super.constructFromResource();
+			let self = this;
+			self.c1 = self.getController("c1");
+			let idx = Math.floor(self.c1.pageCount * Math.random());
+			self.c1.setSelectedIndex(idx);		
+		}
 
 		public init(rotateSpeed:number){
 			super.init(rotateSpeed);
@@ -39,27 +48,27 @@ module planetJump {
 		}
 
 		//@override
-		protected applyEffect(player:Player, lastCheckPlayerPos:IPoint){
-			let self = this;
-			let d1 = 0, d2 = 0
+		// protected applyEffect(player:Player, lastCheckPlayerPos:IPoint){
+		// 	let self = this;
+		// 	let d1 = 0, d2 = 0
 
-			if(!player.isInvincible){
-				let p0 = self.vertices[0];
-				let p3 = self.vertices[3];
-				let playerGlobal = player.displayObject.parent.localToGlobal(player.x, player.y);
-				let local = self.globalToLocal(playerGlobal.x, playerGlobal.y);
-				let pPlayer = new g2.Vector2(local.x, local.y);
-				d1 = g2.Vector2.distance(p0, pPlayer);
-				d2 = g2.Vector2.distance(p3, pPlayer);
-			}
+		// 	if(!player.isInvincible){
+		// 		let p0 = self.vertices[0];
+		// 		let p3 = self.vertices[3];
+		// 		let playerGlobal = player.displayObject.parent.localToGlobal(player.x, player.y);
+		// 		let local = self.globalToLocal(playerGlobal.x, playerGlobal.y);
+		// 		let pPlayer = new g2.Vector2(local.x, local.y);
+		// 		d1 = g2.Vector2.distance(p0, pPlayer);
+		// 		d2 = g2.Vector2.distance(p3, pPlayer);
+		// 	}
 
-			if(!player.isInvincible && d1 < d2){
-				player.dead();
-			}
-			else{
-				self.addScore();
-				utils.Singleton.get(utils.SoundMgr).playSound("black_explosion_mp3");
-			}
-		}
+		// 	if(!player.isInvincible && d1 < d2){
+		// 		player.dead();
+		// 	}
+		// 	else{
+		// 		self.addScore();
+		// 		utils.Singleton.get(utils.SoundMgr).playSound("black_explosion_mp3");
+		// 	}
+		// }
 	}
 }

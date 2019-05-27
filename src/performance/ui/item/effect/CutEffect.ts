@@ -24,12 +24,12 @@ module planetJump {
 
 		protected onUpdate(){
 			let self = this;
-			// 查找所有陨石
-			let obs = ItemMgr.getInstance().findItemsByKey(ItemDefine.ObCircle, ItemDefine.ObSquare, ItemDefine.ObTriangle);
+			// 查找所有障碍
+			let obs = ItemMgr.getInstance().findItemsByKey(ItemDefine.ObCircle, ItemDefine.ObSquare, ItemDefine.ObTriangle, ItemDefine.ObTube);
 
 			for(let i = 0, len = obs.length; i < len; i++){
 				let tmp = obs[i];
-				// 线是否和陨石所在圆碰撞
+				// 线是否和障碍所在圆碰撞
 				let r = Math.floor(Math.min(tmp.img.width, tmp.img.height) * 0.5);
 				let hit = self.lineCircleHitTest({x:0, y:0}, {x:self.player.x, y:self.player.y}, {x:tmp.x, y:tmp.y}, r);
 

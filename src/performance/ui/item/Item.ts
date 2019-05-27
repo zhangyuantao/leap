@@ -5,7 +5,6 @@ module planetJump {
 	export class Item extends fairygui.GComponent implements utils.IGameObject, g2.SAT.ICollider{
 		public colliderEnabled:boolean = false;	// 是否能启用碰撞器
 		protected colliderDisplay:egret.Shape;
-
 		public img:fairygui.GImage;
 
 		public constructFromResource(){
@@ -40,7 +39,15 @@ module planetJump {
 		}
 
 		// 执行效果
-		protected applyEffect(target:Player, ...args:any[]){
+		protected applyEffect(player:Player, ...args:any[]){
+			let self = this;
+			if(!player.isInvincible){
+				player.dead();
+			}
+			else{
+				self.addScore();
+				utils.Singleton.get(utils.SoundMgr).playSound("black_explosion_mp3");
+			}
 		}
 
 		// 碰撞效果

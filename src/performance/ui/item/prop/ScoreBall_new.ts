@@ -5,16 +5,15 @@ module planetJump {
 		constructFromResource(){
 			super.constructFromResource();
 			let self = this;
-			self.c1 = self.getController("c1");			
+			self.c1 = self.getController("c1");	
+			let idx = Math.floor(self.c1.pageCount * Math.random());
+			self.c1.setSelectedIndex(idx);
 		}
 
 		public onCreate(){
 			super.onCreate();
 			let self = this;
 			self.key = ItemDefine.ScoreBall;
-
-			let idx = Math.floor(self.c1.pageCount * Math.random());
-			self.c1.setSelectedIndex(idx);
 		}
 
 		protected applyEffect(player:Player){

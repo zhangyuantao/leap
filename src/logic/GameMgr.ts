@@ -128,12 +128,23 @@ module planetJump {
 
 			// 存储新纪录
 			if(self.score > self.scoreRecord){
-				let now = Date.now().toString();
+				let now = Date.now();
 				egret.localStorage.setItem("scoreRecord", self.score.toString());
-				egret.localStorage.setItem("recordTime", now);
+				egret.localStorage.setItem("recordTime", now.toString());
 				self.scoreRecord = self.score;
-				platform.setUserCloudStorage([{key:'score', value:`${self.score}`}, {key:'recordTime', value:now}], res => { 
-					console.log("分数设置成功:", res);
+				let v = {
+						"wxgame": {
+							"score": self.score,
+							"update_time": Math.floor(now / 1000)
+						},
+						"recordTime":now.toString()
+				};
+				let info = {
+					"key":"rank",
+					"value":JSON.stringify(v)
+				};				
+				platform.setUserCloudStorage([info], res => { 
+					console.log("排行榜分数设置成功:", res);
 				});
 			}
 			
@@ -238,6 +249,8 @@ module planetJump {
 		 */
 		public getShareTittle(){
 			let arr = [
+				"这可能是最另类的跳一跳了~",
+				"为了逃离黑洞，你不得不跳！",
 				"这游戏火了就你不知道？好友圈都在玩！",
 				"这游戏要是能上3000分就证明你有点东西~",
 				"你永远不知道下一个背景是什么颜色。",
