@@ -93,7 +93,7 @@
 		},
 		"ObTube":{
 			"score":5,
-			"level":7,
+			"level":6,
 			"speedRange":[0.1, 0.3],
 			"spawnInterval":20000,
 			"spawnRange":[1000, 1600],
@@ -117,28 +117,28 @@
 			"propRange":[500, 1000]
 			},
 		"3":{
-			"score":100,
+			"score":200,
 			"propSpawnMax":2,
 			"obSpawnMax":2,
 			"propSpawnInterval":[25000, 30000],
 			"propRange":[600, 1200]
 		},
 		"4":{
-			"score":200,
+			"score":400,
 			"propSpawnMax":2,
 			"obSpawnMax":2,
 			"propSpawnInterval":[35000, 40000],
 			"propRange":[600, 1200]
 		},
 		"5":{
-			"score":400,
+			"score":700,
 			"propSpawnMax":1,
 			"obSpawnMax":3,
 			"propSpawnInterval":[45000, 50000],
 			"propRange":[700, 1400]
 		},
 		"6":{
-			"score":800,
+			"score":1100,
 			"propSpawnMax":1,
 			"obSpawnMax":3,
 			"propSpawnInterval":[55000, 60000],
@@ -152,7 +152,7 @@
 			"propRange":[700, 1400]
 		},
 		"8":{
-			"score":[1600,50,450],
+			"score":[1600,100,500],
 			"propSpawnMax":1,
 			"obSpawnMax":4,
 			"propSpawnInterval":[75000, 80000],

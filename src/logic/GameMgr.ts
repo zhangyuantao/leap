@@ -231,7 +231,7 @@ module planetJump {
 		public getShareImgUrlId(shareImgId:number = -1):string[]{
 			let arr = [
 				["", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBlMianh5iaqObI06H2J2vLgu5nFsXIfWeEibTsAP9v1DNHsOJAtibgdJhJ/0"],
-				["pzjL958QSs6QFcTPR9Clbw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzD8oOSqF7KA725Y8AUeQr2ZNFk05oB1SsZmMfr96X6fNBIOwZtc4udia/0"],
+				["PVwAwaXOSuOu5Vv9BHR3Yg", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBj6uibjoUHzqqp6ebZqs3F3r0tKDhv5KGyrc2DNu0Gc377cLoQ6QcFia/0"],
 				["qcglU7v4TAuf0eRYI46h8A", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzB7jkV42B09xuer2NToEGcwDiblmJr8vzYic8yTpwl2aD7Jc9t6qI0usk/0"],
 				["8Cqy0zJZSTmH5ARvaopFAw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBLVSYJqmibcgibsgMzxNfiaY0If5kEBu1KpP0sic4MQPdBApGSTSxX0czt/0"],
 			];
