@@ -32,7 +32,7 @@ declare const canvas:{
     toTempFilePathSync(arg:any);
 }
 
-declare const wx: {
+declare const tt: {
     /**
      * 创建一个画布对象。首次调用创建的是显示在屏幕上的画布，之后调用创建的都是离屏画布。
      */
@@ -241,7 +241,6 @@ declare const wx: {
     getSetting(object: { success: (res: any) => void, fail: (res: any) => void, complete: (res: any) => void }): void;
     openSetting(object: { success: (res: any) => void, fail: (res: any) => void, complete: (res: any) => void }): void;
     getWeRunData(object: { success: (res: any) => void, fail: (res: any) => void, complete: (res: any) => void }): void;
-    createUserInfoButton(object: { type: string, text?: string, image?: string, style: any }): UserInfoButton;
     /**
      * 拉取当前用户所有同玩好友的托管数据。该接口只可在开放数据域下使用
      */
@@ -970,10 +969,10 @@ declare interface RenderingContext { }
 /**
  * 按钮
  */
-declare interface UserInfoButton {
+/*declare interface UserInfoButton {
     destroy(): void;
     hide(): void;
     onTap(callback: (res) => void): void;
     offTap(callback: () => void): void;
     show(): void;
-}
+}*/

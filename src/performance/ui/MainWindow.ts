@@ -1,7 +1,7 @@
 /**
  * 主游戏入口
  */
-module leap {
+module planetJump {
 	export class MainWindow extends BaseWindow {
 		public static instance:MainWindow;
 		public textureBg:TextureBackground;
@@ -24,12 +24,12 @@ module leap {
 			let self = this;		
 			MainWindow.instance = self;
 
-			if(platform.isRunInWX()){
+			if(platform.isRunInTT()){
 				// 启用显示转发分享菜单
-				wx.showShareMenu({withShareTicket:true});
+				tt.showShareMenu({});
 
 				// 用户点击了“转发”按钮
-				wx.onShareAppMessage(() => {
+				tt.onShareAppMessage(() => {
 					let info = GameMgr.getInstance().getShareImgUrlId(0);
 					return {
 						title:"黑洞，人类首次看见它！",
@@ -49,8 +49,7 @@ module leap {
 			egret.Tween.removeAllTweens();
 			self.destroyGame();		
 			utils.Singleton.destroy(utils.SoundMgr);
-			self.btnCloseRank.removeClickListener(self.onCloseRank, self);	
-			//console.log("game dispose");
+			self.btnCloseRank.removeClickListener(self.onCloseRank, self);
 		}
 
 		protected addEventListeners(){
@@ -80,6 +79,8 @@ module leap {
 			self.registerComponent("Guide2", Guide2);
 			self.registerComponent("Guide3", Guide3);
 			self.registerComponent("ResultPanel", ResultPanel);
+			self.registerComponent("recommendBtn", RecommandBtn);
+			self.registerComponent("LinkLine", LinkLine);
 	
 		}
 		protected registerComponent(compName:string, userClass:any, pkgName:string = "leap"){
@@ -144,10 +145,11 @@ module leap {
 			// 背景
 			let bg = utils.ObjectPool.getInstance().createObject(Background);
 			self.displayListContainer.addChildAt(bg, 0);
-			
+
+			// 纹理背景
 			self.textureBg = fairygui.UIPackage.createObject('leap', "TextureBackground") as TextureBackground;
 			self.textureBg.visible = false;
-			self.addChild(self.textureBg);
+			self.displayListContainer.addChildAt(self.textureBg.displayObject, 1);		
 
 			// 世界
 			if(self.worldContainer)
@@ -156,7 +158,7 @@ module leap {
 				self.worldContainer = new egret.DisplayObjectContainer();
 			self.worldContainer.x = 0;
 			self.worldContainer.y = 0;
-			self.displayListContainer.addChildAt(self.worldContainer, 1);
+			self.displayListContainer.addChildAt(self.worldContainer, 2);
 			let world = utils.ObjectPool.getInstance().createObject(World);
 			self.worldContainer.addChild(world);
 
@@ -184,13 +186,12 @@ module leap {
 		 */
 		public showRankWnd(type:string = "list", maskAlpha:number = 1, maskTouchEnabled:boolean = true, showCloseRankBnt:boolean = true){
 			let self = this;
-			if(!platform.isRunInWX())
+			if(!platform.isRunInTT())
 				return;
 			if(!self.isShowRank) {
 				self.lastRankType = self.curRankType;
 				self.curRankType = type;
-				//Main.userInfoBtn && Main.userInfoBtn.hide();
-				
+								
 				//处理遮罩,避免开放域数据影响主域
 				if(!self.rankingListMask){
 					self.rankingListMask = fairygui.UIPackage.createObject("leap", "RankBack");
@@ -248,7 +249,7 @@ module leap {
 		 */
 		public hideRankWnd(){
 			let self = this;
-			if(!platform.isRunInWX())
+			if(!platform.isRunInTT())
 				return;
 			if(self.isShowRank) {
 				if(self.rankBitmap)

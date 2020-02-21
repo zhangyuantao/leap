@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class Star extends Prop{
 
 		// 执行效果

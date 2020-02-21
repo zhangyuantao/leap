@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class PlayerUI extends fairygui.GComponent{
 		public face:fairygui.GComponent;
 		private eyes:fairygui.GComponent;
@@ -21,6 +21,12 @@ module leap {
 			self.magnetEff = self.getChild("magnetEff").asCom; 
 			self.magnetEff.visible = false;
         }
+
+		public dispose(){
+			super.dispose();
+			let self = this;
+			self.removeAllEff();
+		}
 
 		public onEnterFrame(){
 			let self = this;
@@ -101,7 +107,7 @@ module leap {
 			egret.Tween.get(self.plusEff).to({alpha:0}, 300, egret.Ease.sineInOut).call(()=>{
 				self.plusEff.visible = false;
 			});
-			
+
 			egret.Tween.removeTweens(self.face);
 			egret.Tween.get(self.face).to({scaleX:1, scaleY:1}, 300, egret.Ease.sineInOut);		
 		}

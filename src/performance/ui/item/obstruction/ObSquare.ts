@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ObSquare extends CircleMotionSquare{
 		//@override
 		protected initVertices(){

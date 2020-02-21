@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	/**
 	 * 道具生成器
 	 */

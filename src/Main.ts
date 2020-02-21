@@ -1,6 +1,5 @@
 class Main extends egret.DisplayObjectContainer {
-    public static systemInfo:any;
-    public static userInfoBtn:UserInfoButton;
+    //public static systemInfo:any;
     public static isScopeUserInfo:boolean;
     public static myAvatarUrl:string = "";
 
@@ -39,7 +38,7 @@ class Main extends egret.DisplayObjectContainer {
         let loginData = await platform.login();
 
         // 读取设备信息
-        Main.systemInfo = await platform.getSystemInfo();
+        //Main.systemInfo = await platform.getSystemInfo();
 
         const setting = await platform.getSetting();  
         Main.isScopeUserInfo = setting["authSetting"]["scope.userInfo"];   
@@ -81,7 +80,7 @@ class Main extends egret.DisplayObjectContainer {
         fairygui.UIPackage.addPackage("leap");        
         this.stage.addChild(fairygui.GRoot.inst.displayObject);
         this.stage.removeChild(this);
-        let wnd = new leap.MainWindow();
+        let wnd = new planetJump.MainWindow();
         wnd.show();
     }
 }

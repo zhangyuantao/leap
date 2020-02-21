@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class MyTimer implements utils.IGameObject{
 		private gameRunTime:number = 0;	// 游戏运行时间
 		private timers:ITimer[];

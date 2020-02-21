@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class GameMgr {		
 		private static instance:GameMgr;
 		public static getInstance() {
@@ -29,14 +29,54 @@ module leap {
 			let self = this;
 			self.hasRevived = false;
 			let record = egret.localStorage.getItem("scoreRecord");
-			if(record && record != "")
-				self.scoreRecord = parseInt(record);
+			if(record && record != ""){
+				// 周一重重
+				let recordTime = parseInt(egret.localStorage.getItem("recordTime"));
+				if(!self.isSameWeek(recordTime)){
+					self.scoreRecord = 0;
+					egret.localStorage.setItem("scoreRecord", "0");
+				}
+				else
+					self.scoreRecord = parseInt(record);
+			}
 			else
 				self.scoreRecord = 0;
 
 			utils.EventDispatcher.getInstance().dispatchEvent("startGame");
 		}
 
+		private isSameWeek(oldTime) {
+			oldTime = parseInt(oldTime);
+			let newTime = new Date().getTime();
+			let oneDayTime = 60 * 60 * 24 * 1000;
+			// console.log("now:" + newTime + " old:" + oldTime + " off:" + (newTime - oldTime) + " one:" + (oneDayTime * 7))
+			let oldDate = new Date(oldTime);
+			let newDate = new Date(newTime);
+
+			let oldDay = oldDate.getDay();
+			let newDay = newDate.getDay();
+			if (newDay == 0) {
+				newDay = 7;
+			}
+			if (oldDay == 0) {
+				oldDay = 7;
+			}
+			let isSame = false;
+
+			if (oldDay < newDay) {
+				if ((newTime - oldTime) < oneDayTime * 7) {  // 时间相差小于7
+					isSame = true;
+				}
+			}
+			else if (oldDay == newDay) {
+				if ((newTime - oldTime) < oneDayTime) {
+					isSame = true;
+				}
+			}
+			return isSame;
+		}
+		
+		
 		/**
 		 * 开始一个计时器
 		 */
@@ -87,11 +127,24 @@ module leap {
 			self.setPause(true);
 
 			// 存储新纪录
-			if(self.score > self.scoreRecord){				
+			if(self.score > self.scoreRecord){
+				let now = Date.now();
 				egret.localStorage.setItem("scoreRecord", self.score.toString());
+				egret.localStorage.setItem("recordTime", now.toString());
 				self.scoreRecord = self.score;
-				platform.setUserCloudStorage([{key:'score', value:`${self.score}`}], res => { 
-					console.log("分数设置成功:", res);
+				let v = {
+						"wxgame": {
+							"score": self.score,
+							"update_time": Math.floor(now / 1000)
+						},
+						"recordTime":now.toString()
+				};
+				let info = {
+					"key":"rank",
+					"value":JSON.stringify(v)
+				};				
+				platform.setUserCloudStorage([info], res => { 
+					console.log("排行榜分数设置成功:", res);
 				});
 			}
 			
@@ -133,14 +186,14 @@ module leap {
 		 */
 		public share(title?:string, shareImgId:number = -1){
 			let self = this;
-			if(!platform.isRunInWX())
+			if(!platform.isRunInTT())
 				return;
 			
 			if(!title) title = self.getShareTittle();
 			let info = self.getShareImgUrlId(shareImgId);
 
 			// 分享
-			wx.shareAppMessage({
+			tt.shareAppMessage({
 				title:title,
 				imageUrlId:info[0],
 				imageUrl:info[1],
@@ -151,7 +204,7 @@ module leap {
 		// 使用 Canvas 内容作为转发图片（5:4比例）
 		public shareFromCanvas(title?:string, x:number = 0, y:number = 200, width:number = 720, height:number = 576, destWidth:number = 425, destHeight:number = 340){
 			let self = this;
-			if(!platform.isRunInWX())
+			if(!platform.isRunInTT())
 				return;
 				
 			if(!title) title = self.getShareTittle();
@@ -164,7 +217,7 @@ module leap {
 				destHeight: destHeight
 			});
 			
-			wx.shareAppMessage({
+			tt.shareAppMessage({
 				title:title,
 				imageUrl:tmpFilePath,
 				imageUrlId:"",
@@ -178,13 +231,13 @@ module leap {
 		public getShareImgUrlId(shareImgId:number = -1):string[]{
 			let arr = [
 				["", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBlMianh5iaqObI06H2J2vLgu5nFsXIfWeEibTsAP9v1DNHsOJAtibgdJhJ/0"],
-				["Z48e_OwCRmGCxZzvY33xyw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzC89r1OCNkLxlEykiaKyFTZyVqXAJQluLcuiaBamruqr8hucMtnUAA9sA/0"],
-				["SslXVQ9WS9ySqCX_EmjGww", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBasfSDwqemHMDJvZ8OyJYYvyS0h9Pcrmp7tQDKYfocQaoia2YpzJVul/0"],
-				["jxKor47oSTqhSz8dTWZ2EQ", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzAyNhicibcGVy9nbgibIRH6IialUVz6YEvr57oJFXMEUwZnib5sC5JRjPOoM/0"],
+				["PVwAwaXOSuOu5Vv9BHR3Yg", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBj6uibjoUHzqqp6ebZqs3F3r0tKDhv5KGyrc2DNu0Gc377cLoQ6QcFia/0"],
+				["qcglU7v4TAuf0eRYI46h8A", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzB7jkV42B09xuer2NToEGcwDiblmJr8vzYic8yTpwl2aD7Jc9t6qI0usk/0"],
+				["8Cqy0zJZSTmH5ARvaopFAw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBLVSYJqmibcgibsgMzxNfiaY0If5kEBu1KpP0sic4MQPdBApGSTSxX0czt/0"],
 			];
 
 			if(shareImgId == -1){
-				let idx = Math.round(1 + Math.random() * (arr.length - 2));
+				let idx = Math.floor(1 + Math.random() * (arr.length - 1));
 				return arr[idx];
 			}
 			else
@@ -196,11 +249,16 @@ module leap {
 		 */
 		public getShareTittle(){
 			let arr = [
-				"你知道LeapOn吗？终于在微信上可以玩了！",
-				"只有iPhone6以上才能玩(开发者说优化尽力了)",
+				"这可能是最另类的跳一跳了~",
+				"为了逃离黑洞，你不得不跳！",
+				"这游戏火了就你不知道？好友圈都在玩！",
+				"这游戏要是能上3000分就证明你有点东西~",
+				"你永远不知道下一个背景是什么颜色。",
+				"首次发现黑洞，地球命运掌握在你的手里！",
 				"听说有点难？这分数不服来战！",
-				"太好玩了！好友请你帮他复活接着玩！",
-				"这音乐节奏根本停不下来啊！"
+				"太好玩了！破纪录就靠你了，快来帮我复活。",
+				"这音乐节奏根本停不下来啊！",
+				"旋转，跳跃，但是我不能闭着眼！因为..."
 			];
 			let idx = Math.round(Math.random() * (arr.length - 1));
 			return arr[idx];
@@ -211,20 +269,17 @@ module leap {
 		 */
 		public watchVideoAd(adKey:string, cb:Function){
 			let self = this;
-			if(!platform.isRunInWX()){
-				return cb();
+			if(!platform.isRunInTT()){
+				return cb(true);
 			}
 
 			// 获取双倍奖励
 			utils.Singleton.get(AdMgr).watchVideoAd(adKey, (isEnded) => {
-				if(isEnded){ // 观看广告完成
-					cb();
-				}
+				cb(isEnded);
 			}, () => {
 				// 广告拉取失败改成分享
-				//self.share("嘿，看见你了！", 1);
-				//self.shareFromCanvas(null, 0, 185)
-				cb();
+				self.shareFromCanvas(null, 0, 185)
+				cb(true);
 			});				
 		}
 

@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class GuideUI extends fairygui.GComponent{
 		protected step:number;
 

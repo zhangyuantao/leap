@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class EndLine extends egret.Sprite implements utils.IGameObject{
 		//********************* 接口实现 ********************//		
 		public key:string;

@@ -1,18 +1,10 @@
-module leap {
+module planetJump {
 	export class AdMgr implements utils.ISingleton{
 		private adCfg = {
-			"Banner首页":'adunit-254c6894d7445ced',
-			"Banner答题":'adunit-ffc20a240f2df634',
-			"Banner结算":'adunit-9bbb5f2e0e1a0deb',
-			"Banner排行榜":'adunit-519a1a4eecd6cbfa',
-			"Banner关卡":'adunit-5f71b2babc6d5531',
-			"Banner转盘":'adunit-aa345621a1364836',
-			"Banner礼物界面":'adunit-0be54d96516555f7',
-			"Banner答题次数用完":'adunit-b01bca0c77d3e43b',
-			"Video抽奖":'adunit-eb825b11659445af',
-			"Video解锁提示":'adunit-8cf5566718dd3b8a',
-			"Video双倍奖励":'adunit-f015846fe6b66acb',
-			"Video解锁答题次数":'adunit-31773b2f5e36ae0a',
+			"结算界面banner":'adunit-af30ea26be5ee8f3',
+			"暂停界面banner":'adunit-4e928e7d53b5e701',
+			"帮助界面banner":'adunit-71d035b44b8adf6b',
+			"复活广告":'adunit-054e13726a11ffa3'
 		};
 
 		private onWatchVideoOk:Function;
@@ -31,7 +23,7 @@ module leap {
 
 		onCreate(){
 			let self = this;
-			let res = wx.getSystemInfoSync();
+			let res = tt.getSystemInfoSync();
 			self.sysInfo = res;
 			self.screenWidth = res.screenWidth;
 			self.screenHeight = res.screenHeight;
@@ -53,7 +45,7 @@ module leap {
 				return;
 
 			let info = {
-				adUnitId: 'adunit-aa345621a1364836',
+				adUnitId: adId,
     			style: {
 					left: (self.screenWidth - 300) * 0.5,
 					top: top || 0,
@@ -76,10 +68,6 @@ module leap {
 			if(self.bannerComp)
 				self.bannerComp.hide();
 		}
-
-		//public canWatchVideo(){
-		//	return this.videoEnabled;
-		//}
 
 		// 观看视频广告
 		public watchVideoAd(adName:string, watchOk:Function, watchFail:Function){

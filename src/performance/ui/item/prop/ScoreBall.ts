@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ScoreBall extends LinearMotionCircle{
 		private colorImg:fairygui.GImage;
 

@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class MagnetEffect extends PropEffect {
 		private foundItemIds:number[] = [];	// 已经找到的
 		private foundItems:	Item[] = [];

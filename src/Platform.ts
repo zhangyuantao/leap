@@ -6,13 +6,12 @@
  */
 declare interface Platform {
     openDataContext:any;
-    isRunInWX():boolean;
+    isRunInTT():boolean;
     getUserInfo(): Promise<any>;
     login(): Promise<any>;
     getSetting():Promise<any>;
     getSystemInfo():Promise<any>;
     getUserCloudStorage(keyArr:string[]):Promise<any>;
-    wladGetAds(num, cb);    
     createBannerAd(info:any); 
     createVideoAd(adUnitId);
     layaAdChange(cb:Function);
@@ -25,7 +24,7 @@ declare interface Platform {
 class DebugPlatform implements Platform {
     openDataContext:any;
     
-    isRunInWX(){
+    isRunInTT(){
         return false;
     }
 

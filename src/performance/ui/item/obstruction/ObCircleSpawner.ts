@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ObCircleSpawner extends ItemSpawner{
 		public constructor(){
 			super(ItemDefine.ObCircle);

@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	/**
 	 * 玩家控制的小球
 	 */
@@ -242,7 +242,7 @@ module leap {
 					ob.touchable = false;
 					return ob;
 				}
-				self.trail.init(280, 0.3, 0, 5, 0.7);
+				self.trail.init(280, 0.2, 0, 5, 0.7);
 				self.displayListContainer.addChild(self.trail);
 			}
 
@@ -364,8 +364,10 @@ module leap {
 
 			if(key == ItemDefine.Thunderbolt)
 				self.mainUI.showThunderEff();
-			if(key == ItemDefine.Plus)
+			if(key == ItemDefine.Plus){
 				self.mainUI.showPlusEff();	
+				utils.EventDispatcher.getInstance().dispatchEvent("showPlusEff");
+			}
 			if(key == ItemDefine.Magnet)
 				self.mainUI.showMagnetEff();		
 		}

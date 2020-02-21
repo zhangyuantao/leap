@@ -1,7 +1,7 @@
 /**
  * 主游戏入口
  */
-module leap {
+module planetJump {
 	export class BaseWindow extends fairygui.Window {
 		protected playPopSound:boolean = false;
 

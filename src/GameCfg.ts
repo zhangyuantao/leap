@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class GameCfg {
 		public static readonly frameTime:number = 33;
 		public static readonly colliderDisplayCfg = <IColliderDisplayCfg>{

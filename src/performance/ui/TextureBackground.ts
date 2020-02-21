@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class TextureBackground extends fairygui.GComponent{
 		private curImg:fairygui.GImage;
 		private imgs:fairygui.GImage[];
@@ -39,7 +39,7 @@ module leap {
 			self.lastIdx = idx;
 			self.curImg = self.imgs[idx];
 
-			egret.Tween.get(self.curImg).set({visible:true, alpha:0}).to({alpha:0.2}, 500, egret.Ease.sineInOut);
+			egret.Tween.get(self.curImg).set({visible:true, alpha:0}).to({alpha:0.1}, 500, egret.Ease.sineInOut);
 		}
 
 		public hide(){

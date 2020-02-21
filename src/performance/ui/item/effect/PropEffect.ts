@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	/**
 	 * 有持续时间的功能道具效果
 	 */

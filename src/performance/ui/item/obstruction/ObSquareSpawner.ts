@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ObSquareSpawner extends ItemSpawner{
 		public constructor(){
 			super(ItemDefine.ObSquare);
@@ -15,7 +15,7 @@ module leap {
 			let randomRad = Math.random() * Math.PI * 2;
 			let randomRadius = Math.floor(itemCfg.spawnRange[0] + Math.random() * (itemCfg.spawnRange[1] - itemCfg.spawnRange[0]));
 			let randomScale = itemCfg.scaleRange[0] + Math.random() * (itemCfg.scaleRange[1] - itemCfg.scaleRange[0]);
-			let item = ItemMgr.getInstance().spawnItem(ItemDefine.ObSquare, randomRad, randomRadius, randomScale) as ObSquare;
+			let item = ItemMgr.getInstance().spawnItem(ItemDefine.ObSquare, randomRad, randomRadius, randomScale) as ObSquare_new;
 			let randomSpeed = itemCfg.speedRange[0] + Math.random() * (itemCfg.speedRange[1] - itemCfg.speedRange[0]);
 			item.init(randomSpeed);
 			World.instance.addItem(item.displayObject);

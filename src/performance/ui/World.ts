@@ -1,11 +1,11 @@
-module leap{
+module planetJump{
 	export class World extends egret.Sprite implements utils.IGameObject{
 		public static instance:World;
 
 		// 显示对象
 		public player:Player;
 		public spike:SpikeCenter;
-		public linkLine:fairygui.GObject;
+		public linkLine:LinkLine;
 		public endLine:EndLine;
 
 		private itemContainer:egret.DisplayObjectContainer;
@@ -92,13 +92,16 @@ module leap{
 			// 	}
 			// }
 
-			if(!self.linkLine.alpha) self.linkLine.alpha = 1;
+			if(!self.linkLine.alpha) self.linkLine.alpha = 0.6;
 			self.linkLine.height = playHeight;
 			self.linkLine.rotation = self.player.getAngle() - 90;
 		}
 
 		private init(){
 			let self = this;
+			// 全局光
+			let worldLight = fairygui.UIPackage.createObject('leap', "WoldLight");
+			self.addChild(worldLight.displayObject);
 
 			// 物品容器
 			self.itemContainer = new egret.DisplayObjectContainer();
@@ -111,10 +114,11 @@ module leap{
 			self.addChild(self.endLine);
 
 			// 玩家连线
-			self.linkLine = fairygui.UIPackage.createObject("leap", "BaseImgWhite");
+			self.linkLine = fairygui.UIPackage.createObject("leap", "LinkLine") as LinkLine;
 			self.linkLine.touchable = false;
 			self.linkLine.width = 4;
 			self.linkLine.pivotX = 0.5;
+			self.linkLine.alpha = 0.6;
 			self.addChild(self.linkLine.displayObject);
 
 			// 玩家显示对象
@@ -134,7 +138,7 @@ module leap{
 			// 生成一圈球
 			for(let i = 0; i < 16; i++){
 				let rad = i * Math.PI / (16 / 2);
-				let ball = ItemMgr.getInstance().spawnItem(ItemDefine.WhiteBall, rad, 150) as WhiteBall;
+				let ball = ItemMgr.getInstance().spawnItem(ItemDefine.WhiteBall, rad, 150, 0.8) as WhiteBall;
 				ball.init(0.05 + Math.random() * 0.05);
 				self.addItem(ball.displayObject);
 			}

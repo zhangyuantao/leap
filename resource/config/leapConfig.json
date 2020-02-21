@@ -3,17 +3,19 @@
 	"WorldRange":3000,
 	"PlayerRotateSpeed":1.2,
 	"BgColors":[
-		"0x990000",
-		"0xE2602D",
-		"0x628927",
-		"0x106B98",
-		"0xCC275C",	
-		"0x4E26B3",	
-		"0x663366",	
-		"0x003366",	
+		"0x001C3D",
+		"0xffffff",
+		"0x333333",	
+		"0x000000",
 		"0x666666",
-		"0x333333",		
-		"0x000000"
+		"0x0D4F52",	
+		"0x663366",	
+		"0x3E148C",	
+		"0x055252",	
+		"0x0B5E85",
+		"0x588019",
+		"0xC74E22",
+		"0x871616"
 	],
 	"Items":{
 		"WhiteBall":{
@@ -61,12 +63,17 @@
 			"duration":6000,
 			"acceleration":1,
 			"invincibleTime":6300
+		},	
+		"Cut":{
+			"jumpSpeed":12,
+			"duration":10000,
+			"invincibleTime":10000
 		},		
 		"ObCircle":{
 			"score":1,
 			"level":1,
 			"speedRange":[0.1, 0.3],
-			"spawnInterval":10000,
+			"spawnInterval":5000,
 			"spawnRange":[400, 1200],
 			"scaleRange":[0.6, 1]
 		},
@@ -74,8 +81,8 @@
 			"score":1,
 			"level":3,
 			"speedRange":[0.1, 0.3],
-			"spawnInterval":20000,
-			"spawnRange":[600, 1200],
+			"spawnInterval":10000,
+			"spawnRange":[800, 1800],
 			"scaleRange":[0.6, 1]
 		},
 		"ObTriangle":{
@@ -85,12 +92,12 @@
 			"spawnInterval":15000
 		},
 		"ObTube":{
-			"score":1,
-			"level":7,
+			"score":5,
+			"level":6,
 			"speedRange":[0.1, 0.3],
-			"spawnInterval":25000,
-			"spawnRange":[800, 1200],
-			"scaleRange":[0.6, 1],
+			"spawnInterval":20000,
+			"spawnRange":[1000, 1600],
+			"scaleRange":[1, 1.5],
 			"selfRotateSpeedRange":[0.3, 1]
 		}
 	},
@@ -110,28 +117,28 @@
 			"propRange":[500, 1000]
 			},
 		"3":{
-			"score":100,
+			"score":200,
 			"propSpawnMax":2,
 			"obSpawnMax":2,
 			"propSpawnInterval":[25000, 30000],
 			"propRange":[600, 1200]
 		},
 		"4":{
-			"score":200,
+			"score":400,
 			"propSpawnMax":2,
 			"obSpawnMax":2,
 			"propSpawnInterval":[35000, 40000],
 			"propRange":[600, 1200]
 		},
 		"5":{
-			"score":400,
+			"score":700,
 			"propSpawnMax":1,
 			"obSpawnMax":3,
 			"propSpawnInterval":[45000, 50000],
 			"propRange":[700, 1400]
 		},
 		"6":{
-			"score":800,
+			"score":1100,
 			"propSpawnMax":1,
 			"obSpawnMax":3,
 			"propSpawnInterval":[55000, 60000],
@@ -145,7 +152,7 @@
 			"propRange":[700, 1400]
 		},
 		"8":{
-			"score":[1600,50,450],
+			"score":[1600,100,500],
 			"propSpawnMax":1,
 			"obSpawnMax":4,
 			"propSpawnInterval":[75000, 80000],

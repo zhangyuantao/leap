@@ -1,11 +1,14 @@
-module leap {
+module planetJump {
 	export class MainUI extends fairygui.GComponent{
 		private scoreTxt:ScoreText;
 		private multTxt:fairygui.GComponent;
 		private levelTxt:fairygui.GComponent;
 		private pauseBtn:fairygui.GButton;
 		private musicBtn:fairygui.GButton;	
+		private helpBtn:fairygui.GButton;	
+		private closeHelpBtn:fairygui.GButton;	
 		private pausePanel:fairygui.GComponent;
+		private helpPanel:fairygui.GComponent;
 		private continueBtn:fairygui.GButton;
 		private newRecord:fairygui.GComponent;
 		private gameOverCtrl:fairygui.Controller;
@@ -48,9 +51,15 @@ module leap {
 			self.pauseBtn = self.getChild("pauseBtn").asButton;   
 			self.pauseBtn.addClickListener(self.onPauseBtn, self);
 			self.musicBtn = self.getChild("musicBtn").asButton; 
-			self.musicBtn.addClickListener(self.onMusicBtn, self);		
+			self.musicBtn.addClickListener(self.onMusicBtn, self);
+			self.helpBtn = self.getChild("helpBtn").asButton; 
+			self.helpBtn.addClickListener(self.showHelpPanel, self);		
 			self.pausePanel = self.getChild("pausePanel").asCom;
 			self.pausePanel.visible = false;
+			self.helpPanel = self.getChild("helpPanel").asCom;
+			self.helpPanel.visible = false;
+			self.closeHelpBtn = self.helpPanel.getChild("closeBtn").asButton; 
+			self.closeHelpBtn.addClickListener(self.closeHelpPanel, self);
 			self.continueBtn = self.pausePanel.getChild("continueBtn").asButton;
 			self.continueBtn.addClickListener(self.onContinueBtn, self);
 			self.gameOverCtrl = self.getController("gameOverCtrl");
@@ -87,6 +96,9 @@ module leap {
 			self.pausePanel.visible = true;
 			egret.Tween.removeTweens(self.pausePanel);
 			egret.Tween.get(self.pausePanel).to({alpha:1}, 300, egret.Ease.sineInOut);
+			
+			// 广告
+			utils.Singleton.get(AdMgr).showBannerAd("暂停界面banner");
 		}
 
 		private closePausePanel(){
@@ -95,6 +107,7 @@ module leap {
 			egret.Tween.get(self.pausePanel).to({alpha:0}, 300, egret.Ease.sineInOut).call(() => {
 				self.pausePanel.visible = false;
 			});
+			utils.Singleton.get(AdMgr).hideBanner();
 		}
 
 		private onMusicBtn(e){		
@@ -139,7 +152,7 @@ module leap {
 
 		private onLevelUp(lv:number){
 			let self = this;
-			self.levelTxt.getChild("txt").asTextField.text = "STAGE " + lv;
+			self.levelTxt.getChild("txt").asTextField.text = "LEVEL " + lv;
 			egret.Tween.get(self.levelTxt).set({alpha:0}).to({alpha:1, scaleX:1.5, scaleY:1.5}, 500, egret.Ease.sineInOut).wait(500).to({alpha:0, scaleX:1, scaleY:1}, 500, egret.Ease.sineInOut);
 		}
 		
@@ -168,11 +181,38 @@ module leap {
 			self.gameOverCtrl.setSelectedIndex(0);
 		}
 
+		private showHelpPanel(){
+			let self = this;
+			if(GameMgr.getInstance().isPaused || GameMgr.getInstance().gameOver)
+				return;
+			GameMgr.getInstance().setPause(true, false);
+
+			self.helpPanel.visible = true;
+			egret.Tween.removeTweens(self.helpPanel);
+			egret.Tween.get(self.helpPanel).to({alpha:1}, 300, egret.Ease.sineInOut);
+			
+			// 广告
+			utils.Singleton.get(AdMgr).showBannerAd("帮助界面banner");
+		}
+
+		private closeHelpPanel(){
+			let self = this;
+			GameMgr.getInstance().setPause(false, false);
+
+			egret.Tween.removeTweens(self.helpPanel);
+			egret.Tween.get(self.helpPanel).to({alpha:0}, 300, egret.Ease.sineInOut).call(() => {
+				self.helpPanel.visible = false;
+			});
+			utils.Singleton.get(AdMgr).hideBanner();
+		}
+
 		public dispose(){
 			super.dispose();
 			let self = this;
 			self.pauseBtn.removeClickListener(self.onPauseBtn, self);
 			self.musicBtn.removeClickListener(self.onMusicBtn, self);		
+			self.helpBtn.removeClickListener(self.showHelpPanel, self);	
+			self.closeHelpBtn.addClickListener(self.closeHelpPanel, self);
 			self.continueBtn.removeClickListener(self.onContinueBtn, self);
 
 			utils.StageUtils.removeEventListener("createGame", self.onCreateGame, self);

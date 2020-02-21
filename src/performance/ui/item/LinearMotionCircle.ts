@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class LinearMotionCircle extends CircleItem{
 		public speed:number = 0;
 		public speedX:number = 0;
@@ -30,8 +30,8 @@ module leap {
 			super.onMove(deltaTime);
 			let newX = self.x + self.speedX;
 			let newY = self.y + self.speedY;
-			self.x = parseFloat(newX.toFixed(1));
-			self.y = parseFloat(newY.toFixed(1));
+			self.x = parseFloat(newX.toFixed(2));
+			self.y = parseFloat(newY.toFixed(2));
 		}		
 	}
 }

@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ObCircle extends CircleMotionCircle{
 		public init(rotateSpeed:number){
 			let self = this;

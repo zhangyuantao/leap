@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class StarEffect extends PropEffect{	
 		public init(effKey:string, p:Player){
 			super.init(effKey, p);

@@ -1,4 +1,4 @@
-module leap {
+module planetJump {
 	export class ItemDefine {		
 		public static WhiteBall:string = "WhiteBall";
 		public static ScoreBall:string = "ScoreBall";
@@ -9,6 +9,7 @@ module leap {
 		public static Thunderbolt:string = "Thunderbolt";
 		public static Plus:string = "Plus";
 		public static Magnet:string = "Magnet";
+		public static Cut:string = "Cut";
 		public static ObCircle:string = "ObCircle";	
 		public static ObTriangle:string = "ObTriangle";
 		public static ObSquare:string = "ObSquare";
