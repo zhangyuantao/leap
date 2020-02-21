@@ -4,6 +4,7 @@ module planetJump {
 		private rankBtn:fairygui.GButton;
 		private shareBtn:fairygui.GButton;
 		private scopeCtrl:fairygui.Controller;
+		private platCtrl:fairygui.Controller;
 
 		public constructFromResource(){
             super.constructFromResource();
@@ -15,6 +16,7 @@ module planetJump {
 			self.shareBtn = self.getChild("shareBtn").asButton;
 			self.shareBtn.addClickListener(self.onShareBtn, self);
 			self.scopeCtrl = self.getController("scopeCtrl");
+			self.platCtrl = self.getController("platCtrl");
 			self.initState();
 		}
 
@@ -27,7 +29,7 @@ module planetJump {
 
 		private initState(){
 			let self = this;
-
+			self.scopeCtrl.setSelectedPage("tt");
 			self.scopeCtrl.setSelectedIndex(1);
 			if(!Main.isScopeUserInfo && platform.isRunInTT()){
 				self.scopeCtrl.setSelectedIndex(0);				
