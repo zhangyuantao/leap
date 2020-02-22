@@ -23,6 +23,9 @@ module planetJump {
 
 		onCreate(){
 			let self = this;
+			if(!platform.isRunInTT())
+				return;
+
 			let res = tt.getSystemInfoSync();
 			self.sysInfo = res;
 			self.screenWidth = res.screenWidth;
@@ -34,7 +37,9 @@ module planetJump {
 
 		// 展示banner广告
 		public showBannerAd(adName:string, left?:number, top?:number, width?:number){
-			let self = this;	
+			let self = this;
+			if(!platform.isRunInTT())
+				return;	
 
 			// SDKVersion 判断基础库版本号 >= 2.0.4 后再使用该 API		
 			if(self.compareVersion(self.sysInfo.SDKVersion, "2.0.4") < 0)
