@@ -40,7 +40,6 @@ module planetJump {
 			const userInfo = await platform.getUserInfo();
 			Main.myAvatarUrl = userInfo.avatarUrl;
 			Main.isScopeUserInfo = true;
-			console.log("授权成功");
 			self.onStartBtn(null);
 		}
 

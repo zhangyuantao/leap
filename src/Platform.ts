@@ -17,6 +17,25 @@ declare interface Platform {
     isRuniOS(): boolean;
     setUserCloudStorage(kvDataList: any[], success?: Function, fail?: Function, complete?: Function);
     loadFont(url: string);
+    getGameRecorderManager(): GameRecorderManager;
+}
+
+/**头条必接录屏功能 */
+declare interface GameRecorderManager {
+    start(arg: { duration: number });
+    pause();
+    resume();
+    stop();
+    recordClip(arg: { timeRange, success, fail, complete });
+    clipVideo(arg: any);
+    
+    onStart(func: Function);
+    onPause(func: Function);
+    onResume(func: Function);
+    onStop(func: Function);
+    onError(func: Function);
+    onInterruptionBegin(func: Function);
+    onInterruptionEnd(func: Function);
 }
 
 class DebugPlatform implements Platform {
@@ -93,6 +112,10 @@ class DebugPlatform implements Platform {
 
     loadFont(url: string) {
 
+    }
+
+    getGameRecorderManager() {
+        return null;
     }
 }
 
