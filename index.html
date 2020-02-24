@@ -79,7 +79,8 @@
                  * "calculateCanvasScaleFactor": //a function return canvas scale factor
                  * }
                  **/
-                egret.runEgret({ renderMode: "webgl", audioType: 0, calculateCanvasScaleFactor:function(context) {
+                // 头条小游戏audioType需要audio类型，否则加载卡住
+                egret.runEgret({ renderMode: "webgl", audioType: 3, calculateCanvasScaleFactor:function(context) {
                     var backingStore = context.backingStorePixelRatio ||
                         context.webkitBackingStorePixelRatio ||
                         context.mozBackingStorePixelRatio ||

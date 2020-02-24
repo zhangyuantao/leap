@@ -18,6 +18,7 @@ declare interface Platform {
     setUserCloudStorage(kvDataList: any[], success?: Function, fail?: Function, complete?: Function);
     loadFont(url: string);
     getGameRecorderManager(): GameRecorderManager;
+    showToast(title, duration, icon, successCb, failCb);
 }
 
 /**头条必接录屏功能 */
@@ -28,7 +29,7 @@ declare interface GameRecorderManager {
     stop();
     recordClip(arg: { timeRange, success, fail, complete });
     clipVideo(arg: any);
-    
+
     onStart(func: Function);
     onPause(func: Function);
     onResume(func: Function);
@@ -116,6 +117,10 @@ class DebugPlatform implements Platform {
 
     getGameRecorderManager() {
         return null;
+    }
+
+    showToast(title, duration, icon, successCb, failCb) {
+        console.log(title);
     }
 }
 

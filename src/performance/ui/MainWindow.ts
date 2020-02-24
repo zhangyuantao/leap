@@ -3,28 +3,30 @@
  */
 module planetJump {
 	export class MainWindow extends BaseWindow {
-		public static instance:MainWindow;
-		public textureBg:TextureBackground;
-		
-		private readyPanel:ReadyPanel;
-		private btnCloseRank:fairygui.GButton;
+		public static instance: MainWindow;
+		public textureBg: TextureBackground;
+		public isRecording: boolean;
+		public recordTime: number;
 
-		private isShowRank:boolean = false;
-		private rankingListMask:fairygui.GObject;
-		private rankBitmap:egret.Bitmap;
+		private readyPanel: ReadyPanel;
+		private btnCloseRank: fairygui.GButton;
 
-    	private myAvatarUrl:string = "";
-		private curRankType:string;
-		private lastRankType:string;
+		private isShowRank: boolean = false;
+		private rankingListMask: fairygui.GObject;
+		private rankBitmap: egret.Bitmap;
 
-		private worldContainer:egret.DisplayObjectContainer;
+		private myAvatarUrl: string = "";
+		private curRankType: string;
+		private lastRankType: string;
 
-		public constructor(pkgName:string = "leap", windowName?:string, playPopSound?:boolean) {
-			super(pkgName, windowName, playPopSound);		
-			let self = this;		
+		private worldContainer: egret.DisplayObjectContainer;
+
+		public constructor(pkgName: string = "leap", windowName?: string, playPopSound?: boolean) {
+			super(pkgName, windowName, playPopSound);
+			let self = this;
 			MainWindow.instance = self;
 
-			if(platform.isRunInTT()){
+			if (platform.isRunInTT()) {
 				// 启用显示转发分享菜单
 				tt.showShareMenu({});
 
@@ -32,32 +34,32 @@ module planetJump {
 				tt.onShareAppMessage(() => {
 					let info = GameMgr.getInstance().getShareImgUrlId(0);
 					return {
-						title:"黑洞，人类首次看见它！",
-						imageUrlId:info[0],
-						imageUrl:info[1],
-						query:"",		
+						title: "黑洞，人类首次看见它！",
+						imageUrlId: info[0],
+						imageUrl: info[1],
+						query: "",
 					}
 				});
-			}        
-		}	
+			}
+		}
 
 		// 释放
-		public dispose(): void {		
-			super.dispose();			
-			let self = this;			
+		public dispose(): void {
+			super.dispose();
+			let self = this;
 			self.removeEventListeners();
 			egret.Tween.removeAllTweens();
-			self.destroyGame();		
+			self.destroyGame();
 			utils.Singleton.destroy(utils.SoundMgr);
 			self.btnCloseRank.removeClickListener(self.onCloseRank, self);
 		}
 
-		protected addEventListeners(){
+		protected addEventListeners() {
 			let self = this;
 			//utils.EventDispatcher.getInstance().addEventListener("startGame", self.createGame, self);
 		}
 
-		protected removeEventListeners(){
+		protected removeEventListeners() {
 			let self = this;
 			//utils.EventDispatcher.getInstance().removeEventListener("startGame", self.createGame, self);
 		}
@@ -65,7 +67,7 @@ module planetJump {
 		/**
 		 * 注册组件的拓展类
 		 */
-		protected registerComponents(){
+		protected registerComponents() {
 			let self = this;
 			self.registerComponent("ReadyPanel", ReadyPanel);
 			self.registerComponent("MainUI", MainUI);
@@ -81,67 +83,67 @@ module planetJump {
 			self.registerComponent("ResultPanel", ResultPanel);
 			self.registerComponent("recommendBtn", RecommandBtn);
 			self.registerComponent("LinkLine", LinkLine);
-	
+
 		}
-		protected registerComponent(compName:string, userClass:any, pkgName:string = "leap"){
+		protected registerComponent(compName: string, userClass: any, pkgName: string = "leap") {
 			let url = fairygui.UIPackage.getItemURL(pkgName, compName);
 			fairygui.UIObjectFactory.setPackageItemExtension(url, userClass);
-		}	
+		}
 
 		/**
 		 * 初始化完成
 		 */
-        protected onInit(){
+		protected onInit() {
 			super.onInit();
 			let self = this;
 			self.readyPanel = self.contentPane.getChild("readyPanel") as ReadyPanel;
 			self.btnCloseRank = self.contentPane.getChild("btnCloseRank").asButton;
 			self.btnCloseRank.addClickListener(self.onCloseRank, self);
-			self.btnCloseRank.visible = false;			
+			self.btnCloseRank.visible = false;
 
 			utils.Singleton.get(utils.SoundMgr).preloadBgm("back_music_mp3");
-		}	
+		}
 
 		// 引导初始化
-		private initGuide(){
+		private initGuide() {
 			let self = this;
-			if(self.isFinishGuide()){
-				GameMgr.getInstance().guideCompleted = true;				
+			if (self.isFinishGuide()) {
+				GameMgr.getInstance().guideCompleted = true;
 			}
-			else{
+			else {
 				// 引导没有全部完成的话记录全部清除重来
-				for(let step = 0; step < 4; step++){
+				for (let step = 0; step < 4; step++) {
 					let key = "leap_guideStep" + step;
 					egret.localStorage.removeItem(key);
 				}
 
 				GameMgr.getInstance().guideCompleted = false;
-				let panel =	utils.ObjectPool.getInstance().createFairyUIObject(GuidePanel, "leap");					
+				let panel = utils.ObjectPool.getInstance().createFairyUIObject(GuidePanel, "leap");
 				self.displayListContainer.addChild(panel.displayObject);
 			}
 		}
 
 		// 引导是否完成
-		public isFinishGuide(){
+		public isFinishGuide() {
 			let doGuideCount = parseInt(egret.localStorage.getItem("doGuideCount") || "0");
 			return doGuideCount >= 2; // 做完整的2次引导
 		}
 
-		public isCompleteGuide(step:number){
+		public isCompleteGuide(step: number) {
 			let key = "leap_guideStep" + step;
 			let guideStep = egret.localStorage.getItem(key);
 			return guideStep && guideStep != "";
 		}
 
 		// 创建游戏
-		public createGame(){
+		public createGame() {
 			let self = this;
 			self.destroyGame();
 			GameMgr.getInstance().gameBegin();
-			
+
 			utils.Singleton.get(utils.SoundMgr).playBgm("back_music_mp3", true);
 			utils.StageUtils.dispatchEvent("createGame");
-			
+
 			// 背景
 			let bg = utils.ObjectPool.getInstance().createObject(Background);
 			self.displayListContainer.addChildAt(bg, 0);
@@ -149,10 +151,10 @@ module planetJump {
 			// 纹理背景
 			self.textureBg = fairygui.UIPackage.createObject('leap', "TextureBackground") as TextureBackground;
 			self.textureBg.visible = false;
-			self.displayListContainer.addChildAt(self.textureBg.displayObject, 1);		
+			self.displayListContainer.addChildAt(self.textureBg.displayObject, 1);
 
 			// 世界
-			if(self.worldContainer)
+			if (self.worldContainer)
 				self.worldContainer.removeChildren();
 			else
 				self.worldContainer = new egret.DisplayObjectContainer();
@@ -165,15 +167,15 @@ module planetJump {
 			// 引导初始化
 			self.initGuide();
 		}
-		
+
 		// 重开游戏
-		public restartGame(){
+		public restartGame() {
 			let self = this;
 			self.createGame();
 		}
 
 		// 销毁游戏
-		public destroyGame(){			
+		public destroyGame() {
 			ItemMgr.getInstance().dispose();
 			utils.ObjectPool.getInstance().dispose();
 			GameMgr.getInstance().dispose();
@@ -184,16 +186,16 @@ module planetJump {
 		 * 显示排行榜
 		 * type： list horizontal vertical
 		 */
-		public showRankWnd(type:string = "list", maskAlpha:number = 1, maskTouchEnabled:boolean = true, showCloseRankBnt:boolean = true){
+		public showRankWnd(type: string = "list", maskAlpha: number = 1, maskTouchEnabled: boolean = true, showCloseRankBnt: boolean = true) {
 			let self = this;
-			if(!platform.isRunInTT())
+			if (!platform.isRunInTT())
 				return;
-			if(!self.isShowRank) {
+			if (!self.isShowRank) {
 				self.lastRankType = self.curRankType;
 				self.curRankType = type;
-								
+
 				//处理遮罩,避免开放域数据影响主域
-				if(!self.rankingListMask){
+				if (!self.rankingListMask) {
 					self.rankingListMask = fairygui.UIPackage.createObject("leap", "RankBack");
 					self.rankingListMask.width = utils.StageUtils.stageWidth;
 					self.rankingListMask.height = utils.StageUtils.stageHeight;
@@ -203,18 +205,18 @@ module planetJump {
 				self.rankingListMask.visible = true;
 				self.rankingListMask.alpha = maskAlpha;
 				self.rankingListMask.touchable = maskTouchEnabled;
-				
+
 				//显示开放域数据
-				self.rankBitmap = platform.openDataContext.createDisplayObject(null, utils.StageUtils.stageWidth, utils.StageUtils.stageHeight);				
+				self.rankBitmap = platform.openDataContext.createDisplayObject(null, utils.StageUtils.stageWidth, utils.StageUtils.stageHeight);
 				self.parent.displayListContainer.addChild(self.rankBitmap);
-				egret.Tween.get(self.rankBitmap).set({alpha:0}).to({alpha:1}, 500, egret.Ease.sineInOut);
+				egret.Tween.get(self.rankBitmap).set({ alpha: 0 }).to({ alpha: 1 }, 500, egret.Ease.sineInOut);
 
 				self.rankBitmap.anchorOffsetX = 0.5;
 				self.rankBitmap.anchorOffsetY = 0.5;
 				self.rankBitmap.skewY = type == "list" ? -4 : type == "horizontal" ? 4 : 0;
 
 				//让关闭排行榜按钮显示在容器内
-				if(showCloseRankBnt){
+				if (showCloseRankBnt) {
 					self.btnCloseRank.visible = true;
 					self.parent.displayListContainer.addChild(self.btnCloseRank.displayObject);
 				}
@@ -226,33 +228,33 @@ module planetJump {
 					text: "egret",
 					year: (new Date()).getFullYear(),
 					command: "open",
-					myAvatarUrl:Main.myAvatarUrl,
-					rankType:type
-				});	
+					myAvatarUrl: Main.myAvatarUrl,
+					rankType: type
+				});
 			}
 
-			if(type == "list")
+			if (type == "list")
 				utils.Singleton.get(AdMgr).hideBanner();
-		}	
+		}
 
-		private onCloseRank(e){
-			let self = this;			
+		private onCloseRank(e) {
+			let self = this;
 			self.hideRankWnd();
 			//if(self.lastRankType == "vertical" && self.testWnd.isShowing)
 			//	self.showRankWnd("vertical", 0, false, false);
-			
+
 			//utils.Singleton.get(AdMgr).showBannerAd("Banner排行榜");
 		}
 
 		/**
 		 * 隐藏排行榜
 		 */
-		public hideRankWnd(){
+		public hideRankWnd() {
 			let self = this;
-			if(!platform.isRunInTT())
+			if (!platform.isRunInTT())
 				return;
-			if(self.isShowRank) {
-				if(self.rankBitmap)
+			if (self.isShowRank) {
+				if (self.rankBitmap)
 					egret.Tween.removeTweens(self.rankBitmap)
 				self.rankBitmap.parent && self.rankBitmap.parent.removeChild(self.rankBitmap);
 				self.rankingListMask.visible = false;
@@ -266,12 +268,39 @@ module planetJump {
 				});
 			}
 		}
-		
+
 		// 返回准备界面
-		public backToReadyWindow(){
+		public backToReadyWindow() {
 			let self = this;
 			self.destroyGame();
 			self.readyPanel.show();
+		}
+
+		public recordVideo() {
+			let self = this;
+			//if (!platform.isRunInTT())
+			//	return;
+
+			let recorder = platform.getGameRecorderManager();
+
+			if (!self.isRecording) {
+				self.isRecording = true;
+				recorder.start({ duration: 30 });
+				self.recordTime = Date.now();
+
+				utils.StageUtils.dispatchEvent("onRecord", false, 1);
+			} else {
+				let dt = Date.now() - self.recordTime;
+				if (dt > 3000) {
+					recorder.stop();
+					self.isRecording = false;
+
+					utils.StageUtils.dispatchEvent("onRecord", false, 0);
+				}
+				else {
+					console.warn("录屏时长需大于3秒~");
+				}
+			}
 		}
 	}
 }

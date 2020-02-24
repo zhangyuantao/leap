@@ -1,6 +1,7 @@
 module planetJump {
 	export class ReadyPanel extends fairygui.GComponent {
 		private startBtn: fairygui.GButton;
+		private recordBtn: fairygui.GButton;
 		private rankBtn: fairygui.GButton;
 		private shareBtn: fairygui.GButton;
 		private scopeCtrl: fairygui.Controller;
@@ -16,10 +17,24 @@ module planetJump {
 			self.rankBtn.addClickListener(self.onRankBtn, self);
 			self.shareBtn = self.getChild("shareBtn").asButton;
 			self.shareBtn.addClickListener(self.onShareBtn, self);
+			self.recordBtn = self.getChild("recordBtn").asButton;
+			self.recordBtn.addClickListener(self.onRecordBtn, self);
 			self.scopeCtrl = self.getController("scopeCtrl");
 			self.platCtrl = self.getController("platCtrl");
 			self.titlePlatCtrl = self.getChild("title").asCom.getController("platCtrl");
 			self.initState();
+
+			utils.StageUtils.addEventListener("onRecord", self.onRecord, self);
+		}
+
+		private onRecord(e: egret.Event) {
+			let self = this;
+			let flag = e.data;
+			self.recordBtn.getController("state").setSelectedPage(flag ? "down" : "up");
+			if (flag)
+				self.recordBtn.getTransition("recordAni").play(null, null, null, -1);
+			else
+				self.recordBtn.getTransition("recordAni").stop();
 		}
 
 		private onStartBtn(e) {
@@ -84,13 +99,20 @@ module planetJump {
 			GameMgr.getInstance().share();
 		}
 
+		private onRecordBtn(e) {
+			let self = this;
+			MainWindow.instance.recordVideo();
+		}
+
 		public dispose() {
 			super.dispose();
 			let self = this;
 			self.startBtn.removeClickListener(self.onStartBtn, self);
 			self.rankBtn.removeClickListener(self.onRankBtn, self);
 			self.shareBtn.removeClickListener(self.onShareBtn, self);
+			self.recordBtn.removeClickListener(self.onRecordBtn, self);
 			utils.StageUtils.removeEventListener("leaveGame", self.onLeaveGame, self);
+			utils.StageUtils.removeEventListener("onRecord", self.onRecord, self);
 		}
 	}
 }

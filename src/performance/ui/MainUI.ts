@@ -18,7 +18,6 @@ module planetJump {
 		private soundOn: boolean = true;
 		private hasShowNewRecord: boolean = false;
 		private recordTime: number;
-		private isRecording: boolean;
 
 		public constructor() {
 			super();
@@ -80,12 +79,17 @@ module planetJump {
 			self.recordBtn = self.getChild("recordBtn").asButton;
 			self.recordBtn.addClickListener(self.onRecordVideo, self);
 
-			if (platform.isRunInTT()) {
-				let recorder = platform.getGameRecorderManager();
-				recorder.onStop(() => {
-					console.log("录屏停止");
-				});
-			}
+			utils.StageUtils.addEventListener("onRecord", self.onRecord, self);
+		}
+
+		private onRecord(e:egret.Event) {
+			let self = this;
+			let flag = e.data;
+			self.recordBtn.getController("state").setSelectedPage(flag ? "down" : "up");
+			if (flag)
+				self.recordBtn.getTransition("recordAni").play(null, null, null, -1);
+			else
+				self.recordBtn.getTransition("recordAni").stop();
 		}
 
 		private onPauseBtn(e) {
@@ -223,30 +227,7 @@ module planetJump {
 		}
 
 		private onRecordVideo() {
-			let self = this;
-			if (!platform.isRunInTT())
-				return;
-
-			let recorder = platform.getGameRecorderManager();
-
-			if (!self.isRecording) {
-				self.isRecording = true;
-				recorder.start({ duration: 30 });
-				self.recordTime = Date.now();
-				self.recordBtn.getController("state").setSelectedPage("down");
-				self.recordBtn.getTransition("recordAni").play(null, null, null, -1);
-			} else {
-				let dt = Date.now() - self.recordTime;
-				if (dt > 3000) {
-					recorder.stop();
-					self.isRecording = false;
-					self.recordBtn.getController("state").setSelectedPage("up");
-					self.recordBtn.getTransition("recordAni").stop();
-				}
-				else {
-					console.warn("录屏时长需大于3秒~");
-				}
-			}
+			MainWindow.instance.recordVideo();
 		}
 
 		public dispose() {
@@ -260,6 +241,7 @@ module planetJump {
 			self.recordBtn.removeClickListener(self.onRecordVideo, self);
 
 			utils.StageUtils.removeEventListener("createGame", self.onCreateGame, self);
+			utils.StageUtils.removeEventListener("onRecord", self.onRecord, self);
 			utils.EventDispatcher.getInstance().removeEventListener("updateScore", self.updateScore, self);
 			utils.EventDispatcher.getInstance().removeEventListener("onAppPause", self.onPause, self);
 			utils.EventDispatcher.getInstance().removeEventListener("gameRevive", self.pause, self);

@@ -36,7 +36,6 @@ module utils {
 		 * 预加载背景音乐，文件比较大的时候播放会卡顿
 		 */
 		public preloadBgm(url:string){
-			return;
 			let self = this;
 			if(!self.bgm)
 				self.bgm = RES.getRes(url) as egret.Sound;		
@@ -45,7 +44,6 @@ module utils {
 		/** 背景音乐 */
 		public playBgm(url:string, isReset:boolean = false, startTime:number = 0, loops:number = 0, volume:number = 1){
 			let self = this;
-			return;
 
 			if(self.bgmSoundChannel)
 			 	self.bgmSoundChannel.stop();
@@ -64,7 +62,6 @@ module utils {
 
 		// 暂停背景音乐
 		public pauseBgm(){
-			return;
 			let self = this;
 			if(self.bgmSoundChannel){
 				self.lastBgmPos = self.bgmSoundChannel.position;
@@ -74,7 +71,6 @@ module utils {
 
 		// 恢复背景音乐
 		public resumeBgm(){
-			return;
 			let self = this;
 			if(self.isMuteBgm)
 				return;
@@ -85,7 +81,6 @@ module utils {
 
 		// 释放背景音乐
 		public disposeBgm(){
-			return;
 			let self = this;
 			self.bgmSoundChannel.stop();
 			self.bgmSoundChannel = null;
@@ -95,7 +90,6 @@ module utils {
 		
 		// 设置背景音乐静音状态
 		public setBgmMute(mute:boolean){
-			return;
 			let self = this;
 			if(self.isMuteBgm == mute)
 				return;
@@ -112,7 +106,6 @@ module utils {
 
 		/** 音效 */
 		public playSound(url:string, startTime:number = 0, loops:number = 1, volume:number = 1){
-			return;
 			let self = this;
 			if(self.isMuteSound)
 				return;
@@ -134,7 +127,6 @@ module utils {
 
 		// 暂停声音
 		public pauseSound(url:string){
-			return;
 			let self = this;
 			let sound = self.sounds[url];
 			if(sound)
@@ -153,7 +145,6 @@ module utils {
 
 		// 恢复声音
 		public resumeSound(url:string){
-			return;
 			let self = this;
 			let info = self.sounds[url];
 			if(info){
@@ -164,7 +155,6 @@ module utils {
 
 		// 设置全局音效静音
 		public setSoundMute(mute:boolean){
-			return;
 			let self = this;
 			if(self.isMuteSound == mute)
 				return;
@@ -178,7 +168,6 @@ module utils {
 
 		// 释放某个声音
 		public disposeSound(url:string){
-			return;
 			let self = this;
 			let info = self.sounds[url];
 			if(!info) return;

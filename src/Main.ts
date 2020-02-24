@@ -34,6 +34,8 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private async runGame() {
+        RES.setMaxLoadingThread(1);
+    
         await this.loadResource();
         let loginData = await platform.login();
         // 读取设备信息
@@ -63,7 +65,8 @@ class Main extends egret.DisplayObjectContainer {
                 command: "loadRes"
             });
 
-            platform.loadFont("resource/RubikOne-Regular.ttf");
+            let fontName = platform.loadFont("resource/RubikOne-Regular.ttf");
+            console.log("loadFont:", fontName);
         }
         catch (e) {
             console.error(e);
