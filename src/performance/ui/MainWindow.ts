@@ -6,6 +6,7 @@ module planetJump {
 		public static instance: MainWindow;
 		public textureBg: TextureBackground;
 		public isRecording: boolean;
+		public recordVideoPath: boolean;
 		public recordTime: number;
 
 		private readyPanel: ReadyPanel;
@@ -31,15 +32,21 @@ module planetJump {
 				tt.showShareMenu({});
 
 				// 用户点击了“转发”按钮
-				tt.onShareAppMessage(() => {
-					let info = GameMgr.getInstance().getShareImgUrlId(0);
-					return {
-						title: "黑洞，人类首次看见它！",
-						imageUrlId: info[0],
-						imageUrl: info[1],
-						query: "",
-					}
+				tt.onShareAppMessage(self.onShareAppMessage);
+
+				let recorder = platform.getGameRecorderManager();
+				recorder.onStop(res => {
+					self.recordVideoPath = res.videoPath;
 				});
+			}
+		}
+
+		private onShareAppMessage() {
+			let info = GameMgr.getInstance().getShareImgUrlId(0);
+			return {
+				title: "LeapOn!一起飞跃吧！",
+				imageUrlId: info[0],
+				imageUrl: info[0]
 			}
 		}
 
@@ -47,6 +54,11 @@ module planetJump {
 		public dispose(): void {
 			super.dispose();
 			let self = this;
+
+			if (platform.isRunInTT()) {
+				tt.offShareAppMessage(self.onShareAppMessage);
+			}
+
 			self.removeEventListeners();
 			egret.Tween.removeAllTweens();
 			self.destroyGame();
@@ -276,10 +288,10 @@ module planetJump {
 			self.readyPanel.show();
 		}
 
-		public recordVideo() {
+		public recordOrStopVideo() {
 			let self = this;
-			//if (!platform.isRunInTT())
-			//	return;
+			if (!platform.isRunInTT())
+				return;
 
 			let recorder = platform.getGameRecorderManager();
 
@@ -301,6 +313,18 @@ module planetJump {
 					console.warn("录屏时长需大于3秒~");
 				}
 			}
+		}
+
+		public forceStopVideo() {
+			let self = this;
+			if (!platform.isRunInTT())
+				return;
+
+			if (self.isRecording) {
+				let recorder = platform.getGameRecorderManager();
+				recorder.stop();
+			}
+
 		}
 	}
 }

@@ -1,29 +1,26 @@
 module planetJump {
-	export class AdMgr implements utils.ISingleton{
+	export class AdMgr implements utils.ISingleton {
 		private adCfg = {
-			"结算界面banner":'adunit-af30ea26be5ee8f3',
-			"暂停界面banner":'adunit-4e928e7d53b5e701',
-			"帮助界面banner":'adunit-71d035b44b8adf6b',
-			"复活广告":'adunit-054e13726a11ffa3'
+			"结算界面banner": 'cnsg3amqimd5s0mmv1',
+			"暂停界面banner": '7u2ld3cvld71bnd459',
+			"帮助界面banner": 'fhi16oeh73f374acoc',
+			"设置界面banner": 'aj6kika1id4im8frpn',
+			"复活广告": '3n38ru34bohlac9ga6'
 		};
 
-		private onWatchVideoOk:Function;
-		private onWatchVideoFail:Function;
-		private videoAdComp:any;
-		private bannerComp:any;
+		private videoAdComp: any;
+		private bannerComp: any;
 
-		private sysInfo:any;
-		private screenWidth:number;
-		private screenHeight:number;
+		private sysInfo: any;
+		private screenWidth: number;
+		private screenHeight: number;
 
-		//private totayWatchVideoCount:number = 0;
-		//private dayWatchVideoMaxCount:number = 5;
-		
-		//public videoEnabled:boolean = true;
+		public static watchVideoEnd: Function;
+		public static watchVideoFail: Function;
 
-		onCreate(){
+		onCreate() {
 			let self = this;
-			if(!platform.isRunInTT())
+			if (!platform.isRunInTT())
 				return;
 
 			let res = tt.getSystemInfoSync();
@@ -32,97 +29,95 @@ module planetJump {
 			self.screenHeight = res.screenHeight;
 		}
 
-        onDestroy(){
+		onDestroy() {
+			let self = this;
 		}
 
 		// 展示banner广告
-		public showBannerAd(adName:string, left?:number, top?:number, width?:number){
+		public showBannerAd(adName: string, left?: number, top?: number, width?: number) {
 			let self = this;
-			if(!platform.isRunInTT())
-				return;	
-
-			// SDKVersion 判断基础库版本号 >= 2.0.4 后再使用该 API		
-			if(self.compareVersion(self.sysInfo.SDKVersion, "2.0.4") < 0)
+			if (!platform.isRunInTT())
 				return;
 
-			let adId = self.adCfg[adName]	
-			if(!adId)	
+			let adId = self.adCfg[adName]
+			if (!adId)
 				return;
 
 			let info = {
 				adUnitId: adId,
-    			style: {
+				style: {
 					left: (self.screenWidth - 300) * 0.5,
 					top: top || 0,
 					width: 300
 				}
 			};
 
-			if(self.bannerComp)
+			if (self.bannerComp)
 				self.bannerComp.destroy();
-			self.bannerComp = platform.createBannerAd(info);	
-			self.bannerComp.show();
+			self.bannerComp = platform.createBannerAd(info);
+			self.bannerComp.onLoad(() => {
+				self.bannerComp.show();
+			});
 			self.bannerComp.onError(e => console.log(e));
 			self.bannerComp.onResize(res => {
 				self.bannerComp.style.top = self.screenHeight - res.height;
 			});
 		}
 
-		public hideBanner(){
+		public hideBanner() {
 			let self = this;
-			if(self.bannerComp)
+			if (self.bannerComp)
 				self.bannerComp.hide();
 		}
 
 		// 观看视频广告
-		public watchVideoAd(adName:string, watchOk:Function, watchFail:Function){
-			let self = this;	
-			let adId = self.adCfg[adName]	
-			if(!adId){
-				watchFail();
-				return;
+		public watchVideoAd(adName: string, end: Function, fail: Function) {
+			let self = this;
+			AdMgr.watchVideoEnd = end;
+			AdMgr.watchVideoFail = fail;
+
+			let adId = self.adCfg[adName]
+			if (!adId) {
+				return fail();
 			}
-			self.videoAdComp = platform.createVideoAd(adId);	
+
+			if (self.videoAdComp) {
+				self.videoAdComp.offError(self.onVideoError);
+				self.videoAdComp.offClose(self.onVideoClosed);
+			}
+
+			self.videoAdComp = platform.createVideoAd(adId);
 			self.videoAdComp.load()
-			.then(() => self.videoAdComp.show())
-			.catch(err => {
-				console.log(err.errMsg);
-				watchFail();
-				return;
-			});
+				.then(() => self.videoAdComp.show())
+				.catch(err => {
+					console.log(err.errMsg);
+					fail();
+				});
 
-			self.onWatchVideoOk = watchOk;
-			self.onWatchVideoFail = watchFail;
-			self.videoAdComp.onError(res => {self.onVideoError(res)});
-			self.videoAdComp.onClose(res => {self.onVideoClosed(res)});
+			self.videoAdComp.onError(self.onVideoError);
+			self.videoAdComp.onClose(self.onVideoClosed);
 		}
 
-		private onVideoError(res){
+		private onVideoError(res) {
 			let self = this;
-			self.videoAdComp.offError();
 			console.log("视频观看错误：", res);
-			if(self.onWatchVideoFail)
-				self.onWatchVideoFail();
-
-			//if(self.totayWatchVideoCount >= self.dayWatchVideoMaxCount){
-			//	self.videoEnabled = false;
-			//}
+			if (AdMgr.watchVideoFail)
+				AdMgr.watchVideoFail();
 		}
 
-		private onVideoClosed(res){
+		private onVideoClosed(res) {
 			let self = this;
-			self.videoAdComp.offClose();
-
-			if(res && res.isEnded || res === undefined){
-				// 观看完成
-				self.onWatchVideoOk(true);
-
-				//self.totayWatchVideoCount ++;
+			console.log("视频观看结束：", res);
+			if (res && res.isEnded || res === undefined) {
+				if (AdMgr.watchVideoEnd)
+					AdMgr.watchVideoEnd(true);
 			}
-			else{
-				// 观看未完成
-				self.onWatchVideoOk(false);
+			else {
+				if (AdMgr.watchVideoEnd)
+					AdMgr.watchVideoEnd(false);
 			}
+
+			AdMgr.watchVideoEnd = null;
 		}
 
 		/**
@@ -135,22 +130,22 @@ module planetJump {
 			v1 = v1.split('.')
 			v2 = v2.split('.')
 			var len = Math.max(v1.length, v2.length)
-			
+
 			while (v1.length < len) {
 				v1.push('0')
 			}
 			while (v2.length < len) {
 				v2.push('0')
 			}
-			
+
 			for (var i = 0; i < len; i++) {
 				var num1 = parseInt(v1[i])
 				var num2 = parseInt(v2[i])
-			
+
 				if (num1 > num2) {
-				return 1
+					return 1
 				} else if (num1 < num2) {
-				return -1
+					return -1
 				}
 			}
 			return 0

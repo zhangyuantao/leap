@@ -1,38 +1,38 @@
 module planetJump {
-	export class GameMgr {		
-		private static instance:GameMgr;
+	export class GameMgr {
+		private static instance: GameMgr;
 		public static getInstance() {
-			if(!GameMgr.instance)
+			if (!GameMgr.instance)
 				GameMgr.instance = new GameMgr();
 			return GameMgr.instance;
 		}
 
-		public timer:MyTimer;
-		public gameOver:boolean = false;
-		public scoreRecord:number;	// 记录旧的周记录
-		public score:number = 0;		// 得分
-		public multiNum:number = 1; 	// 倍数
-		public level:number = 1;		// 关卡
-		public guideCompleted:boolean;
-		public hasRevived:boolean;	// 标记该局是否分享过
+		public timer: MyTimer;
+		public gameOver: boolean = false;
+		public scoreRecord: number;	// 记录旧的周记录
+		public score: number = 0;		// 得分
+		public multiNum: number = 1; 	// 倍数
+		public level: number = 1;		// 关卡
+		public guideCompleted: boolean;
+		public hasRevived: boolean;	// 标记该局是否分享过
 
-		private constructor(){
+		private constructor() {
 			let self = this;
 			utils.EventDispatcher.getInstance().addEventListener("newRound", self.onNewRound, self);
 		}
 
-		public get isPaused(){
+		public get isPaused() {
 			return utils.ObjectPool.getInstance().pause;
 		}
 
-		public gameBegin(){
+		public gameBegin() {
 			let self = this;
 			self.hasRevived = false;
 			let record = egret.localStorage.getItem("scoreRecord");
-			if(record && record != ""){
+			if (record && record != "") {
 				// 周一重重
 				let recordTime = parseInt(egret.localStorage.getItem("recordTime"));
-				if(!self.isSameWeek(recordTime)){
+				if (!self.isSameWeek(recordTime)) {
 					self.scoreRecord = 0;
 					egret.localStorage.setItem("scoreRecord", "0");
 				}
@@ -75,91 +75,91 @@ module planetJump {
 			}
 			return isSame;
 		}
-		
-		
+
+
 		/**
 		 * 开始一个计时器
 		 */
-		public startTimer(timeout:number, cb:Function, thisObj:any){
+		public startTimer(timeout: number, cb: Function, thisObj: any) {
 			let self = this;
-			if(!self.timer)
+			if (!self.timer)
 				self.timer = utils.ObjectPool.getInstance().createObject(MyTimer);
 			self.timer.startTimer(timeout, cb, thisObj);
 		}
 
-		private onNewRound(rounds){
-			let self = this;			
+		private onNewRound(rounds) {
+			let self = this;
 			self.multiNum = rounds;
 		}
 
-		public addScore(score:number){
+		public addScore(score: number) {
 			let self = this;
-			if(!score || score <= 0) return;
+			if (!score || score <= 0) return;
 			let addValue = score * self.multiNum;
 			self.score += addValue;
 
 			// 判断升级
 			let needScore;
 			let nextLv = self.level + 1;
-			if(nextLv < 8){
+			if (nextLv < 8) {
 				let lvCfg = GameCfg.getLevelCfg(nextLv)
-				needScore = lvCfg.score;		
+				needScore = lvCfg.score;
 			}
-			else{ // >=8级后的规则
+			else { // >=8级后的规则
 				let lvCfg = GameCfg.getLevelCfg(8);
 				needScore = lvCfg.score[0] + lvCfg.score[1] * Math.pow((nextLv - 7), 2) + lvCfg.score[2] * (nextLv - 7);
 			}
 
-			if(self.score >= needScore){
+			if (self.score >= needScore) {
 				self.level++;
 				utils.EventDispatcher.getInstance().dispatchEvent("levelUp", self.level);
 			}
 
 			utils.EventDispatcher.getInstance().dispatchEvent("updateScore", self.score);
-			
+
 			return addValue;
 		}
 
 		// 死亡
-		public dead(){
+		public dead() {
 			let self = this;
 			self.gameOver = true;
 			self.setPause(true);
 
 			// 存储新纪录
-			if(self.score > self.scoreRecord){
+			if (self.score > self.scoreRecord) {
 				let now = Date.now();
 				egret.localStorage.setItem("scoreRecord", self.score.toString());
 				egret.localStorage.setItem("recordTime", now.toString());
 				self.scoreRecord = self.score;
 				let v = {
-						"wxgame": {
-							"score": self.score,
-							"update_time": Math.floor(now / 1000)
-						},
-						"recordTime":now.toString()
+					"wxgame": {
+						"score": self.score,
+						"update_time": Math.floor(now / 1000)
+					},
+					"recordTime": now.toString()
 				};
 				let info = {
-					"key":"rank",
-					"value":JSON.stringify(v)
-				};				
-				platform.setUserCloudStorage([info], res => { 
+					"key": "rank",
+					"value": JSON.stringify(v)
+				};
+				platform.setUserCloudStorage([info], res => {
 					console.log("排行榜分数设置成功:", res);
 				});
 			}
-			
-			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");		
+
+			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");
 		}
 
 		// 复活
-		public revive(){
+		public revive() {
 			let self = this;
-			if(self.hasRevived)
-				return;			
+			if (self.hasRevived)
+				return;
 			self.hasRevived = true;
 
 			self.gameOver = false;
-			
+
 			utils.EventDispatcher.getInstance().dispatchEvent("gameRevive");
 
 			utils.EventDispatcher.getInstance().once("gameResume", () => {
@@ -167,76 +167,108 @@ module planetJump {
 			}, self);
 		}
 
-		public setPause(paused:boolean, pauseBgm:boolean = true){
+		public setPause(paused: boolean, pauseBgm: boolean = true) {
 			let self = this;
-			if(self.isPaused == paused)
+			if (self.isPaused == paused)
 				return;
-			utils.ObjectPool.getInstance().pause = paused;			
-			
-			if(paused && pauseBgm)
+			utils.ObjectPool.getInstance().pause = paused;
+
+			if (paused && pauseBgm)
 				utils.Singleton.get(utils.SoundMgr).pauseBgm();
-			else if(!paused && pauseBgm)
+			else if (!paused && pauseBgm)
 				utils.Singleton.get(utils.SoundMgr).resumeBgm();
-				
-			utils.EventDispatcher.getInstance().dispatchEvent(paused ? "gamePause": "gameResume");
+
+			utils.EventDispatcher.getInstance().dispatchEvent(paused ? "gamePause" : "gameResume");
 		}
 
 		/**
 		 * 使用指定图片分享
 		 */
-		public share(title?:string, shareImgId:number = -1){
+		public share(title?: string, shareImgId: number = -1) {
 			let self = this;
-			if(!platform.isRunInTT())
+			if (!platform.isRunInTT())
 				return;
-			
-			if(!title) title = self.getShareTittle();
+
+			if (!title) title = self.getShareTittle();
 			let info = self.getShareImgUrlId(shareImgId);
 
 			// 分享
 			tt.shareAppMessage({
-				title:title,
-				imageUrlId:info[0],
-				imageUrl:info[1],
-				query:"",					
+				templateId: info[0],
+				success() {
+					console.log("分享成功");
+				},
+				fail(e) {
+					console.log("分享失败");
+				}
 			});
 		}
 
 		// 使用 Canvas 内容作为转发图片（5:4比例）
-		public shareFromCanvas(title?:string, x:number = 0, y:number = 200, width:number = 720, height:number = 576, destWidth:number = 425, destHeight:number = 340){
+		public shareFromCanvas(title?: string, x: number = 0, y: number = 200, width: number = 720, height: number = 576, destWidth: number = 425, destHeight: number = 340) {
 			let self = this;
-			if(!platform.isRunInTT())
+			if (!platform.isRunInTT())
 				return;
-				
-			if(!title) title = self.getShareTittle();
+
+			if (!title) title = self.getShareTittle();
 			let tmpFilePath = canvas.toTempFilePathSync({
-				x:x,
-				y:y,
+				x: x,
+				y: y,
 				width: width,
 				height: height,
 				destWidth: destWidth,
 				destHeight: destHeight
 			});
-			
+
 			tt.shareAppMessage({
-				title:title,
-				imageUrl:tmpFilePath,
-				imageUrlId:"",
-				query:"",			
+				title: title,
+				imageUrl: tmpFilePath,
+				success() {
+					console.log("分享成功");
+				},
+				fail(e) {
+					console.log("分享失败");
+				}
 			});
 		}
-		
+
+		public shareVideo(title: string, desc: string, ok: Function, fail: Function) {
+			if (!MainWindow.instance.recordVideoPath)
+				return;
+			let videoPath = MainWindow.instance.recordVideoPath;
+			tt.shareAppMessage({
+				channel: "video",
+				title: title || "这个feel倍爽！",
+				desc: desc || "这音乐节奏根本停不下来啊！",
+				extra: {
+					videoPath: videoPath,
+					videoTopics: ["LeapOn", "飞跃吧"]
+				},
+				success() {
+					console.log("分享视频成功");
+					ok && ok();
+					MainWindow.instance.recordVideoPath = null;
+				},
+				fail(e) {
+					console.log("分享视频失败");
+					fail && fail();
+					MainWindow.instance.recordVideoPath = null;
+				}
+			});
+		}
+
 		/**
 		 * 获取审核过的分享图信息
 		 */
-		public getShareImgUrlId(shareImgId:number = -1):string[]{
+		public getShareImgUrlId(shareImgId: number = -1): string[] {
 			let arr = [
-				["", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBlMianh5iaqObI06H2J2vLgu5nFsXIfWeEibTsAP9v1DNHsOJAtibgdJhJ/0"],
-				["PVwAwaXOSuOu5Vv9BHR3Yg", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBj6uibjoUHzqqp6ebZqs3F3r0tKDhv5KGyrc2DNu0Gc377cLoQ6QcFia/0"],
-				["qcglU7v4TAuf0eRYI46h8A", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzB7jkV42B09xuer2NToEGcwDiblmJr8vzYic8yTpwl2aD7Jc9t6qI0usk/0"],
-				["8Cqy0zJZSTmH5ARvaopFAw", "https://mmocgame.qpic.cn/wechatgame/ib1ZlEfsuWzBLVSYJqmibcgibsgMzxNfiaY0If5kEBu1KpP0sic4MQPdBApGSTSxX0czt/0"],
+				["2a7l46ei8ll1579ldl", "https://sf1-ttcdn-tos.pstatp.com/img/developer/app/tt75250398ea0f6cbe/si7189869~noop.image"],
+				["1k41r8ua0fx5efjmgj", "https://sf1-ttcdn-tos.pstatp.com/img/developer/app/tt75250398ea0f6cbe/si655571e~noop.image"],
+				["g176e69ajj1ddj3qir", "https://sf1-ttcdn-tos.pstatp.com/img/developer/app/tt75250398ea0f6cbe/sic070d8c~noop.image"],
+				["p3c22o8o8k32mb85jg", "https://sf1-ttcdn-tos.pstatp.com/img/developer/app/tt75250398ea0f6cbe/sib51cc18~noop.image"],
 			];
 
-			if(shareImgId == -1){
+			if (shareImgId == -1) {
 				let idx = Math.floor(1 + Math.random() * (arr.length - 1));
 				return arr[idx];
 			}
@@ -247,7 +279,7 @@ module planetJump {
 		/**
 		 * 获取分享标题
 		 */
-		public getShareTittle(){
+		public getShareTittle() {
 			let arr = [
 				"这可能是最另类的跳一跳了~",
 				"为了逃离黑洞，你不得不跳！",
@@ -267,9 +299,9 @@ module planetJump {
 		/**
 		 * 看广告，失败转分享
 		 */
-		public watchVideoAd(adKey:string, cb:Function){
+		public watchVideoAd(adKey: string, cb: Function) {
 			let self = this;
-			if(!platform.isRunInTT()){
+			if (!platform.isRunInTT()) {
 				return cb(true);
 			}
 
@@ -278,23 +310,23 @@ module planetJump {
 				cb(isEnded);
 			}, () => {
 				// 广告拉取失败改成分享
-				self.shareFromCanvas(null, 0, 185)
+				self.shareFromCanvas()
 				cb(true);
-			});				
+			});
 		}
 
 
-		public dispose(){
+		public dispose() {
 			let self = this;
 			self.level = 1;
 			self.score = 0;
 			utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
-			if(self.timer){
+			if (self.timer) {
 				utils.ObjectPool.getInstance().destroyObject(self.timer);
 				self.timer = null;
 			}
-			
-			GameMgr.instance = null;		
+
+			GameMgr.instance = null;
 		}
 	}
 }

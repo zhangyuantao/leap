@@ -101,7 +101,7 @@ module planetJump {
 
 		private onRecordBtn(e) {
 			let self = this;
-			MainWindow.instance.recordVideo();
+			MainWindow.instance.recordOrStopVideo();
 		}
 
 		public dispose() {

@@ -227,7 +227,7 @@ module planetJump {
 		}
 
 		private onRecordVideo() {
-			MainWindow.instance.recordVideo();
+			MainWindow.instance.recordOrStopVideo();
 		}
 
 		public dispose() {

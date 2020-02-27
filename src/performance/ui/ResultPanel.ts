@@ -1,14 +1,14 @@
 module planetJump {
-	export class ResultPanel extends fairygui.GComponent{
-		private restartBtn:fairygui.GButton;
-		private homeBtn:fairygui.GButton;
-		private reviveBtn:fairygui.GButton;
-		private shareBtn:fairygui.GButton;
-		private txtScore:fairygui.GTextField;
-		private txtScoreBest:fairygui.GTextField;
+	export class ResultPanel extends fairygui.GComponent {
+		private restartBtn: fairygui.GButton;
+		private homeBtn: fairygui.GButton;
+		private reviveBtn: fairygui.GButton;
+		private shareBtn: fairygui.GButton;
+		private txtScore: fairygui.GTextField;
+		private txtScoreBest: fairygui.GTextField;
 
-		public constructFromResource(){
-            super.constructFromResource();
+		public constructFromResource() {
+			super.constructFromResource();
 			let self = this;
 			self.restartBtn = self.getChild("restartBtn").asButton;
 			self.restartBtn.addClickListener(self.onReStartBtn, self);
@@ -20,79 +20,89 @@ module planetJump {
 			self.shareBtn.addClickListener(self.onShareBtn, self);
 			self.txtScore = self.getChild("txtScore").asTextField;
 			self.txtScoreBest = self.getChild("txtScoreBest").asTextField;
-			self.alpha = 0;	
+			self.alpha = 0;
 
 			utils.StageUtils.addEventListener("createGame", self.onCreateGame, self);
 		}
 
-		private onCreateGame(){
+		private onCreateGame() {
 			let self = this;
 			utils.EventDispatcher.getInstance().addEventListener("gameOver", self.onGameOver, self);
 		}
 
-		private onGameOver(){
+		private onGameOver() {
 			let self = this;
 			self.show();
 		}
 
-		private show(){
+		private show() {
 			let self = this;
 			self.txtScore.text = GameMgr.getInstance().score + "";
 			self.txtScoreBest.text = GameMgr.getInstance().scoreRecord + "";
 			self.reviveBtn.visible = !GameMgr.getInstance().hasRevived;
 			self.visible = true;
-			egret.Tween.get(self).to({alpha:1}, 500, egret.Ease.sineInOut);
-			
+			egret.Tween.get(self).to({ alpha: 1 }, 500, egret.Ease.sineInOut);
+
 			// 显示横板排行榜
 			MainWindow.instance.showRankWnd("horizontal", 0, false, false);
 
-			utils.Singleton.get(AdMgr).showBannerAd("结算界面banner");	
+			utils.Singleton.get(AdMgr).showBannerAd("结算界面banner");
+
+			// 停止录屏
+			MainWindow.instance.forceStopVideo();
 		}
 
-		private onReStartBtn(e){
-			let self = this;		
+		private onReStartBtn(e) {
+			let self = this;
 			MainWindow.instance.restartGame();
 			self.hide();
 		}
 
-		private onHomeBtn(e){
-			let self = this;		
+		private onHomeBtn(e) {
+			let self = this;
 			self.hide();
 			MainWindow.instance.backToReadyWindow();
 		}
 
-		private onReviveBtn(e){
+		private onReviveBtn(e) {
 			let self = this;
-			if(GameMgr.getInstance().hasRevived)
+			if (GameMgr.getInstance().hasRevived)
 				return;
-			
+
 			self.touchable = false;
-			GameMgr.getInstance().watchVideoAd("复活广告", (success:boolean) => {
+			GameMgr.getInstance().watchVideoAd("复活广告", (success: boolean) => {
 				self.touchable = true;
-				if(success){
+				if (success) {
 					GameMgr.getInstance().revive();
 					self.hide();
 				}
 			});
 		}
 
-		private onShareBtn(e){
+		private onShareBtn(e) {
 			let self = this;
-			GameMgr.getInstance().shareFromCanvas();
+			if (MainWindow.instance.recordVideoPath) {
+				GameMgr.getInstance().shareVideo(null, null, null, () => {
+					GameMgr.getInstance().shareFromCanvas();					
+				});
+			}
+			else {
+				GameMgr.getInstance().shareFromCanvas();
+			}
 		}
 
-		private hide(){
+		private hide() {
 			let self = this;
 			self.touchable = false;
 			MainWindow.instance.hideRankWnd();
-			egret.Tween.get(self).to({alpha:0}, 500, egret.Ease.sineInOut).call(() => {			
+			egret.Tween.get(self).to({ alpha: 0 }, 500, egret.Ease.sineInOut).call(() => {
 				self.visible = false;
 				self.touchable = true;
-			});	
-			utils.Singleton.get(AdMgr).hideBanner();	
+			});
+			utils.Singleton.get(AdMgr).hideBanner();
 		}
 
-		public dispose(){
+		public dispose() {
 			super.dispose();
 			let self = this;
 			self.restartBtn.removeClickListener(self.onReStartBtn, self);
@@ -100,7 +110,7 @@ module planetJump {
 			self.reviveBtn.removeClickListener(self.onReviveBtn, self);
 			self.shareBtn.removeClickListener(self.onShareBtn, self);
 			utils.StageUtils.removeEventListener("createGame", self.onCreateGame, self);
-			utils.EventDispatcher.getInstance().removeEventListener("gameOver", self.onGameOver, self)	
+			utils.EventDispatcher.getInstance().removeEventListener("gameOver", self.onGameOver, self)
 		}
 	}
 }

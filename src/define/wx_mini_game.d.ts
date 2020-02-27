@@ -28,8 +28,8 @@ declare function setTimeout(callback: () => void, delay: number, rest: any): num
  */
 declare function setInterval(callback: () => void, delay: number, rest: any): number;
 
-declare const canvas:{
-    toTempFilePathSync(arg:any);
+declare const canvas: {
+    toTempFilePathSync(arg: any);
 }
 
 declare const tt: {
@@ -279,11 +279,12 @@ declare const tt: {
      * 取消监听用户点击右上角菜单的“转发”按钮时触发的事件
      */
     offShareAppMessage(callback: () => void): void;
-    showShareMenu(arg:any): void;
+    showShareMenu(arg: any): void;
     /**
      * 主动拉起转发，进入选择通讯录界面。
      */
-    shareAppMessage(object: { title: string, imageUrl: string, imageUrlId:string, query: string}): void;
+    //shareAppMessage(object: { title: string, imageUrl: string, imageUrlId: string, query: string }): void;
+    shareAppMessage(object: any): void;
     updateShareMenu(object: { withShareTicket: boolean, success: (res: any) => void, fail: (res: any) => void, complete: (res: any) => void }): void;
     setEnableDebug(object: { enableDebug: boolean, success: (res: any) => void, fail: (res: any) => void, complete: (res: any) => void }): void;
     /**
