@@ -19,6 +19,7 @@ declare interface Platform {
     loadFont(url: string);
     getGameRecorderManager(): GameRecorderManager;
     showToast(title, duration, icon, successCb, failCb);
+    authorize(scope);
 }
 
 /**头条必接录屏功能 */
@@ -121,6 +122,10 @@ class DebugPlatform implements Platform {
 
     showToast(title, duration, icon, successCb, failCb) {
         console.log(title);
+    }
+
+    async authorize(scope){
+        return null;
     }
 }
 

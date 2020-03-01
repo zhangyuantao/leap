@@ -16,9 +16,38 @@ module planetJump {
 		public guideCompleted: boolean;
 		public hasRevived: boolean;	// 标记该局是否分享过
 
+		/**录屏相关 */
+		public openAutoRecordFlag: boolean; // 开启自动录屏，以及结束时分享录屏
+		public isRecording: boolean;
+		public recordVideoPath: string;
+		public recordTime: number;
+
 		private constructor() {
 			let self = this;
+			/**录屏相关 */
+			if (platform.isRunInTT()) {
+				let flag = egret.localStorage.getItem("openAutoRecord");
+				if (flag && flag == "1") self.openAutoRecordFlag = true;
+				let recorder = platform.getGameRecorderManager();
+				recorder.onStop(res => {
+					self.recordVideoPath = res.videoPath;
+				});
+			}
+
 			utils.EventDispatcher.getInstance().addEventListener("newRound", self.onNewRound, self);
+		}
+
+		public dispose() {
+			let self = this;
+			self.level = 1;
+			self.score = 0;
+			utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
+			if (self.timer) {
+				utils.ObjectPool.getInstance().destroyObject(self.timer);
+				self.timer = null;
+			}
+
+			GameMgr.instance = null;
 		}
 
 		public get isPaused() {
@@ -41,6 +70,10 @@ module planetJump {
 			}
 			else
 				self.scoreRecord = 0;
+
+			// 自动录屏
+			if (self.openAutoRecordFlag)
+				self.recordOrStopVideo();
 
 			utils.EventDispatcher.getInstance().dispatchEvent("startGame");
 		}
@@ -133,7 +166,7 @@ module planetJump {
 				egret.localStorage.setItem("recordTime", now.toString());
 				self.scoreRecord = self.score;
 				let v = {
-					"wxgame": {
+					"ttgame": {
 						"score": self.score,
 						"update_time": Math.floor(now / 1000)
 					},
@@ -143,10 +176,16 @@ module planetJump {
 					"key": "rank",
 					"value": JSON.stringify(v)
 				};
-				platform.setUserCloudStorage([info], res => {
-					console.log("排行榜分数设置成功:", res);
-				});
+
+				if (Main.isScopeUserInfo) {
+					platform.setUserCloudStorage([info], res => {
+						console.log("排行榜分数设置:", res);
+					});
+				}
 			}
+
+			// 停止录屏
+			self.recordOrStopVideo(true);
 
 			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");
 		}
@@ -164,6 +203,7 @@ module planetJump {
 
 			utils.EventDispatcher.getInstance().once("gameResume", () => {
 				utils.EventDispatcher.getInstance().dispatchEvent("gameReviveOk");
+				self.recordOrStopVideo();
 			}, self);
 		}
 
@@ -172,11 +212,6 @@ module planetJump {
 			if (self.isPaused == paused)
 				return;
 			utils.ObjectPool.getInstance().pause = paused;
-
-			if (paused && pauseBgm)
-				utils.Singleton.get(utils.SoundMgr).pauseBgm();
-			else if (!paused && pauseBgm)
-				utils.Singleton.get(utils.SoundMgr).resumeBgm();
 
 			utils.EventDispatcher.getInstance().dispatchEvent(paused ? "gamePause" : "gameResume");
 		}
@@ -233,26 +268,27 @@ module planetJump {
 		}
 
 		public shareVideo(title: string, desc: string, ok: Function, fail: Function) {
-			if (!MainWindow.instance.recordVideoPath)
+			let self = this;
+			if (!self.recordVideoPath)
 				return;
-			let videoPath = MainWindow.instance.recordVideoPath;
+
 			tt.shareAppMessage({
 				channel: "video",
 				title: title || "这个feel倍爽！",
 				desc: desc || "这音乐节奏根本停不下来啊！",
 				extra: {
-					videoPath: videoPath,
+					videoPath: self.recordVideoPath,
 					videoTopics: ["LeapOn", "飞跃吧"]
 				},
 				success() {
 					console.log("分享视频成功");
 					ok && ok();
-					MainWindow.instance.recordVideoPath = null;
+					self.recordVideoPath = null;
 				},
 				fail(e) {
 					console.log("分享视频失败");
 					fail && fail();
-					MainWindow.instance.recordVideoPath = null;
+					self.recordVideoPath = null;
 				}
 			});
 		}
@@ -315,18 +351,45 @@ module planetJump {
 			});
 		}
 
-
-		public dispose() {
+		/**
+		 * 开启或停止录屏
+		 */
+		public recordOrStopVideo(forceStop?: boolean) {
 			let self = this;
-			self.level = 1;
-			self.score = 0;
-			utils.EventDispatcher.getInstance().removeEventListener("newRound", self.onNewRound, self);
-			if (self.timer) {
-				utils.ObjectPool.getInstance().destroyObject(self.timer);
-				self.timer = null;
-			}
+			if (!platform.isRunInTT())
+				return;
 
-			GameMgr.instance = null;
+			let recorder = platform.getGameRecorderManager();
+
+			if (!self.isRecording) {
+				self.isRecording = true;
+				recorder.start({ duration: 30 });
+				self.recordTime = Date.now();
+
+				//utils.StageUtils.dispatchEvent("onRecord", false, 1);
+			}
+			else {
+				let dt = Date.now() - self.recordTime;
+				if (forceStop || dt > 3000) {
+					recorder.stop();
+					self.isRecording = false;
+					self.recordTime = 0;
+
+					//utils.StageUtils.dispatchEvent("onRecord", false, 0);
+				}
+				else {
+					console.warn("录屏时长需大于3秒~");
+				}
+			}
+		}
+
+		/**
+		 * 设置游戏开局自动录屏以及结束后的分享按钮行为为分享录屏
+		 */
+		public setAutoRecord(open: boolean) {
+			let self = this;
+			self.openAutoRecordFlag = open;
+			egret.localStorage.setItem("openAutoRecord", open ? "1" : "0");
 		}
 	}
 }

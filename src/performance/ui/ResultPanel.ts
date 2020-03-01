@@ -6,6 +6,7 @@ module planetJump {
 		private shareBtn: fairygui.GButton;
 		private txtScore: fairygui.GTextField;
 		private txtScoreBest: fairygui.GTextField;
+		private noScope: fairygui.Controller;
 
 		public constructFromResource() {
 			super.constructFromResource();
@@ -20,8 +21,8 @@ module planetJump {
 			self.shareBtn.addClickListener(self.onShareBtn, self);
 			self.txtScore = self.getChild("txtScore").asTextField;
 			self.txtScoreBest = self.getChild("txtScoreBest").asTextField;
+			self.noScope = self.getController("noScope");
 			self.alpha = 0;
-
 			utils.StageUtils.addEventListener("createGame", self.onCreateGame, self);
 		}
 
@@ -44,12 +45,14 @@ module planetJump {
 			egret.Tween.get(self).to({ alpha: 1 }, 500, egret.Ease.sineInOut);
 
 			// 显示横板排行榜
-			MainWindow.instance.showRankWnd("horizontal", 0, false, false);
+			if (Main.isScopeUserInfo) {
+				self.noScope.setSelectedIndex(0);
+				MainWindow.instance.showRankWnd("horizontal", 0, false, false);
+			}
+			else
+				self.noScope.setSelectedIndex(1);
 
 			utils.Singleton.get(AdMgr).showBannerAd("结算界面banner");
-
-			// 停止录屏
-			MainWindow.instance.forceStopVideo();
 		}
 
 		private onReStartBtn(e) {
@@ -81,9 +84,10 @@ module planetJump {
 
 		private onShareBtn(e) {
 			let self = this;
-			if (MainWindow.instance.recordVideoPath) {
+			// 如果有录屏则分享录屏
+			if (GameMgr.getInstance().recordVideoPath) {
 				GameMgr.getInstance().shareVideo(null, null, null, () => {
-					GameMgr.getInstance().shareFromCanvas();					
+					GameMgr.getInstance().shareFromCanvas();
 				});
 			}
 			else {

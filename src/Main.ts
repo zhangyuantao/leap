@@ -2,21 +2,27 @@ class Main extends egret.DisplayObjectContainer {
     //public static systemInfo:any;
     public static isScopeUserInfo: boolean;
     public static myAvatarUrl: string = "";
+    public static loginData:any; 
 
     public constructor() {
         super();
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
 
+    // 是否在平台登录
+    public static isLogin(){
+        return Main.loginData.isLogin;
+    }
+
     private onAddToStage(event: egret.Event) {
 
-        egret.lifecycle.addLifecycleListener((context) => {
+        /*egret.lifecycle.addLifecycleListener((context) => {
             // custom lifecycle plugin
 
             context.onUpdate = () => {
 
             }
-        })
+        })*/
 
         egret.lifecycle.onPause = () => {
             egret.ticker.pause();
@@ -33,23 +39,22 @@ class Main extends egret.DisplayObjectContainer {
         })
     }
 
-    private async runGame() {
-        RES.setMaxLoadingThread(1);
-    
+    private async runGame() {    
         await this.loadResource();
-        let loginData = await platform.login();
+
+        this.createGameScene();
+
+        Main.loginData  = await platform.login();
+
         // 读取设备信息
         //Main.systemInfo = await platform.getSystemInfo();
 
         const setting = await platform.getSetting();
         Main.isScopeUserInfo = setting["authSetting"]["scope.userInfo"];
-
         if (Main.isScopeUserInfo) {
             const userInfo = await platform.getUserInfo();
             Main.myAvatarUrl = userInfo.avatarUrl;
         }
-
-        this.createGameScene();
     }
 
     private async loadResource() {
@@ -65,8 +70,8 @@ class Main extends egret.DisplayObjectContainer {
                 command: "loadRes"
             });
 
-            let fontName = platform.loadFont("resource/RubikOne-Regular.ttf");
-            console.log("loadFont:", fontName);
+            // let fontName = platform.loadFont("resource/RubikOne-Regular.ttf");
+            // console.log("loadFont:", fontName);
         }
         catch (e) {
             console.error(e);

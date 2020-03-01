@@ -13,7 +13,6 @@ module planetJump {
 		private continueBtn: fairygui.GButton;
 		private newRecord: fairygui.GComponent;
 		private gameOverCtrl: fairygui.Controller;
-		private platCtrl: fairygui.Controller;
 
 		private soundOn: boolean = true;
 		private hasShowNewRecord: boolean = false;
@@ -53,12 +52,14 @@ module planetJump {
 			let self = this;
 			self.pauseBtn = self.getChild("pauseBtn").asButton;
 			self.pauseBtn.addClickListener(self.onPauseBtn, self);
-			self.musicBtn = self.getChild("musicBtn").asButton;
-			self.musicBtn.addClickListener(self.onMusicBtn, self);
-			self.helpBtn = self.getChild("helpBtn").asButton;
-			self.helpBtn.addClickListener(self.showHelpPanel, self);
 			self.pausePanel = self.getChild("pausePanel").asCom;
 			self.pausePanel.visible = false;
+			self.musicBtn = self.pausePanel.getChild("musicBtn").asButton;
+			self.musicBtn.addClickListener(self.onMusicBtn, self);
+			self.recordBtn = self.pausePanel.getChild("recordBtn").asButton;
+			self.recordBtn.addClickListener(self.onRecordBtn, self);
+			self.helpBtn = self.pausePanel.getChild("helpBtn").asButton;
+			self.helpBtn.addClickListener(self.showHelpPanel, self);
 			self.helpPanel = self.getChild("helpPanel").asCom;
 			self.helpPanel.visible = false;
 			self.closeHelpBtn = self.helpPanel.getChild("closeBtn").asButton;
@@ -73,23 +74,6 @@ module planetJump {
 			self.levelTxt.alpha = 0;
 			self.newRecord = self.getChild("newRecord").asCom;
 			self.newRecord.alpha = 0;
-			self.platCtrl = self.getController("platCtrl");
-
-			self.platCtrl.setSelectedPage("tt");
-			self.recordBtn = self.getChild("recordBtn").asButton;
-			self.recordBtn.addClickListener(self.onRecordVideo, self);
-
-			utils.StageUtils.addEventListener("onRecord", self.onRecord, self);
-		}
-
-		private onRecord(e:egret.Event) {
-			let self = this;
-			let flag = e.data;
-			self.recordBtn.getController("state").setSelectedPage(flag ? "down" : "up");
-			if (flag)
-				self.recordBtn.getTransition("recordAni").play(null, null, null, -1);
-			else
-				self.recordBtn.getTransition("recordAni").stop();
 		}
 
 		private onPauseBtn(e) {
@@ -114,6 +98,8 @@ module planetJump {
 		private showPausePanel() {
 			let self = this;
 			self.pausePanel.visible = true;
+			self.recordBtn.selected = GameMgr.getInstance().openAutoRecordFlag;
+
 			egret.Tween.removeTweens(self.pausePanel);
 			egret.Tween.get(self.pausePanel).to({ alpha: 1 }, 300, egret.Ease.sineInOut);
 
@@ -172,7 +158,7 @@ module planetJump {
 
 		private onLevelUp(lv: number) {
 			let self = this;
-			self.levelTxt.getChild("txt").asTextField.text = "LEVEL " + lv;
+			self.levelTxt.getChild("txt").asTextField.text = "" + lv;
 			egret.Tween.get(self.levelTxt).set({ alpha: 0 }).to({ alpha: 1, scaleX: 1.5, scaleY: 1.5 }, 500, egret.Ease.sineInOut).wait(500).to({ alpha: 0, scaleX: 1, scaleY: 1 }, 500, egret.Ease.sineInOut);
 		}
 
@@ -203,7 +189,7 @@ module planetJump {
 
 		private showHelpPanel() {
 			let self = this;
-			if (GameMgr.getInstance().isPaused || GameMgr.getInstance().gameOver)
+			if (GameMgr.getInstance().gameOver)
 				return;
 			GameMgr.getInstance().setPause(true, false);
 
@@ -216,9 +202,7 @@ module planetJump {
 		}
 
 		private closeHelpPanel() {
-			let self = this;
-			GameMgr.getInstance().setPause(false, false);
-
+			let self = this;			
 			egret.Tween.removeTweens(self.helpPanel);
 			egret.Tween.get(self.helpPanel).to({ alpha: 0 }, 300, egret.Ease.sineInOut).call(() => {
 				self.helpPanel.visible = false;
@@ -226,8 +210,10 @@ module planetJump {
 			utils.Singleton.get(AdMgr).hideBanner();
 		}
 
-		private onRecordVideo() {
-			MainWindow.instance.recordOrStopVideo();
+		private onRecordBtn() {
+			let self = this;
+			let open = self.recordBtn.selected;
+			GameMgr.getInstance().setAutoRecord(open); 
 		}
 
 		public dispose() {
@@ -238,10 +224,9 @@ module planetJump {
 			self.helpBtn.removeClickListener(self.showHelpPanel, self);
 			self.closeHelpBtn.addClickListener(self.closeHelpPanel, self);
 			self.continueBtn.removeClickListener(self.onContinueBtn, self);
-			self.recordBtn.removeClickListener(self.onRecordVideo, self);
+			self.recordBtn.removeClickListener(self.onRecordBtn, self);
 
 			utils.StageUtils.removeEventListener("createGame", self.onCreateGame, self);
-			utils.StageUtils.removeEventListener("onRecord", self.onRecord, self);
 			utils.EventDispatcher.getInstance().removeEventListener("updateScore", self.updateScore, self);
 			utils.EventDispatcher.getInstance().removeEventListener("onAppPause", self.onPause, self);
 			utils.EventDispatcher.getInstance().removeEventListener("gameRevive", self.pause, self);

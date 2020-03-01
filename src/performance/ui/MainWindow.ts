@@ -5,9 +5,6 @@ module planetJump {
 	export class MainWindow extends BaseWindow {
 		public static instance: MainWindow;
 		public textureBg: TextureBackground;
-		public isRecording: boolean;
-		public recordVideoPath: boolean;
-		public recordTime: number;
 
 		private readyPanel: ReadyPanel;
 		private btnCloseRank: fairygui.GButton;
@@ -33,11 +30,6 @@ module planetJump {
 
 				// 用户点击了“转发”按钮
 				tt.onShareAppMessage(self.onShareAppMessage);
-
-				let recorder = platform.getGameRecorderManager();
-				recorder.onStop(res => {
-					self.recordVideoPath = res.videoPath;
-				});
 			}
 		}
 
@@ -202,6 +194,12 @@ module planetJump {
 			let self = this;
 			if (!platform.isRunInTT())
 				return;
+
+			// 是否授权
+			if (!Main.isScopeUserInfo) {
+				return self.scope();
+			}
+
 			if (!self.isShowRank) {
 				self.lastRankType = self.curRankType;
 				self.curRankType = type;
@@ -249,6 +247,15 @@ module planetJump {
 				utils.Singleton.get(AdMgr).hideBanner();
 		}
 
+		private async scope() {
+			let res = await platform.authorize("scope.userInfo");
+			Main.isScopeUserInfo = true;
+			const userInfo = await platform.getUserInfo();
+			Main.myAvatarUrl = userInfo.avatarUrl;
+
+			this.showRankWnd();
+		}
+
 		private onCloseRank(e) {
 			let self = this;
 			self.hideRankWnd();
@@ -286,45 +293,6 @@ module planetJump {
 			let self = this;
 			self.destroyGame();
 			self.readyPanel.show();
-		}
-
-		public recordOrStopVideo() {
-			let self = this;
-			if (!platform.isRunInTT())
-				return;
-
-			let recorder = platform.getGameRecorderManager();
-
-			if (!self.isRecording) {
-				self.isRecording = true;
-				recorder.start({ duration: 30 });
-				self.recordTime = Date.now();
-
-				utils.StageUtils.dispatchEvent("onRecord", false, 1);
-			} else {
-				let dt = Date.now() - self.recordTime;
-				if (dt > 3000) {
-					recorder.stop();
-					self.isRecording = false;
-
-					utils.StageUtils.dispatchEvent("onRecord", false, 0);
-				}
-				else {
-					console.warn("录屏时长需大于3秒~");
-				}
-			}
-		}
-
-		public forceStopVideo() {
-			let self = this;
-			if (!platform.isRunInTT())
-				return;
-
-			if (self.isRecording) {
-				let recorder = platform.getGameRecorderManager();
-				recorder.stop();
-			}
-
 		}
 	}
 }
