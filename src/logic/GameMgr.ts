@@ -27,11 +27,14 @@ module planetJump {
 			/**录屏相关 */
 			if (platform.isRunInTT()) {
 				let flag = egret.localStorage.getItem("openAutoRecord");
-				if (flag && flag == "1") self.openAutoRecordFlag = true;
+				if (!flag || flag == "" || flag == "open" || flag == "1")  // == 1 兼容旧数据
+					self.openAutoRecordFlag = true;
+				else
+					self.openAutoRecordFlag = false;
+
 				let recorder = platform.getGameRecorderManager();
 				recorder.onStop(res => {
 					self.recordVideoPath = res.videoPath;
-					console.log("onStop:", self.recordVideoPath );
 				});
 			}
 
@@ -177,7 +180,7 @@ module planetJump {
 					"value": JSON.stringify(v)
 				};
 
-				if (Main.isScopeUserInfo) {
+				if (Main.isScopeUserInfo()) {
 					platform.setUserCloudStorage([info], res => {
 						console.log("排行榜分数设置:", res);
 					});
@@ -185,7 +188,7 @@ module planetJump {
 			}
 
 			self.setPause(true);
-			
+
 			self.recordOrStopVideo(true); // 停止录屏
 
 			utils.Singleton.get(utils.SoundMgr).pauseBgm();
@@ -226,7 +229,7 @@ module planetJump {
 			if (!platform.isRunInTT())
 				return;
 
-			if (!title) title = self.getShareTittle();
+			//if (!title) title = self.getShareTittle();
 			let info = self.getShareImgUrlId(shareImgId);
 
 			// 分享
@@ -280,7 +283,7 @@ module planetJump {
 				desc: desc || "这音乐节奏根本停不下来啊！",
 				extra: {
 					videoPath: self.recordVideoPath,
-					videoTopics: ["LeapOn", "飞跃吧"]
+					videoTopics: ["飞跃吧"]
 				},
 				success() {
 					console.log("分享视频成功");
@@ -361,7 +364,7 @@ module planetJump {
 			if (!platform.isRunInTT())
 				return;
 
-			if (forceStop) 
+			if (forceStop)
 				return self.stopRecord();
 
 			if (!self.isRecording) {
@@ -369,8 +372,6 @@ module planetJump {
 				let recorder = platform.getGameRecorderManager();
 				recorder.start({ duration: 30 });
 				self.recordTime = Date.now();
-
-				console.log("isRecording");
 			}
 			else {
 				let dt = Date.now() - self.recordTime;
@@ -397,7 +398,7 @@ module planetJump {
 		public setAutoRecord(open: boolean) {
 			let self = this;
 			self.openAutoRecordFlag = open;
-			egret.localStorage.setItem("openAutoRecord", open ? "1" : "0");
+			egret.localStorage.setItem("openAutoRecord", open ? "open" : "close");
 		}
 	}
 }

@@ -34,7 +34,7 @@ module planetJump {
 		}
 
 		// 展示banner广告
-		public showBannerAd(adName: string, left?: number, top?: number, width?: number) {
+		public showBannerAd(adName: string) {
 			let self = this;
 			if (!platform.isRunInTT())
 				return;
@@ -43,12 +43,13 @@ module planetJump {
 			if (!adId)
 				return;
 
+			let bannerW = 200;
 			let info = {
 				adUnitId: adId,
 				style: {
-					left: (self.screenWidth - 300) * 0.5,
-					top: top || 0,
-					width: 300
+					width: bannerW,
+					left: (self.screenWidth - bannerW) * 0.5,
+					top: self.screenHeight + (bannerW / 16) * 9 // 根据系统约定尺寸计算出广告高度
 				}
 			};
 
@@ -59,8 +60,9 @@ module planetJump {
 				self.bannerComp.show();
 			});
 			self.bannerComp.onError(e => console.log(e));
-			self.bannerComp.onResize(res => {
-				self.bannerComp.style.top = self.screenHeight - res.height;
+			self.bannerComp.onResize(size => {
+				self.bannerComp.style.top = self.screenHeight - size.height;
+				self.bannerComp.style.left = (self.screenWidth - size.width) / 2;
 			});
 		}
 

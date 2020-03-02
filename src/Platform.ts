@@ -8,7 +8,7 @@ declare interface Platform {
     openDataContext: any;
     isRunInTT(): boolean;
     getUserInfo(): Promise<any>;
-    login(): Promise<any>;
+    login(force: boolean): Promise<any>;
     getSetting(): Promise<any>;
     getSystemInfo(): Promise<any>;
     getUserCloudStorage(keyArr: string[]): Promise<any>;
@@ -20,6 +20,7 @@ declare interface Platform {
     getGameRecorderManager(): GameRecorderManager;
     showToast(title, duration, icon, successCb, failCb);
     authorize(scope);
+    showModal(title, content);
 }
 
 /**头条必接录屏功能 */
@@ -79,31 +80,6 @@ class DebugPlatform implements Platform {
         return null;
     }
 
-    // 微量平台广告接口
-    wladGetAds(num, cb) {
-        let testInfo = {
-            "code": 0,
-            "data": [
-                {
-                    "appid": "wx46ce62a969b2c121",
-                    "desc": "追忆似水年华，天天答题领红包，可以转发给父母的关爱",
-                    "img": "https://wllm.oss-cn-beijing.aliyuncs.com/trackposter/wx46ce62a969b2c121/1127155c9372026a8098_1.jpg",
-                    "logo": "https://wllm.oss-cn-beijing.aliyuncs.com/logoa/wx46ce62a969b2c121.png",
-                    "name": "答题天天乐"
-                },
-                {
-                    "appid": "wx7e5637f105ddc564",
-                    "desc": "没有来日方长，只有时光匆匆。珍惜当下的每一分每一秒",
-                    "img": "https://wllm.oss-cn-beijing.aliyuncs.com/trackposter/wx7e5637f105ddc564/d3c358c96baed85e4e7e_1.jpg",
-                    "logo": "https://wllm.oss-cn-beijing.aliyuncs.com/logoa/wx7e5637f105ddc564.png",
-                    "name": "人生时间管理"
-                }
-            ]
-        };
-
-        cb(testInfo);
-    }
-
     isRuniOS() {
         return true;
     }
@@ -120,11 +96,15 @@ class DebugPlatform implements Platform {
         return null;
     }
 
-    showToast(title, duration, icon, successCb, failCb) {
+    showToast(title, duration) {
         console.log(title);
     }
 
-    async authorize(scope){
+    async authorize(scope) {
+        return null;
+    }
+
+    async showModal(title, content) {
         return null;
     }
 }

@@ -36,9 +36,8 @@ module planetJump {
 		private onShareAppMessage() {
 			let info = GameMgr.getInstance().getShareImgUrlId(0);
 			return {
-				title: "LeapOn!一起飞跃吧！",
-				imageUrlId: info[0],
-				imageUrl: info[0]
+				title: "一起飞跃吧！",
+				templateId: info[0]
 			}
 		}
 
@@ -196,7 +195,7 @@ module planetJump {
 				return;
 
 			// 是否授权
-			if (!Main.isScopeUserInfo) {
+			if (!Main.isScopeUserInfo()) {
 				return self.scope();
 			}
 
@@ -238,7 +237,7 @@ module planetJump {
 					text: "egret",
 					year: (new Date()).getFullYear(),
 					command: "open",
-					myAvatarUrl: Main.myAvatarUrl,
+					myAvatarUrl: self.myAvatarUrl,
 					rankType: type
 				});
 			}
@@ -248,12 +247,35 @@ module planetJump {
 		}
 
 		private async scope() {
-			let res = await platform.authorize("scope.userInfo");
-			Main.isScopeUserInfo = true;
-			const userInfo = await platform.getUserInfo();
-			Main.myAvatarUrl = userInfo.avatarUrl;
+			let self = this;
+			Main.loginData = await platform.login(false);
+			if (!Main.isLogin()) {
+				let res = await platform.showModal("温馨提示", "排行榜需先登录获取用户信息。\n是否登录？");
+				if (res.confirm) {
+					Main.loginData = await platform.login(true);
+				}
+				return;
+			}
 
-			this.showRankWnd();
+			const setting = await platform.getSetting();
+			let scopeUserInfo = setting["authSetting"]["scope.userInfo"];
+			if (scopeUserInfo == undefined) {// == undefined表示未授权过	
+				let res = await platform.authorize("scope.userInfo");
+				scopeUserInfo = res["data"]["scope.userInfo"];
+			}
+
+			if (scopeUserInfo) {
+				const userInfo = await platform.getUserInfo();
+				self.myAvatarUrl = userInfo.avatarUrl;
+				self.showRankWnd();
+			}
+			else { // 用户拒绝过了
+				let res = await platform.showModal("排行榜用户信息授权", "点击确定后将打开设置界面,\n请打开[用户信息]权限");
+				if (res.confirm)
+					tt.openSetting();
+			}
+
+			Main.scopeUserInfo = scopeUserInfo;
 		}
 
 		private onCloseRank(e) {

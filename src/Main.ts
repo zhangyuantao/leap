@@ -1,8 +1,7 @@
 class Main extends egret.DisplayObjectContainer {
     //public static systemInfo:any;
-    public static isScopeUserInfo: boolean;
-    public static myAvatarUrl: string = "";
-    public static loginData:any; 
+    public static scopeUserInfo: any;
+    public static loginData: any;
 
     public constructor() {
         super();
@@ -10,8 +9,13 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     // 是否在平台登录
-    public static isLogin(){
+    public static isLogin() {
         return Main.loginData.isLogin;
+    }
+
+    // 是否授权用户信息
+    public static isScopeUserInfo() {
+        return Main.scopeUserInfo == true;
     }
 
     private onAddToStage(event: egret.Event) {
@@ -39,22 +43,22 @@ class Main extends egret.DisplayObjectContainer {
         })
     }
 
-    private async runGame() {    
+    private async runGame() {
         await this.loadResource();
 
         this.createGameScene();
 
-        Main.loginData  = await platform.login();
+        //Main.loginData  = await platform.login(false);
 
         // 读取设备信息
         //Main.systemInfo = await platform.getSystemInfo();
 
-        const setting = await platform.getSetting();
-        Main.isScopeUserInfo = setting["authSetting"]["scope.userInfo"];
-        if (Main.isScopeUserInfo) {
-            const userInfo = await platform.getUserInfo();
-            Main.myAvatarUrl = userInfo.avatarUrl;
-        }
+        // const setting = await platform.getSetting();
+        // Main.scopeUserInfo = setting["authSetting"]["scope.userInfo"];
+        // if (Main.isScope()) {
+        //     const userInfo = await platform.getUserInfo();
+        //     Main.myAvatarUrl = userInfo.avatarUrl;
+        // }
     }
 
     private async loadResource() {

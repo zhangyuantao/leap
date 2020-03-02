@@ -6,7 +6,7 @@ module planetJump {
 		constructFromResource(){
 			super.constructFromResource();
 			let self = this;
-			self.wladGetAds();
+			//self.wladGetAds();
 			self.addClickListener(self.onClick, self);
 		}
 

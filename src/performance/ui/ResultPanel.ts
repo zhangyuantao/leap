@@ -45,7 +45,7 @@ module planetJump {
 			egret.Tween.get(self).to({ alpha: 1 }, 500, egret.Ease.sineInOut);
 
 			// 显示横板排行榜
-			if (Main.isScopeUserInfo) {
+			if (Main.isScopeUserInfo()) {
 				self.noScope.setSelectedIndex(0);
 				MainWindow.instance.showRankWnd("horizontal", 0, false, false);
 			}
