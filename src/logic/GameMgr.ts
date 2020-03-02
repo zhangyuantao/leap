@@ -31,6 +31,7 @@ module planetJump {
 				let recorder = platform.getGameRecorderManager();
 				recorder.onStop(res => {
 					self.recordVideoPath = res.videoPath;
+					console.log("onStop:", self.recordVideoPath );
 				});
 			}
 
@@ -157,7 +158,6 @@ module planetJump {
 		public dead() {
 			let self = this;
 			self.gameOver = true;
-			self.setPause(true);
 
 			// 存储新纪录
 			if (self.score > self.scoreRecord) {
@@ -184,8 +184,11 @@ module planetJump {
 				}
 			}
 
-			// 停止录屏
-			self.recordOrStopVideo(true);
+			self.setPause(true);
+			
+			self.recordOrStopVideo(true); // 停止录屏
+
+			utils.Singleton.get(utils.SoundMgr).pauseBgm();
 
 			utils.EventDispatcher.getInstance().dispatchEvent("gameOver");
 		}
@@ -196,14 +199,13 @@ module planetJump {
 			if (self.hasRevived)
 				return;
 			self.hasRevived = true;
-
 			self.gameOver = false;
-
 			utils.EventDispatcher.getInstance().dispatchEvent("gameRevive");
-
 			utils.EventDispatcher.getInstance().once("gameResume", () => {
 				utils.EventDispatcher.getInstance().dispatchEvent("gameReviveOk");
 				self.recordOrStopVideo();
+
+				utils.Singleton.get(utils.SoundMgr).resumeBgm();
 			}, self);
 		}
 
@@ -359,28 +361,34 @@ module planetJump {
 			if (!platform.isRunInTT())
 				return;
 
-			let recorder = platform.getGameRecorderManager();
+			if (forceStop) 
+				return self.stopRecord();
 
 			if (!self.isRecording) {
 				self.isRecording = true;
+				let recorder = platform.getGameRecorderManager();
 				recorder.start({ duration: 30 });
 				self.recordTime = Date.now();
 
-				//utils.StageUtils.dispatchEvent("onRecord", false, 1);
+				console.log("isRecording");
 			}
 			else {
 				let dt = Date.now() - self.recordTime;
-				if (forceStop || dt > 3000) {
-					recorder.stop();
-					self.isRecording = false;
-					self.recordTime = 0;
-
-					//utils.StageUtils.dispatchEvent("onRecord", false, 0);
+				if (dt > 3000) {
+					self.stopRecord();
 				}
 				else {
 					console.warn("录屏时长需大于3秒~");
 				}
 			}
+		}
+
+		private stopRecord() {
+			let self = this;
+			let recorder = platform.getGameRecorderManager();
+			recorder.stop();
+			self.isRecording = false;
+			self.recordTime = 0;
 		}
 
 		/**

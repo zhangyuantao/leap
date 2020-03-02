@@ -122,8 +122,6 @@ module planetJump {
 			// 死亡特效
 			egret.Tween.get(self.mainUI).to({alpha:0}, 300);		
 			World.instance.spawnUIAni(DeadAni, self.x, self.y);
-			
-			utils.Singleton.get(utils.SoundMgr).pauseBgm();
 
 			// 死亡音效
 			utils.Singleton.get(utils.SoundMgr).playSound("DM-CGS-10_edited_mp3");
