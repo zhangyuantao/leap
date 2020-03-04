@@ -159,7 +159,7 @@ module planetJump {
 		private onLevelUp(lv: number) {
 			let self = this;
 			self.levelTxt.getChild("txt").asTextField.text = "" + lv;
-			egret.Tween.get(self.levelTxt).set({ alpha: 0 }).to({ alpha: 1, scaleX: 1.5, scaleY: 1.5 }, 500, egret.Ease.sineInOut).wait(500).to({ alpha: 0, scaleX: 1, scaleY: 1 }, 500, egret.Ease.sineInOut);
+			egret.Tween.get(self.levelTxt).set({ alpha: 0 }).to({ alpha: 1, scaleX: 1.5, scaleY: 1.5 }, 500, egret.Ease.sineInOut).wait(700).to({ alpha: 0, scaleX: 1, scaleY: 1 }, 500, egret.Ease.sineInOut);
 		}
 
 		private updateScore(score: number) {
