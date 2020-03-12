@@ -91,6 +91,7 @@ module utils {
 			let self = this;
 			self.listeners = null;
 			EventDispatcher.instance = null;
+			console.log("EventDispatcher释放");
 		}
 	}
 

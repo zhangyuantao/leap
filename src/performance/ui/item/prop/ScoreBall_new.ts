@@ -13,7 +13,7 @@ module planetJump {
 		public onCreate(){
 			super.onCreate();
 			let self = this;
-			self.key = ItemDefine.ScoreBall;
+			self.key = ItemDefine.ScoreBall_new;
 		}
 
 		protected applyEffect(player:Player){

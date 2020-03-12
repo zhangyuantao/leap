@@ -52,6 +52,7 @@ module planetJump {
 			}
 
 			GameMgr.instance = null;
+			console.log("GameMgr释放");
 		}
 
 		public get isPaused() {

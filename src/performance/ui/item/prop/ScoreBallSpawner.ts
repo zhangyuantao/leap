@@ -3,7 +3,7 @@ module planetJump {
 		public spawnInterval:number = 1500;
 		
 		public constructor(){
-			super(ItemDefine.ScoreBall);
+			super(ItemDefine.ScoreBall_new);
 			let self = this;
 			let itemCfg = GameCfg.getCfg().Items[self.key];
 			self.spawnInterval = itemCfg.spawnInterval;

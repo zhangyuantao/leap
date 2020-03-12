@@ -29,13 +29,14 @@ module planetJump {
 			self.itemNumRecord = null;
 			self.itemClasses = null;
 			ItemMgr.instance = null;
+			console.log("ItemMgr释放");
 		}
 
 		private registerItem(){
 			let self = this;
 			self.itemClasses = {};
 			self.itemClasses[ItemDefine.WhiteBall] = WhiteBall;
-			self.itemClasses[ItemDefine.ScoreBall] = ScoreBall_new;
+			self.itemClasses[ItemDefine.ScoreBall_new] = ScoreBall_new;
 			self.itemClasses[ItemDefine.Explode] = Explode;
 			self.itemClasses[ItemDefine.ExplodeSpike] = ExplodeSpike;
 			self.itemClasses[ItemDefine.MegaJump] = MegaJump;
@@ -46,7 +47,7 @@ module planetJump {
 			self.itemClasses[ItemDefine.Cut] = Cut;
 			self.itemClasses[ItemDefine.ObCircle] = ObCircle;
 			self.itemClasses[ItemDefine.ObTriangle] = ObTriangle;
-			self.itemClasses[ItemDefine.ObSquare] = ObSquare_new;
+			self.itemClasses[ItemDefine.ObSquare_new] = ObSquare_new;
 			self.itemClasses[ItemDefine.ObTube] = ObTube;
 
 			self.spwaners = [];	

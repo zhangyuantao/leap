@@ -33,7 +33,7 @@ module planetJump {
 			let self = this;
 			self.touchEnabled = false;
 			self.touchChildren = false;
-			self.line = fairygui.UIPackage.createObject("leap", "BaseImgWhite");
+			self.line = fairygui.UIPackage.createObject("leap", "EndLineUI");
 			self.line.touchable = false;
 			self.line.width = 8;
 			self.line.pivotX = 0.5;

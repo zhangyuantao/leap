@@ -25,7 +25,7 @@ module planetJump {
 		public onDestroy(){
 			let self = this;
 			self.timers = null;
-			//console.log("onDestroy:", self.key);
+			console.log("MyTimer onDestroy:", self.key);
 		}
 
 		public onEnterFrame(deltaTime:number){

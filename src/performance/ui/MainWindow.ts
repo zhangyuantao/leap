@@ -179,9 +179,10 @@ module planetJump {
 
 		// 销毁游戏
 		public destroyGame() {
+			console.log("销毁游戏");
 			ItemMgr.getInstance().dispose();
-			utils.ObjectPool.getInstance().dispose();
 			GameMgr.getInstance().dispose();
+			utils.ObjectPool.getInstance().dispose();
 			utils.EventDispatcher.getInstance().dispose();
 		}
 

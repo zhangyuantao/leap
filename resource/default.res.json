@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "leapConfig_json,leap_atlas0,leap_atlas0_1,leap,back_music_mp3,black_explosion_mp3,Decrease_swap_1_mp3,DM-CGS-10_edited_mp3,gravityeffect2_mp3,Increase_chord_1_edited_mp3,multiplier2_mp3,newHighScore_mp3,power_1_b_edited_mp3,retro_jump_collect_bonus_03_mp3,revive2_mp3,star_sound_final_mp3,thunderbolt_mp3,WhooshesImpacts_Impact_64_edited_mp3",
+			"keys": "leapConfig_json,leap_atlas0,leap_atlas1,leap,back_music_mp3,black_explosion_mp3,Decrease_swap_1_mp3,DM-CGS-10_edited_mp3,gravityeffect2_mp3,Increase_chord_1_edited_mp3,multiplier2_mp3,newHighScore_mp3,power_1_b_edited_mp3,retro_jump_collect_bonus_03_mp3,revive2_mp3,star_sound_final_mp3,thunderbolt_mp3,WhooshesImpacts_Impact_64_edited_mp3",
 			"name": "preload"
 		}
 	],
@@ -22,9 +22,9 @@
 			"name": "leap_atlas0"
 		},
 		{
-			"url": "assets/leap_atlas0_1.png",
+			"url": "assets/leap_atlas1.png",
 			"type": "image",
-			"name": "leap_atlas0_1"
+			"name": "leap_atlas1"
 		},
 		{
 			"url": "assets/sound/back_music.mp3",

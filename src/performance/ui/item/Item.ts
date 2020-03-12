@@ -69,8 +69,8 @@ module planetJump {
 			let self = this;			
 			let cfg = GameCfg.getCfg().Items[self.key];
 			let addValue = GameMgr.getInstance().addScore(cfg.score);
-			let ani = World.instance.spawnUIAni(AddScoreAni, self.x, self.y) as AddScoreAni; // 加分特效
-			ani.setScore(addValue);
+			//let ani = World.instance.spawnUIAni(AddScoreAni, self.x, self.y) as AddScoreAni; // 加分特效
+			//ani.setScore(addValue);
 		}
 
 		protected onAddToStage(e){

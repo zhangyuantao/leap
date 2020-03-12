@@ -3,7 +3,7 @@ module planetJump {
 		public onCreate(){
 			super.onCreate();
 			let self = this;
-			self.key = ItemDefine.ObSquare;
+			self.key = ItemDefine.ObSquare_new;
 		}
 
 		//@override

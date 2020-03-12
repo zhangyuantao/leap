@@ -30,6 +30,8 @@ module utils {
 			let self = this;
 			self.disposeBgm();
 			self.disposeAllSound();
+
+			console.log("SoundMgr释放");
 		}
 
 		/**

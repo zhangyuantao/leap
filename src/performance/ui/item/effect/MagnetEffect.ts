@@ -7,7 +7,7 @@ module planetJump {
 			let self = this;
 
 			// 找到磁铁吸引范围内的道具	
-			let items = ItemMgr.getInstance().findItemsByRange(self.player.position, self.cfg.range, ItemDefine.WhiteBall, ItemDefine.ScoreBall);
+			let items = ItemMgr.getInstance().findItemsByRange(self.player.position, self.cfg.range, ItemDefine.WhiteBall, ItemDefine.ScoreBall_new);
 
 			if(!items.length){
 				self.foundItems = [];

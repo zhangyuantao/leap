@@ -25,7 +25,7 @@ module planetJump {
 		protected onUpdate(){
 			let self = this;
 			// 查找所有障碍
-			let obs = ItemMgr.getInstance().findItemsByKey(ItemDefine.ObCircle, ItemDefine.ObSquare, ItemDefine.ObTriangle, ItemDefine.ObTube);
+			let obs = ItemMgr.getInstance().findItemsByKey(ItemDefine.ObCircle, ItemDefine.ObSquare_new, ItemDefine.ObTriangle, ItemDefine.ObTube);
 
 			for(let i = 0, len = obs.length; i < len; i++){
 				let tmp = obs[i];
