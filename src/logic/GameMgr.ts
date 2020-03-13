@@ -172,7 +172,7 @@ module planetJump {
 				let v = {
 					"ttgame": {
 						"score": self.score,
-						"update_time": Math.floor(now / 1000)
+						"update_time": (now / 1000) | 0
 					},
 					"recordTime": now.toString()
 				};
@@ -311,7 +311,7 @@ module planetJump {
 			];
 
 			if (shareImgId == -1) {
-				let idx = Math.floor(1 + Math.random() * (arr.length - 1));
+				let idx = (1 + Math.random() * (arr.length - 1)) | 0;
 				return arr[idx];
 			}
 			else
@@ -334,7 +334,7 @@ module planetJump {
 				"这音乐节奏根本停不下来啊！",
 				"旋转，跳跃，但是我不能闭着眼！因为..."
 			];
-			let idx = Math.round(Math.random() * (arr.length - 1));
+			let idx = Math.random() * arr.length | 0;
 			return arr[idx];
 		}
 

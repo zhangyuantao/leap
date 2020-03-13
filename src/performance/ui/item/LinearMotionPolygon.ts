@@ -1,6 +1,6 @@
 module planetJump {
 	export class LinearMotionPolygon extends PolygonItem{
-		protected speed:number = 0;
+		protected speed: number;
 		protected speedX:number = 0;
 		protected speedY:number = 0;		
 
@@ -19,6 +19,7 @@ module planetJump {
 		}
 
 		public init(speed:number){
+			super.init();
 			let self = this;
 			self.speed = speed;
 		}

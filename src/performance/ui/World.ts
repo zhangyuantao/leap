@@ -140,7 +140,7 @@ module planetJump {
 			for (let i = 0; i < 16; i++) {
 				let rad = i * Math.PI / (16 / 2);
 				let ball = ItemMgr.getInstance().spawnItem(ItemDefine.WhiteBall, rad, 150, 0.8) as WhiteBall;
-				ball.init(0.05 + Math.random() * 0.05);
+				ball.init(0.01 + Math.random() * 0.05);
 				self.addItem(ball.displayObject);
 			}
 		}
@@ -157,8 +157,8 @@ module planetJump {
 			let ani = utils.ObjectPool.getInstance().createFairyUIObject(classFactory, "leap") as any;
 			ani.touchable = false;
 			self.itemContainer.addChild(ani.displayObject);
-			ani.x = Math.floor(x);
-			ani.y = Math.floor(y);
+			ani.x = x | 0;
+			ani.y = y | 0;
 			ani.getTransition("t0").play(() => {
 				utils.ObjectPool.getInstance().destroyObject(ani);
 			}, self);

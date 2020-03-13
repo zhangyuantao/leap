@@ -23,15 +23,17 @@ module planetJump {
 			if(self.levelUpFlag){
 				self.levelUpFlag = false;
 				let spawnInterval = lvCfg.propSpawnInterval[0] + Math.random() * (lvCfg.propSpawnInterval[1] - lvCfg.propSpawnInterval[0]);
-				self.spawnInterval = Math.floor(spawnInterval);
+				self.spawnInterval = spawnInterval | 0;
 			}
 
 			if(!self.canSpawnProp())
 				return;
 
 			let randomRad = Math.random() * Math.PI * 2;
-			let randomRadius = Math.floor(lvCfg.propRange[0] + Math.random() * (lvCfg.propRange[1] - lvCfg.propRange[0]));
-			let item = ItemMgr.getInstance().spawnItem(self.key, randomRad, randomRadius, Prop.scaleUnit);		
+			let randomRadius = lvCfg.propRange[0] + Math.random() * (lvCfg.propRange[1] - lvCfg.propRange[0]);
+			randomRadius |= 0;
+			let item = ItemMgr.getInstance().spawnItem(self.key, randomRad, randomRadius, Prop.scaleUnit);	
+			item.init();	
 			World.instance.addItem(item.displayObject);
 		}
 	}

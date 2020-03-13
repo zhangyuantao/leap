@@ -5,7 +5,8 @@ module planetJump {
 		protected applyEffect(player:Player){
 			let self = this;
 			super.applyEffect(player);
-			let cfg = GameCfg.getCfg().Items[self.key];
+			let cfg = self.cfg;
+			let spikeCfg = GameCfg.getCfg().Items[ItemDefine.ExplodeSpike];
 
 			// 生成一圈子弹
 			for(let i = 0; i < cfg.bulletNum; i++){
@@ -13,7 +14,7 @@ module planetJump {
 				let item = ItemMgr.getInstance().spawnItem(ItemDefine.ExplodeSpike, rad, 10, 0.8) as ExplodeSpike;	
 				item.rootX = self.x;
 				item.rootY = self.y;
-				item.init(cfg.bulletSpeed);
+				item.init(spikeCfg.speed);
 				World.instance.addItem(item.displayObject);
 			}
 

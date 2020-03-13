@@ -1,67 +1,67 @@
 module planetJump {
-	export class TextureBackground extends fairygui.GComponent{
-		private curImg:fairygui.GImage;
-		private imgs:fairygui.GImage[];
-		private lastIdx:number = -1;
-		
-		constructFromResource(){
-            super.constructFromResource();
-            let self = this;   
+	export class TextureBackground extends fairygui.GComponent {
+		private curImg: fairygui.GImage;
+		private imgs: fairygui.GImage[];
+		private lastIdx: number = -1;
+
+		constructFromResource() {
+			super.constructFromResource();
+			let self = this;
 			let w = utils.StageUtils.stageWidth;
 			let h = utils.StageUtils.stageHeight;
 			self.x = w / 2;
-			self.y = h / 2;      
+			self.y = h / 2;
 			self.imgs = [];
-			let size = Math.ceil(Math.sqrt(w * w + h * h));
-			for(let i = 1; i <= 8; i++){
+			let size = Math.sqrt(w * w + h * h);
+			for (let i = 1; i <= 8; i++) {
 				let img = self.getChild("n" + i).asImage;
-				img.width = img.height = size;
+				img.width = img.height = size | 0;
 				img.setPivot(0.5, 0.5, true);
 				self.imgs.push(img);
 			}
-        }
+		}
 
-		public show(){
+		public show() {
 			let self = this;
 			self.visible = true;
-			if(self.curImg){
+			if (self.curImg) {
 				egret.Tween.removeTweens(self.curImg);
 				self.curImg.visible = false;
 			}
 
 			// 随机一个纹理
 			let idx = 0;
-			do{
-				idx = Math.round(Math.random() * (self.imgs.length - 1));
+			do {
+				idx = Math.random() * (self.imgs.length - 1) | 0;
 			}
-			while(self.lastIdx == idx);
-			
+			while (self.lastIdx == idx);
+
 			self.lastIdx = idx;
 			self.curImg = self.imgs[idx];
 
-			egret.Tween.get(self.curImg).set({visible:true, alpha:0}).to({alpha:0.1}, 500, egret.Ease.sineInOut);
+			egret.Tween.get(self.curImg).set({ visible: true, alpha: 0 }).to({ alpha: 0.1 }, 500, egret.Ease.sineInOut);
 		}
 
-		public hide(){
+		public hide() {
 			let self = this;
 			egret.Tween.removeTweens(self.curImg);
-			egret.Tween.get(self.curImg).to({alpha:0}, 800, egret.Ease.sineInOut).call(() => {
+			egret.Tween.get(self.curImg).to({ alpha: 0 }, 800, egret.Ease.sineInOut).call(() => {
 				self.curImg.visible = false;
 				self.visible = false;
-			});			
+			});
 		}
 
-		public setRotation(rot:number){
+		public setRotation(rot: number) {
 			let self = this;
 			self.rotation = rot;
 		}
 
-		public change(){
+		public change() {
 			let self = this;
 			self.show();
 		}
 
-		public dispose(){
+		public dispose() {
 			super.dispose();
 			let self = this;
 			self.curImg = null;

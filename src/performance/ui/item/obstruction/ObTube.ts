@@ -7,15 +7,14 @@ module planetJump {
 			super.constructFromResource();
 			let self = this;
 			self.c1 = self.getController("c1");
-			let idx = Math.floor(self.c1.pageCount * Math.random());
+			let idx = (self.c1.pageCount * Math.random()) | 0;
 			self.c1.setSelectedIndex(idx);		
 		}
 
 		public init(rotateSpeed:number){
 			super.init(rotateSpeed);
 			let self = this;
-			let cfg = GameCfg.getCfg().Items[self.key];
-			let tmp = cfg.selfRotateSpeedRange[0] + Math.random() * (cfg.selfRotateSpeedRange[1] - cfg.selfRotateSpeedRange[0]);
+			let tmp = self.cfg.selfRotateSpeedRange[0] + Math.random() * (self.cfg.selfRotateSpeedRange[1] - self.cfg.selfRotateSpeedRange[0]);
 			self.selfRotateSpeed = parseFloat(tmp.toFixed(1));
 		}
 

@@ -162,7 +162,7 @@ module planetJump {
 
 		public getHeight(){
 			let self = this;
-			return Math.floor(Math.sqrt(self.x * self.x + self.y * self.y));
+			return Math.sqrt(self.x * self.x + self.y * self.y) | 0;
 		}
 
 		// 获取旋转角度
@@ -240,7 +240,7 @@ module planetJump {
 					ob.touchable = false;
 					return ob;
 				}
-				self.trail.init(280, 0.2, 0, 5, 0.7);
+				self.trail.init(280, 0.3, 0, 3, 0.7);
 				self.displayListContainer.addChild(self.trail);
 			}
 

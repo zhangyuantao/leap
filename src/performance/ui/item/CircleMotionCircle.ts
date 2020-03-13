@@ -5,6 +5,7 @@ module planetJump {
 		private curClockwise:boolean = true;
 
 		public init(rotateSpeed:number){
+			super.init();
 			let self = this;
 			self.rotateSpeed = rotateSpeed;
 			self.rotateTime = self.getAngle() / self.rotateSpeed;	

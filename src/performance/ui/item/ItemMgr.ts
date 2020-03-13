@@ -82,8 +82,8 @@ module planetJump {
 			// 围绕中心点生成	
 			let dx = r * Math.cos(rad);
 			let dy = r * Math.sin(rad);		
-			item.x = Math.floor(dx + World.instance.spike.x);
-			item.y = Math.floor(dy + World.instance.spike.y);
+			item.x = (dx + World.instance.spike.x) | 0;
+			item.y = (dy + World.instance.spike.y) | 0;
 
 			item.scaleX = item.scaleY = parseFloat(scale.toFixed(1));
 
@@ -116,15 +116,16 @@ module planetJump {
 		// 物品定时生成
 		public onUpdate(){
 			let self = this;
-			self.collisionCheck(World.instance.player);	
+			self.collisionCheck();	
 			self.onSpawnsUpdate();
 		}
 
 		/**
 		 * 碰撞检测
 		 */
-		private collisionCheck(player:Player){
+		private collisionCheck(){
 			let self = this;
+			let player = World.instance.player;
 			let playerPos = <IPoint>{x:player.x, y:player.y};
 			let pCollider = player.collider;
 			for(let i = 0; i < self.spawnItems.length; i++){
@@ -132,7 +133,7 @@ module planetJump {
 				if(!item.colliderEnabled)
 					continue;
 				
-				if(item instanceof ExplodeSpike)
+				if(item.key == ItemDefine.ExplodeSpike)
 					continue;
 
 				// 距离超过多少不检测

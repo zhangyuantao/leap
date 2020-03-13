@@ -1,8 +1,8 @@
 module planetJump {
 	export class LinearMotionCircle extends CircleItem{
-		public speed:number = 0;
-		public speedX:number = 0;
-		public speedY:number = 0;
+		public speed: number;
+		protected speedX:number = 0;
+		protected speedY:number = 0;
 
 		protected onAddToStage(e){
 			let self = this;
@@ -21,6 +21,7 @@ module planetJump {
 		}
 
 		public init(speed:number){
+			super.init();
 			let self = this;
 			self.speed = parseFloat(speed.toFixed(2));
 		}
@@ -30,8 +31,8 @@ module planetJump {
 			super.onMove(deltaTime);
 			let newX = self.x + self.speedX;
 			let newY = self.y + self.speedY;
-			self.x = parseFloat(newX.toFixed(2));
-			self.y = parseFloat(newY.toFixed(2));
+			self.x = parseFloat(newX.toFixed(1));
+			self.y = parseFloat(newY.toFixed(1));
 		}		
 	}
 }

@@ -11,9 +11,8 @@ module planetJump {
 
 		protected applyEffect(player:Player){
 			let self = this;
-			let cfg = GameCfg.getCfg().Items[self.key];
-			if(cfg.jumpSpeed)
-				player.jump(cfg.jumpSpeed);
+			if(self.cfg.jumpSpeed)
+				player.jump(self.cfg.jumpSpeed);
 		}
 	}
 }
