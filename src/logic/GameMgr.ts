@@ -21,6 +21,7 @@ module planetJump {
 		public isRecording: boolean;
 		public recordVideoPath: string;
 		public recordTime: number;
+		public clipVideoOk: boolean;
 
 		private constructor() {
 			let self = this;
@@ -34,7 +35,31 @@ module planetJump {
 
 				let recorder = platform.getGameRecorderManager();
 				recorder.onStop(res => {
-					self.recordVideoPath = res.videoPath;
+					console.log("录屏结束,videoPath：", res.videoPath);
+					self.isRecording = false;
+					self.recordTime = 0;
+
+					// 剪辑视频
+					recorder.clipVideo({
+						path: res.videoPath,
+						timeRange: [10, 0], // +最后10秒 
+						success(res) {
+							console.log("剪辑视频完成：", res.videoPath);
+							self.recordVideoPath = res.videoPath;
+							self.clipVideoOk = true;
+						},
+						fail(e) {
+							console.error(e);
+						}
+					});
+				});
+				recorder.onError(res => {
+					self.clipVideoOk = false
+					console.log("录屏错误：", res);
+				});
+				recorder.onStart(res => {
+					self.clipVideoOk = false;
+					console.log("录屏开始：", res);
 				});
 			}
 
@@ -61,6 +86,7 @@ module planetJump {
 
 		public gameBegin() {
 			let self = this;
+			self.gameOver = false;
 			self.hasRevived = false;
 			let record = egret.localStorage.getItem("scoreRecord");
 			if (record && record != "") {
@@ -284,7 +310,7 @@ module planetJump {
 				desc: desc || "这音乐节奏根本停不下来啊！",
 				extra: {
 					videoPath: self.recordVideoPath,
-					videoTopics: ["飞跃吧"]
+					videoTopics: ["LeapOn", "飞跃吧"]
 				},
 				success() {
 					console.log("分享视频成功");
@@ -311,7 +337,7 @@ module planetJump {
 			];
 
 			if (shareImgId == -1) {
-				let idx = (1 + Math.random() * (arr.length - 1)) | 0;
+				let idx = Math.random() * arr.length | 0;
 				return arr[idx];
 			}
 			else
@@ -382,6 +408,30 @@ module planetJump {
 				else {
 					console.warn("录屏时长需大于3秒~");
 				}
+			}
+		}
+
+		/**
+		 * 高光时刻
+		 */
+		public recordClip(timeRange: number[]) {
+			let self = this;
+			if (!platform.isRunInTT())
+				return;
+
+			if (self.isRecording) {
+				let recorder = platform.getGameRecorderManager();
+				recorder.recordClip({
+					timeRange: timeRange,
+					success(res) {
+						console.log("recordClip success:", res);
+					},
+					fail(res) {
+						console.warn("recordClip fail:", res);
+					},
+					complete(res) { }
+				});
+				self.recordTime = Date.now();
 			}
 		}
 

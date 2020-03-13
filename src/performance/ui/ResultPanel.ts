@@ -85,7 +85,7 @@ module planetJump {
 		private onShareBtn(e) {
 			let self = this;
 			// 如果有录屏则分享录屏
-			if (GameMgr.getInstance().recordVideoPath) {
+			if (GameMgr.getInstance().clipVideoOk && GameMgr.getInstance().recordVideoPath) {
 				GameMgr.getInstance().shareVideo(null, null, null, () => {
 					GameMgr.getInstance().shareFromCanvas();
 				});

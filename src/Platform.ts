@@ -29,7 +29,7 @@ declare interface GameRecorderManager {
     pause();
     resume();
     stop();
-    recordClip(arg: { timeRange, success, fail, complete });
+    recordClip(arg: { timeRange, success?, fail?, complete? });
     clipVideo(arg: any);
 
     onStart(func: Function);

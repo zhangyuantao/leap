@@ -172,10 +172,10 @@ module planetJump {
 			let oldX = self.parent.x;
 			let oldY = self.parent.y;
 			egret.Tween.removeTweens(self.parent);
-			egret.Tween.get(self.parent).to({ x: oldX + 10, y: oldY + 10 }, 80, egret.Ease.backInOut)
-				.to({ x: oldX - 7, y: oldY - 7 }, 90, egret.Ease.backInOut)
+			egret.Tween.get(self.parent).to({ x: oldX + 12, y: oldY + 12 }, 100, egret.Ease.backInOut)
+				.to({ x: oldX - 8, y: oldY - 8 }, 10, egret.Ease.backInOut)
 				.to({ x: oldX + 4, y: oldY + 4 }, 100, egret.Ease.backInOut)
-				.to({ x: oldX, y: oldY }, 110, egret.Ease.sineInOut);
+				.to({ x: oldX, y: oldY }, 100, egret.Ease.sineInOut);
 		}
 	}
 }
