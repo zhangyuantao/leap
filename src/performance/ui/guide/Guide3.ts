@@ -18,6 +18,7 @@ module planetJump {
 			let rad = (player.getAngle() + 15) / 180 * Math.PI;
 			let radius = player.getHeight();			
 			let item = ItemMgr.getInstance().spawnItem(ItemDefine.Plus, rad, radius, Prop.scaleUnit);		
+			item.init();
 			World.instance.addItem(item.displayObject);
 
 			let pos = item.displayObject.parent.localToGlobal(item.x, item.y);

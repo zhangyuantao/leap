@@ -7,6 +7,9 @@ module planetJump {
 			player.addEffect(self.key, CutEffect);
 
 			utils.Singleton.get(utils.SoundMgr).playSound("thunderbolt_mp3");
+
+			// 录屏，高光时刻			
+			GameMgr.getInstance().recordClip([1, (self.cfg.duration / 1000 | 0) + 1]);
 		}	
 	}
 }
